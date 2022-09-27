@@ -1,2 +1,2 @@
 release: python manage.py migrate
-web: gunicorn mysite.wsgi
+web: gunicorn project-a-28.wsgi
