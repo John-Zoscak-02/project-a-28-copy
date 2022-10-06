@@ -23,5 +23,5 @@ class GoogleLoginViewTests(TestCase):
         """
         If page results in 404 error, test fails
         """
-        response = self.client.get(reverse('louslist_a28:accounts'))
-        self.assertEquals(response.status_code, 200)
+        response = self.client.get('/accounts/login')
+        self.assertEquals(response.status_code, 301)
