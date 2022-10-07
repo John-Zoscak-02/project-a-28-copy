@@ -1,0 +1,22 @@
+{% extends 'home/bootstrap.html' %}
+
+{% load bootstrap5 %}
+
+{% block bootstrap5_content %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-light">
+    <a class='nav-item nav-link' href="/">Homepage</a>
+    <a class='nav-item nav-link' href="/accounts/login">Login</a>
+</nav>
+<div class="container">
+    <header>
+        <br>
+        <h1><emph>{% block title %}(no content){% endblock %}</emph></h1>
+    </header>
+
+    <!--{% autoescape off %}{% bootstrap_messages %}{% endautoescape %}-->
+
+    <div class="position-absolute top-50 start-50 translate-middle">
+        {% block content %}{% endblock %}
+    </div>
+</div>
+{% endblock %}
