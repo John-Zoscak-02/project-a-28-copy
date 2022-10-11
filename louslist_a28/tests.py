@@ -24,7 +24,7 @@ class GoogleLoginViewTests(TestCase):
         If page results in 404 error, test fails
         """
         response = self.client.get('/accounts/login')
-        self.assertNotEquals(response.status_code, 404)
+        self.assertEquals(response.status_code, 200)
     def test_page_error2(self):
         """
         If random url is input in, test fails
