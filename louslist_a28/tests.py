@@ -21,9 +21,9 @@ from django.urls import reverse
 class GoogleLoginViewTests(TestCase):
     def test_page_error(self):
         """
-        If page results in 404 error, test fails
+        If page results in 200 error, site is running
         """
-        response = self.client.get('/accounts/login')
+        response = self.client.get('/accounts/login/')
         self.assertEquals(response.status_code, 200)
     def test_page_error2(self):
         """
