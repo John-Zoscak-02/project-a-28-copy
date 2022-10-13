@@ -1,3 +1,4 @@
+from unittest.util import _MAX_LENGTH
 from django.db import models
 
 # Create your models here.
@@ -13,16 +14,16 @@ class Department(models.Model):
     subject = models.CharField(max_length=4)
 
     def __str__(self):
-        return "subject: %s" % (self.suject)
+        return "subject: %s" % (self.subject)
 
 class Course(models.Model):
-    catalog_number = models.IntegerField
+    catalog_number = models.CharField(max_length=4)
     description = models.CharField(max_length=64)
-    units = models.IntegerField
+    units = models.CharField(max_length=1)
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
 
     def __str__(self):
-        return "description: %s\ncatalog_number: %d\nsections: %s" % (self.description, self.catalog_number, self.sections)
+        return "description: %s\n - %s %s" % (self.description, self.department, self.catalog_number)
 
 class Section(models.Model):
     section_number = models.IntegerField
@@ -32,8 +33,8 @@ class Section(models.Model):
     enrollment_available= models.IntegerField
     topic = models.CharField(max_length=64)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    proffessor = models.ForeignKey(Professor, on_delete=models.CASCADE)
-    days = models.CharField(max_length=29),
+    professor = models.ForeignKey(Professor, on_delete=models.CASCADE)
+    days = models.CharField(max_length=24),
     start_time = models.TimeField,
     end_time = models.TimeField,
     facility_description =  models.CharField(max_length=128)

@@ -18,47 +18,49 @@ import json
 
 
 def landing(request):  # We probably want this to be the list view of als the courses
+    deserialize_from_luthers_list()
     return render(request, 'home/landing.html')
 
 def deserialize_from_luthers_list():
     http = urllib3.PoolManager()
 
-    depts_r = http.request('GET', "http://luthers-list.herokuapp.com/api/deptlist/?format=json")
+    depts_r = http.request('GET', "http://luthers-list.herokuapp.com/api/deptlist")
     depts = json.loads(depts_r.data.decode('utf-8'))
-
-    for subject in depts:
-        dept = Department(subject=subject)
+    for d in depts:
+        dept = Department(subject=d['subject'])
         dept.save()
-        sections_r = http.request('GET', "http://luthers-list.herokuapp.com/api/dept/%s/?format=json" % subject)
+        sections_r = http.request('GET', "http://luthers-list.herokuapp.com/api/dept/%s" % dept.subject)
         sections = json.loads(sections_r.data.decode('utf-8'))
-
         for s in sections:
-            course = Course.objects.get(description=s.description)
-            if course == Course.DoesNotExist:
-                course = Course(catalog_number=s.catalog_number,
-                                description=s.description,
-                                units=s.units,
-                                department=dept.pk)
+            try: 
+                course = Course.objects.get(description=s['description'])
+            except Course.DoesNotExist:
+                course = Course(catalog_number=s['catalog_number'],
+                                description=s['description'],
+                                units=s['units'],
+                                department=dept)
                 course.save()
 
-            professor = Professor.objects.get(prof_name=s.instructor.name)
-            if professor == Professor.DoesNotExist:
-                professor = Professor(prof_name=s.instructor.name,
-                                description=s.instructor.email)
+            try:
+                professor = Professor.objects.get(prof_name=s['instructor']['name'])
+            except Professor.DoesNotExist:
+                professor = Professor(prof_name=s['instructor']['name'],
+                                prof_email=s['instructor']['email'])
                 professor.save()
             
-            section = Section(section_number=s.course_number,
-                        wait_list=s.wait_list,
-                        wait_cap=s.wait_cap,
-                        enrollment_total=s.enrollment_total,
-                        enrollment_avaialable=s.enrollment_avaiable,
-                        topic=s.topic,
-                        course=course.pk,
-                        proffessor=professor.pk,
-                        days=s.meetings.days,
-                        start_time=s.meetings.start_time,
-                        end_time=s.meetings.end_time,
-                        facility_description=s.meetings.facility_description)
+            print("course number type: ", type(s['course_number']))
+            section = Section(section_number=s['course_number'],
+                        wait_list=s['wait_list'],
+                        wait_cap=s['wait_cap'],
+                        enrollment_total=s['enrollment_total'],
+                        enrollment_available=s['enrollment_available'],
+                        topic=s['topic'],
+                        course=course,
+                        professor=professor,
+                        days=s['meetings'][0]['days'],
+                        start_time=s['meetings'][0]['start_time'],
+                        end_time=s['meetings'][0]['end_time'],
+                        facility_description=s['meetings'][0]['facility_description'])
             section.save()
 
 
