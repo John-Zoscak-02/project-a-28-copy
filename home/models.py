@@ -7,6 +7,7 @@ from django.db import models
 
 class Professor(models.Model):
     prof_name = models.CharField(max_length=200)
+    prof_email = models.CharField(max_length=24)
 
 class Department(models.Model):
     subject = models.CharField(max_length=4)
@@ -30,8 +31,13 @@ class Section(models.Model):
     enrollment_total = models.IntegerField
     enrollment_available= models.IntegerField
     topic = models.CharField(max_length=64)
-    question = models.ForeignKey(Course, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
     proffessor = models.ForeignKey(Professor, on_delete=models.CASCADE)
+    days = models.CharField(max_length=29),
+    start_time = models.TimeField,
+    end_time = models.TimeField,
+    facility_description =  models.CharField(max_length=128)
+
 
     def __str__(self):
         return "number: %d\ntopic: %s" % (self.section_name, self.topic)
