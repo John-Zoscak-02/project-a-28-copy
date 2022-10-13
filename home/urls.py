@@ -21,5 +21,5 @@ urlpatterns = [
     path('', views.landing, name='landing'),
     path('calendar/', views.calendar, name='calendar'),
     path('<int:pk>', views.CourseDetailView.as_view(), name='course_detail')
-
+    
 ]
