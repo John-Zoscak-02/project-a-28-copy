@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'bootstrap5',
-    "home",
+    #"home",
+    'home.apps.HomeConfig'
 ]
 
 SOCIALACCOUNT_PROVIDERS = {
