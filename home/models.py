@@ -26,21 +26,21 @@ class Course(models.Model):
         return "description: %s\n - %s %s" % (self.description, self.department, self.catalog_number)
 
 class Section(models.Model):
-    section_number = models.IntegerField
-    wait_list = models.IntegerField
-    wait_cap = models.IntegerField
-    enrollment_total = models.IntegerField
-    enrollment_available= models.IntegerField
+    section_number = models.IntegerField(default=0)
+    wait_list = models.IntegerField(default=0)
+    wait_cap = models.IntegerField(default=0)
+    enrollment_total = models.IntegerField(default=0)
+    enrollment_available= models.IntegerField(default=0)
     topic = models.CharField(max_length=64)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     professor = models.ForeignKey(Professor, on_delete=models.CASCADE)
-    days = models.CharField(max_length=24),
-    start_time = models.TimeField,
-    end_time = models.TimeField,
-    facility_description =  models.CharField(max_length=128)
+    days = models.CharField(max_length=128)
+    start_time = models.CharField(max_length=128)
+    end_time = models.CharField(max_length=128)
+    facility_description = models.CharField(max_length=128)
 
 
     def __str__(self):
-        return "number: %d\ntopic: %s" % (self.section_name, self.topic)
+        return "number: %d\ntopic: %s" % (self.section_number, self.topic)
 
 
