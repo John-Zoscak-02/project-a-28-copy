@@ -34,7 +34,7 @@ Results can be seen under the Home/Courses page in the django admin portal
 NOTE: if you load too many courses (~290), the database will fill up and you will have problems loading any more
     You can avoid problems by clearing the saved courses in the admin portal 
 '''
-def deserialize_by_department(subject):
+def deserialize_department(subject):
     http = urllib3.PoolManager()
 
     try: 
