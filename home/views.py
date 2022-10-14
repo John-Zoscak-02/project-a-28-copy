@@ -1,5 +1,4 @@
 from django.shortcuts import render
-from django.views import generic
 
 from .models import Course, Department, Section, Professor
 
@@ -17,7 +16,7 @@ import json
 #        return []
 
 
-def landing(request):  # We probably want this to be the list view of als the courses
+def landing(request): 
     return render(request, 'home/landing.html')
 
 
@@ -35,7 +34,7 @@ Results can be seen under the Home/Courses page in the django admin portal
 NOTE: if you load too many courses (~290), the database will fill up and you will have problems loading any more
     You can avoid problems by clearing the saved courses in the admin portal 
 '''
-def deserialize_department(subject):
+def deserialize_by_department(subject):
     http = urllib3.PoolManager()
 
     try: 
@@ -80,15 +79,3 @@ def deserialize_department(subject):
                     end_time=meeting["end_time"],
                     facility_description=meeting["facility_description"])
         section.save() # we can remove this when we are querying the api and rendering on the fly
-
-
-
-
-def calendar(request):
-    return render(request, 'home/calendar.html')
-
-
-class CourseDetailView(generic.DetailView):
-    model = Course
-    template_name = 'home/course_detail.html'
-
