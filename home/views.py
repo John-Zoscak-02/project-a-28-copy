@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.views import generic
 
 from .models import Course, Department, Section, Professor
+from django.views.generic.edit import CreateView
 
 import urllib3
 import json
@@ -19,6 +20,12 @@ import json
 
 def landing(request):  # We probably want this to be the list view of als the courses
     return render(request, 'home/landing.html')
+
+class AboutUsView(generic.ListView):
+    model = Professor
+    template_name= 'home/about-us.html'
+    def about_us(request): 
+        return render(request, 'home/about-us.html')
 
 def deserialize_from_luthers_list():
     http = urllib3.PoolManager()
