@@ -19,4 +19,7 @@ from . import views
 app_name = 'home'
 urlpatterns = [
     path('', views.landing, name='landing'),
+    path('friends', views.friends, name='friends'),
+    path('profile', views.profile, name='profile'), # This will need to be a url in the form of {{username}}/profile this is temporary
+
 ]
