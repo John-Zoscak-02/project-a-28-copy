@@ -13,33 +13,33 @@ class Department(models.Model):
     subject = models.CharField(max_length=4)
 
     def __str__(self):
-        return "subject: %s" % (self.suject)
+        return "subject: %s" % (self.subject)
 
 class Course(models.Model):
-    catalog_number = models.IntegerField
+    catalog_number = models.CharField(max_length=4)
     description = models.CharField(max_length=64)
-    units = models.IntegerField
+    units = models.CharField(max_length=1)
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
 
     def __str__(self):
-        return "description: %s\ncatalog_number: %d\nsections: %s" % (self.description, self.catalog_number, self.sections)
+        return "description: %s\n - %s %s" % (self.description, self.department, self.catalog_number)
 
 class Section(models.Model):
-    section_number = models.IntegerField
-    wait_list = models.IntegerField
-    wait_cap = models.IntegerField
-    enrollment_total = models.IntegerField
-    enrollment_available= models.IntegerField
+    section_number = models.IntegerField(default=0)
+    wait_list = models.IntegerField(default=0)
+    wait_cap = models.IntegerField(default=0)
+    enrollment_total = models.IntegerField(default=0)
+    enrollment_available= models.IntegerField(default=0)
     topic = models.CharField(max_length=64)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    proffessor = models.ForeignKey(Professor, on_delete=models.CASCADE)
-    days = models.CharField(max_length=29),
-    start_time = models.TimeField,
-    end_time = models.TimeField,
-    facility_description =  models.CharField(max_length=128)
+    professor = models.ForeignKey(Professor, on_delete=models.CASCADE)
+    days = models.CharField(max_length=128)
+    start_time = models.CharField(max_length=128)
+    end_time = models.CharField(max_length=128)
+    facility_description = models.CharField(max_length=128)
 
 
     def __str__(self):
-        return "number: %d\ntopic: %s" % (self.section_name, self.topic)
+        return "number: %d\ntopic: %s" % (self.section_number, self.topic)
 
 
