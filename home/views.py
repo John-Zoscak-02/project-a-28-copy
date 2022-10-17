@@ -2,7 +2,7 @@ from django.shortcuts import render
 
 from .models import Course, Department, Section, Professor
 from django.views.generic.edit import CreateView
-
+from django.views import generic
 import urllib3
 import json
 
@@ -25,6 +25,18 @@ class AboutUsView(generic.ListView):
     template_name= 'home/about-us.html'
     def about_us(request): 
         return render(request, 'home/about-us.html')
+
+class CalendarView(generic.ListView):
+    model = Professor
+    template_name= 'home/calendar.html'
+    def about_us(request): 
+        return render(request, 'home/calendar.html')
+
+class CourseDetailView(generic.ListView):
+    model = Course
+    template_name= 'home/course_detail.html'
+    def about_us(request): 
+        return render(request, 'home/course_detail.html')
 
 def deserialize_from_luthers_list():
     http = urllib3.PoolManager()

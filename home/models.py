@@ -5,9 +5,21 @@ from django.db import models
 # We will be able to get this information from the SIS scraper when we have access to that
 # To Do: the specifics of all of this will need to change, this is just an outline and example
 
+class Calendar(models.Model):
+    date = models.DateField()
+
+    def __str__(self):
+        return "Date: %s" % (self.date)
+
+class AboutUs(models.Model):
+    contact = models.TextField(max_length=1000)
+
 class Professor(models.Model):
     prof_name = models.CharField(max_length=200)
     prof_email = models.CharField(max_length=24)
+
+    def __str__(self):
+        return "Prof. " + (self.prof_name)  + " Email: " + (self.prof_email)
 
 class Department(models.Model):
     subject = models.CharField(max_length=4)
