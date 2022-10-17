@@ -1,0 +1,20 @@
+{% extends 'home/base.html' %}
+
+{# Load the tag library #}
+{% load bootstrap5 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+
+{% block title %}About Us{% endblock %}
+
+{% block content %}
+<p class="text-left">
+    This website is under a free use license for educational use. Created in 2022, this website is designed for
+    replacing louslist.com and provides a formatted method for University of Virginia students to access class informaiton.
+</p>
+{% endblock %}
