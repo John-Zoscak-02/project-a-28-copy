@@ -17,13 +17,12 @@ from django.urls import reverse
 #     time = timezone.now() + datetime.timedelta(days=days)
 #     return Question.objects.create(question_text=question_text, pub_date=time)
 
-
 class GoogleLoginViewTests(TestCase):
     def test_page_error(self):
         """
         If page results in 404 error, test fails
         """
-        response = self.client.get('/accounts/login')
+        response = self.client.get('/accounts/login/')
         self.assertEquals(response.status_code, 200)
     def test_page_error2(self):
         """
@@ -31,4 +30,10 @@ class GoogleLoginViewTests(TestCase):
         """
         response = self.client.get('/accounts/random')
         self.assertEquals(response.status_code, 404)
+    def test_signup_error(self):
+        """
+        If page results in 404 error, test fails
+        """
+        response = self.client.get('/accounts/signup/')
+        self.assertEquals(response.status_code, 200)
     
