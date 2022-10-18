@@ -143,7 +143,7 @@ def deserialize_department(subject):
             courses.append(course)
 
         try:
-            professor = list(filter(lambda professor: professor.prof_name == s['instructor']['name'], courses))[0]
+            professor = list(filter(lambda professor: professor.prof_name == s['instructor']['name'], professors))[0]
         except:
             professor = Professor(prof_name=s['instructor']['name'],
                             prof_email=s['instructor']['email'])
