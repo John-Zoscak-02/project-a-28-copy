@@ -116,36 +116,38 @@ We should change this function at some point to return the models that construct
 
 param: subject (<string>) - the department subject to deserialize
 
-return: nothing
+return: list of courses, professors, and sections
 
 Results can be seen under the Home/Courses page in the django admin portal
 '''
 def deserialize_department(subject):
     http = urllib3.PoolManager()
 
-    courses = np.array([])
+    courses = []
+    professors = []
     sections = []
     
     dept = Department(subject=subject)
 
     sections_r = http.request('GET', "http://luthers-list.herokuapp.com/api/dept/%s" % dept.subject)
-    sections = json.loads(sections_r.data.decode('utf-8'))
-    for s in sections:
-        try: 
-            course = courses[courses['description'] == s['description'])]
-        except Course.DoesNotExist:
+    sections_map = json.loads(sections_r.data.decode('utf-8'))
+    for s in sections_map:
+         
+        try:
+            course = list(filter(lambda course: course.description == s['description'], courses))[0]
+        except: 
             course = Course(catalog_number=s['catalog_number'],
                             description=s['description'],
                             units=s['units'],
                             department=dept)
-            course.save() # we can remove this when we are querying the api and rendering on the fly
+            courses.append(course)
 
         try:
-            professor = Professor.objects.get(prof_name=s['instructor']['name'])
-        except Professor.DoesNotExist:
+            professor = list(filter(lambda professor: professor.prof_name == s['instructor']['name'], courses))[0]
+        except:
             professor = Professor(prof_name=s['instructor']['name'],
                             prof_email=s['instructor']['email'])
-            professor.save() # we can remove this when we are querying the api and rendering on the fly
+            professors.append(professor)
         
         if (len(s['meetings']) == 0):
             raise Exception("Having a problem with meeting %d in %s %s"  % (s['course_number'], dept.subject, course.catalog_number))
@@ -163,4 +165,6 @@ def deserialize_department(subject):
                     start_time=meeting["start_time"],
                     end_time=meeting["end_time"],
                     facility_description=meeting["facility_description"])
-        section.save() # we can remove this when we are querying the api and rendering on the fly
+        sections.append(section)
+
+    return courses, professors, sections
