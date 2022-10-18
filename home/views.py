@@ -5,6 +5,7 @@ from django.views.generic.edit import CreateView
 from django.views import generic
 import urllib3
 import json
+import numpy as np
 
 # Create your views here.
 #class LandingView(generic.ListView):
@@ -76,17 +77,16 @@ NOTE: if you load too many courses (~290), the database will fill up and you wil
 def deserialize_department(subject):
     http = urllib3.PoolManager()
 
-    try: 
-        dept = Department.objects.get(subject=subject)
-    except Department.DoesNotExist:
-        dept = Department(subject=subject)
-        dept.save() # we can remove this when we are querying the api and rendering on the fly
+    courses = np.array([])
+    sections = []
+    
+    dept = Department(subject=subject)
 
     sections_r = http.request('GET', "http://luthers-list.herokuapp.com/api/dept/%s" % dept.subject)
     sections = json.loads(sections_r.data.decode('utf-8'))
     for s in sections:
         try: 
-            course = Course.objects.get(description=s['description'])
+            course = courses[courses['description'] == s['description'])]
         except Course.DoesNotExist:
             course = Course(catalog_number=s['catalog_number'],
                             description=s['description'],
