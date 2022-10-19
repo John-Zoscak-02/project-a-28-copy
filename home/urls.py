@@ -20,7 +20,7 @@ app_name = 'home'
 urlpatterns = [
     path('', views.landing, name='landing'),
     path('calendar/', views.CalendarView.as_view(), name='calendar'),
+    path('profile/', views.ProfileView.as_view(), name='profile'),
     path('<int:pk>', views.CourseDetailView.as_view(), name='course_detail'),
-    path('about-us/', views.AboutUsView.as_view(), name='about-us')
-    
+    path('about-us/', views.AboutUsView.as_view(), name='about-us'),
 ]

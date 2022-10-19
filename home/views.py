@@ -27,6 +27,12 @@ class AboutUsView(generic.ListView):
     def about_us(request): 
         return render(request, 'home/about-us.html')
 
+class ProfileView(generic.DetailView):
+    model = Professor
+    template_name= 'home/about-us.html'
+    def about_us(request): 
+        return render(request, 'home/about-us.html')
+
 class CalendarView(generic.ListView):
     model = Professor
     template_name= 'home/calendar.html'
