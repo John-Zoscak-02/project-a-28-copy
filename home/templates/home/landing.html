@@ -14,7 +14,14 @@
 
 {% block content %}
 <content>
-    <p>Hello, this is the landing page</p>
+    <div class="card example-1 scrollbar-ripe-malinka">
+      <div class="card-body">
+          {% for dept in deptList %}
+<!--          We can add a link to each department name to take to that department page, or filter a table-->
+            <a href="#">{{dept.name}}(dept.subject)</a>
+          {% endfor %}
+      </div>
+    </div>
     {% autoescape off %}{% bootstrap_messages %}{% endautoescape %}
 </content>
 {% endblock %}
