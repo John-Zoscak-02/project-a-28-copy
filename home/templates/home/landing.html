@@ -18,7 +18,7 @@
       <div class="card-body">
           {% for dept in deptList %}
 <!--          We can add a link to each department name to take to that department page, or filter a table-->
-            <a href="{{dept}}/">{{dept}}</a>
+            <a href="#">{{dept.name}}(dept.subject)</a>
           {% endfor %}
       </div>
     </div>
