@@ -19,13 +19,13 @@ class Professor(models.Model):
     prof_email = models.CharField(max_length=24)
 
     def __str__(self):
-        return "Prof. " + (self.prof_name)  + " Email: " + (self.prof_email)
+        return "Prof=%s Email=%s" % (self.prof_name, self.prof_email)
 
 class Department(models.Model):
     subject = models.CharField(max_length=4)
 
     def __str__(self):
-        return "subject: %s" % (self.subject)
+        return "subject=%s" % (self.subject)
 
 class Course(models.Model):
     catalog_number = models.CharField(max_length=4)
@@ -34,7 +34,7 @@ class Course(models.Model):
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
 
     def __str__(self):
-        return "description: %s\n - %s %s" % (self.description, self.department, self.catalog_number)
+        return "description=%s - %s %s" % (self.description, self.department, self.catalog_number)
 
 class Section(models.Model):
     section_number = models.IntegerField(default=0)
@@ -52,6 +52,6 @@ class Section(models.Model):
 
 
     def __str__(self):
-        return "number: %d\ntopic: %s" % (self.section_number, self.topic)
+        return "number=%d topic=%s" % (self.section_number, self.topic)
 
 
