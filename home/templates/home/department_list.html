@@ -1,0 +1,29 @@
+{% extends 'home/base.html' %}
+
+{# Load the tag library #}
+{% load bootstrap5 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            {% block title %}Department List Page{% endblock %}
+        </div>
+        <div class="row">
+            <ul>
+                {% for course in object_list.courses %}
+                <li>{{ course }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+    </div>
+    {% autoescape off %}{% bootstrap_messages %}{% endautoescape %}
+{% endblock %}

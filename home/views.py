@@ -37,20 +37,34 @@ def profile(request):
 class AboutUsView(generic.ListView):
     model = Professor
     template_name= 'home/about-us.html'
+
+    @staticmethod
     def about_us(request): 
         return render(request, 'home/about-us.html')
 
 class CalendarView(generic.ListView):
     model = Professor
     template_name= 'home/calendar.html'
+
+    @staticmethod
     def about_us(request): 
         return render(request, 'home/calendar.html')
 
 class CourseDetailView(generic.ListView):
     model = Course
-    template_name= 'home/course_detail.html'
+    template_name = 'home/course_detail.html'
+
+    @staticmethod
     def about_us(request): 
         return render(request, 'home/course_detail.html')
+
+class DeptDetailView(generic.ListView):
+    model = Course
+    template_name = 'home/department_list.html'
+
+    def get_queryset(self):
+        courses, professors, sections = deserialize_department(self.kwargs['dept'])
+        return {'courses': courses, 'professors': professors, 'sections': sections}
 
 '''
 This function will construct/identify department instances for all the mnemonics in luthers list, then 
@@ -96,7 +110,7 @@ def deserialize_from_luthers_list():
                                 prof_email=s['instructor']['email'])
                 professor.save() # we can remove this when we are querying the api and rendering on the fly
             
-            if (len(s['meetings']) == 0):
+            if len(s['meetings']) == 0:
                 #raise Exception("Having a problem with meeting %d in %s %s"  % (s['course_number'], dept.subject, course.catalog_number))
                 meeting = {"days": "-",
                            "start_time": "",
@@ -162,7 +176,7 @@ def deserialize_department(subject):
                             prof_email=s['instructor']['email'])
             professors.append(professor)
         
-        if (len(s['meetings']) == 0):
+        if len(s['meetings']) == 0:
             raise Exception("Having a problem with meeting %d in %s %s"  % (s['course_number'], dept.subject, course.catalog_number))
         meeting = s['meetings'][0]
         #print("Course Number: ", s['course_number'], dept.subject, meeting)
