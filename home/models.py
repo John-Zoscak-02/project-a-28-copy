@@ -31,10 +31,18 @@ class Course(models.Model):
     catalog_number = models.CharField(max_length=4)
     description = models.CharField(max_length=64)
     units = models.CharField(max_length=1)
+    average_rating = models.DecimalField()
+    average_gpa = models.DecimalField()
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
 
     def __str__(self):
         return "description=%s - %s %s" % (self.description, self.department, self.catalog_number)
+
+class Review(models.Model):
+    rating = models.IntegerField(max_length=1)
+    has_text = models.BooleanField()
+    text = models.TextField(max_length=10_000)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
 
 class Section(models.Model):
     section_number = models.IntegerField(default=0)

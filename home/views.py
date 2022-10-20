@@ -41,9 +41,19 @@ class CalendarView(generic.ListView):
 
 class CourseDetailView(generic.ListView):
     model = Course
-    template_name= 'home/course_detail.html'
-    def about_us(request): 
+    template_name = 'home/course_detail.html'
+
+    @staticmethod
+    def get_queryset(request): 
         return render(request, 'home/course_detail.html')
+
+class DeptDetailView(generic.ListView):
+    model = Course
+    template_name = 'home/department_list.html'
+
+    def get_queryset(request):
+        courses, professors, sections = deserialize_department(request.kwargs['dept'])
+        return {'courses': courses, 'professors': professors, 'sections': sections}
 
 '''
 This function will construct/identify department instances for all the mnemonics in luthers list, then 
