@@ -10,18 +10,20 @@
 {# Display django.contrib.messages as Bootstrap alerts #}
 {% bootstrap_messages %}
 
-{% block title %}Landing Page{% endblock %}
 
 {% block content %}
-<content>
+    <div class="container-fluid">
+        <div class="row">
+            {% block title %}Department List Page{% endblock %}
+        </div>
+        <div class="row">
+            <ul>
+                {% for course in object_list.courses %}
+                <li>{{ course }}</li>
+                {% endfor %}
+            </ul>
+        </div>
 
-    <div class="card example-1 scrollbar-ripe-malinka">
-      <div class="card-body">
-          {% for dept in deptList %}
-            <a href="{{dept.name}}/{{ dept.subject }}">{{dept.name}}({{dept.subject}})</a>
-          {% endfor %}
-      </div>
     </div>
     {% autoescape off %}{% bootstrap_messages %}{% endautoescape %}
-</content>
 {% endblock %}

@@ -23,5 +23,6 @@ urlpatterns = [
     path('profile', views.profile, name='profile'), # This will need to be a url in the form of {{username}}/profile this is temporary
     path('calendar/', views.CalendarView.as_view(), name='calendar'),
     path('<int:pk>', views.CourseDetailView.as_view(), name='course_detail'),
-    path('about-us/', views.AboutUsView.as_view(), name='about-us')
+    path('about-us/', views.AboutUsView.as_view(), name='about-us'),
+    path('department/<str:dept>', views.DeptDetailView.as_view(), name='dept_detail')
 ]
