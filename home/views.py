@@ -64,7 +64,9 @@ class DeptDetailView(generic.ListView):
 
     def get_queryset(self):
         courses, professors, sections = deserialize_department(self.kwargs['dept'])
-        return {'courses': courses, 'professors': professors, 'sections': sections}
+        dept_json = get_department_json(self.kwargs['dept'])
+        courses_json = group_by_course(self.kwargs['dept'])
+        return {'courses': courses, 'professors': professors, 'sections': sections, 'dept_json': dept_json, 'courses_json': courses_json}
 
 '''
 This function will construct/identify department instances for all the mnemonics in luthers list, then 
@@ -195,3 +197,25 @@ def deserialize_department(subject):
         sections.append(section)
 
     return courses, professors, sections
+
+
+def get_department_json(subject):
+    http = urllib3.PoolManager()
+    dept = Department(subject=subject)
+    dept_r = http.request('GET', "http://luthers-list.herokuapp.com/api/dept/%s" % dept.subject)
+    dept_json = json.loads(dept_r.data.decode('utf-8'))
+    return dept_json
+
+
+def group_by_course(subject):
+    dept_json = get_department_json(subject)
+    courses = {}
+    courses_set = set()
+    for section in dept_json:
+        if courses_set.__contains__(section['catalog_number']):
+            courses[subject+section['catalog_number']].append(section)
+        else:
+            courses_set.add(section['catalog_number'])
+            courses[subject + section['catalog_number']] = []
+            courses[subject + section['catalog_number']].append(section)
+    return courses
