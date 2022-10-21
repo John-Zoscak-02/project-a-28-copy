@@ -25,7 +25,7 @@ class Department(models.Model):
     subject = models.CharField(max_length=4)
 
     def __str__(self):
-        return "subject=%s" % (self.subject)
+        return self.subject
 
 class Course(models.Model):
     catalog_number = models.CharField(max_length=4)
@@ -34,7 +34,7 @@ class Course(models.Model):
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
 
     def __str__(self):
-        return "description=%s - %s %s" % (self.description, self.department, self.catalog_number)
+        return f"{self.department} {self.catalog_number} - {self.description} ({self.units} units)"
 
 class Section(models.Model):
     section_number = models.IntegerField(default=0)
@@ -52,6 +52,6 @@ class Section(models.Model):
 
 
     def __str__(self):
-        return "number=%d topic=%s" % (self.section_number, self.topic)
+        return "number=%d course=%s" % (self.section_number, self.course)
 
 
