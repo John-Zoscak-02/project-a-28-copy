@@ -10,20 +10,38 @@
 {# Display django.contrib.messages as Bootstrap alerts #}
 {% bootstrap_messages %}
 
+{% block title %}{{ object_list.dept }} List Page{% endblock %}
 
 {% block content %}
-    <div class="container-fluid">
-        <div class="row">
-            {% block title %}Department List Page{% endblock %}
-        </div>
-        <div class="row">
-            <ul>
-                {% for course in object_list.courses %}
-                <li>{{ course }}</li>
-                {% endfor %}
-            </ul>
-        </div>
+    <div class="accordion" id="accordionExample">
+        {% for course, sections in object_list.courses_json.items %}
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="heading{{ forloop.counter }}">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ forloop.counter }}" aria-expanded="false" aria-controls="collapse{{ forloop.counter }}">
+            <div style="width: 800px;">{{ course }}</div>
+<!--              this width value is temporary, I hasn't able to figure out how to keep the badge on the right while in the button-->
+              <div class="badge bg-primary rounded-pill pl-4" style = "float:right">{{ sections|length }} Section(s)</div>
 
+          </button>
+        </h2>
+        <div id="collapse{{ forloop.counter }}" class="accordion-collapse collapsed collapse" aria-labelledby="heading{{ forloop.counter }}">
+          <div class="accordion-body">
+              <ul>
+                {% for section in sections %}
+
+                <li class="list-group-item">
+                    <input class="form-check-input me-1" type="checkbox" value="" aria-label="..." />
+                    {{ section.course_section }}
+                </li>
+
+                {% endfor %}
+                </ul>
+            </div>
+        </div>
+      </div>
+
+        {% endfor %}
     </div>
+
     {% autoescape off %}{% bootstrap_messages %}{% endautoescape %}
 {% endblock %}
