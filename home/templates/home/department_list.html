@@ -10,12 +10,10 @@
 {# Display django.contrib.messages as Bootstrap alerts #}
 {% bootstrap_messages %}
 
+{% block title %}{{ object_list.dept }} List Page{% endblock %}
 
 {% block content %}
     <div class="container-fluid">
-        <div class="row">
-            {% block title %}Department List Page{% endblock %}
-        </div>
         <div class="row">
             <ul>
                 {% for course, sections in object_list.courses_json.items %}

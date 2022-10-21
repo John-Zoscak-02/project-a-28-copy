@@ -63,9 +63,9 @@ class DeptDetailView(generic.ListView):
     template_name = 'home/department_list.html'
 
     def get_queryset(self):
-        courses, professors, sections = deserialize_department(self.kwargs['dept'])
+        # courses, professors, sections = deserialize_department(self.kwargs['dept'])
         courses_json = group_by_course(self.kwargs['dept'])
-        return {'courses': courses, 'professors': professors, 'sections': sections, 'courses_json': courses_json}
+        return {'courses_json': courses_json, 'dept': self.kwargs['dept']}
 
 '''
 This function will construct/identify department instances for all the mnemonics in luthers list, then 
