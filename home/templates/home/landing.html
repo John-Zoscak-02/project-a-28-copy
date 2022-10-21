@@ -10,16 +10,23 @@
 {# Display django.contrib.messages as Bootstrap alerts #}
 {% bootstrap_messages %}
 
-{% block title %}Landing Page{% endblock %}
+{% block title %}Course Mnemonics Offered Spring 2023{% endblock %}
 
 {% block content %}
 <content>
     <div class="card example-1 scrollbar-ripe-malinka">
       <div class="card-body">
+        <div class="row justify-content-center align-items-center">
           {% for dept in deptList %}
-<!--          We can add a link to each department name to take to that department page, or filter a table-->
-            <a href="#">{{dept.name}}({{dept.subject}})</a>
+              <div class="col-4 {% cycle 'order-1' 'order-2' 'order-3' as column %}">
+                <a href="#">{{dept.name}}({{dept.subject}})</a>
+              </div>
+            {% if forloop.counter|divisibleby:3 %}
+            </div>
+            <div class="row justify-content-center align-items-center">
+            {% endif %}
           {% endfor %}
+        </div>
       </div>
     </div>
     {% autoescape off %}{% bootstrap_messages %}{% endautoescape %}
