@@ -15,16 +15,19 @@
 {% block content %}
     <div class="container-fluid">
         <div class="row">
-            <ul>
+            <ul class = "list-group">
                 {% for course, sections in object_list.courses_json.items %}
-                <li>{{ course }}
-                    <div class="'row">
+                <li class="list-group-item d-flex justify-content-between align-items-start">
+                    <div class="ms-2 me-auto">
+                        <div class="fw-bold">{{ course }}</div>
                         <ul>
                             {% for section in sections %}
                             <li> {{ section.course_section }}</li>
+
                             {% endfor %}
                         </ul>
                     </div>
+                    <span class="badge bg-primary rounded-pill">{{ sections|length }} Section(s)</span>
                 </li>
 
                 {% endfor %}
@@ -32,5 +35,6 @@
         </div>
 
     </div>
+
     {% autoescape off %}{% bootstrap_messages %}{% endautoescape %}
 {% endblock %}
