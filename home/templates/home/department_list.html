@@ -18,9 +18,17 @@
         </div>
         <div class="row">
             <ul>
-                {{object_list.courses_json}}
-                {% for course in object_list.courses %}
-                <li>{{ course }}</li>
+                {% for course, sections in object_list.courses_json.items %}
+                <li>{{ course }}
+                    <div class="'row">
+                        <ul>
+                            {% for section in sections %}
+                            <li> {{ section.course_section }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </li>
+
                 {% endfor %}
             </ul>
         </div>

@@ -64,9 +64,8 @@ class DeptDetailView(generic.ListView):
 
     def get_queryset(self):
         courses, professors, sections = deserialize_department(self.kwargs['dept'])
-        dept_json = get_department_json(self.kwargs['dept'])
         courses_json = group_by_course(self.kwargs['dept'])
-        return {'courses': courses, 'professors': professors, 'sections': sections, 'dept_json': dept_json, 'courses_json': courses_json}
+        return {'courses': courses, 'professors': professors, 'sections': sections, 'courses_json': courses_json}
 
 '''
 This function will construct/identify department instances for all the mnemonics in luthers list, then 
@@ -213,9 +212,10 @@ def group_by_course(subject):
     courses_set = set()
     for section in dept_json:
         if courses_set.__contains__(section['catalog_number']):
-            courses[subject+section['catalog_number']].append(section)
+            courses[subject+section['catalog_number'] + ' - ' + section['description']].append(section)
         else:
             courses_set.add(section['catalog_number'])
-            courses[subject + section['catalog_number']] = []
-            courses[subject + section['catalog_number']].append(section)
+            courses[subject + section['catalog_number'] + ' - ' + section['description']] = []
+            courses[subject + section['catalog_number'] + ' - ' + section['description']].append(section)
     return courses
+
