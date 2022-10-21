@@ -20,7 +20,7 @@
         <div class="row justify-content-center align-items-center">
           {% for dept in deptList %}
               <div class="col-4 {% cycle 'order-1' 'order-2' 'order-3' as column %}">
-                <a href="#">{{dept.name}}({{dept.subject}})</a>
+                <a href="department/{{ dept.subject }}">{{dept.name}}({{dept.subject}})</a>
               </div>
             {% if forloop.counter|divisibleby:3 %}
             </div>
