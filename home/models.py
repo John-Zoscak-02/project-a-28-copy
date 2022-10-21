@@ -36,6 +36,9 @@ class Course(models.Model):
     def __str__(self):
         return "description: %s\n - %s %s" % (self.description, self.department, self.catalog_number)
 
+#class Schedule(models.Model):
+#    user = models.ForeignKey(User)
+
 class Section(models.Model):
     section_number = models.IntegerField(default=0)
     wait_list = models.IntegerField(default=0)
@@ -45,6 +48,7 @@ class Section(models.Model):
     topic = models.CharField(max_length=64)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     professor = models.ForeignKey(Professor, on_delete=models.CASCADE)
+    #schedules = models.ManyToManyField(Schedule)
     days = models.CharField(max_length=128)
     start_time = models.CharField(max_length=128)
     end_time = models.CharField(max_length=128)
