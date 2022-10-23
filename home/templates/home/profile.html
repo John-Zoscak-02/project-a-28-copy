@@ -13,8 +13,13 @@
 {% block title %}Profile Page{% endblock %}
 
 {% block content %}
-<content>
-    <p>Hello, this is the profile page</p>
-    {% autoescape off %}{% bootstrap_messages %}{% endautoescape %}
-</content>
+<div class="content-section col-lg-12 col-md-12 col-sm-12 tutorial style" style="min-height:65;">
+    <legend class="border-bottom mb-4"> Profile Information</legend>
+    <h1>
+        {{ user.email }}
+    </h1>
+    {% for followers in user.follows.all %}
+    <li> {{ followers }}</li>
+    {% endfor %}
+</div>
 {% endblock %}

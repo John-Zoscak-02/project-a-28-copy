@@ -1,6 +1,6 @@
+from cProfile import Profile
 from django.shortcuts import render
-
-from .models import Course, Department, Section, Professor
+from .models import Course, Department, Section, Professor, Profile
 from django.views.generic.edit import CreateView
 from django.views import generic
 import urllib3
@@ -31,8 +31,9 @@ def friends(request):
     return render(request, 'home/friends.html')
 
 
-def profile(request):
-    return render(request, 'home/profile.html')
+class ProfileView(generic.ListView):
+    model = Profile
+    template_name= 'home/profile.html'
 
 class AboutUsView(generic.ListView):
     model = Professor
