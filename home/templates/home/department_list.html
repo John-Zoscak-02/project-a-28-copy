@@ -1,0 +1,77 @@
+{% extends 'home/base.html' %}
+
+{# Load the tag library #}
+{% load bootstrap5 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+
+{% block title %}{{ object_list.dept }} List Page{% endblock %}
+
+{% block content %}
+    <div class="accordion" id="accordionExample">
+        {% for course, sections in object_list.courses_json.items %}
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="heading{{ forloop.counter }}">
+         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ forloop.counter }}" aria-expanded="false" aria-controls="collapse{{ forloop.counter }}">
+            <div style="width: 800px;">{{ course }}</div>
+<!--              this width value is temporary, I hasn't able to figure out how to keep the badge on the right while in the button-->
+              <div class="badge bg-primary rounded-pill pl-4" style = "float:right">{{ sections|length }} Section(s)</div>
+
+          </button>
+        </h2>
+        <div id="collapse{{ forloop.counter }}" class="accordion-collapse collapsed collapse" aria-labelledby="heading{{ forloop.counter }}">
+          <div class="accordion-body">
+              <ul>
+                {% for section in sections %}
+
+                <li class="list-group-item">
+                  {%with section.meetings|first as meeting %}
+                    
+
+                <div class="container">
+                  <div class="row align-items-start">
+                    <div class="col">
+                      {{ section.course_number }}
+                    </div>
+                    <div class="col">
+                      {{ section.course_section }}
+                    </div>
+                    <div class="col">
+                      {{ section.component }} {{ section.units }} Units
+                    </div>
+                    <div class="col">
+                      {{ section.enrollment_available }}/{{ section.enrollment_total }}
+                    </div>
+                    <div class="col">
+                      Professor: {{ section.instructor.name }}
+                    </div>
+                    <div class="col">
+                      {{ meeting.days}} {{ meeting.start_time|slice:"0:2" }}:{{ meeting.start_time|slice:"3:5" }} - {{ meeting.end_time|slice:"0:2" }}:{{ meeting.end_time|slice:"3:5" }}
+                    </div>
+                    <div class="col">
+                      {{ meeting.facility_description }}
+                    </div>
+                    <div class="col">
+                      <button type="button" class="btn btn-primary btn-xs rounded-pill">Add To Schedule</button>
+                    </div>
+                  </div>
+                </div>
+                {% endwith %}
+                </li>
+
+                {% endfor %}
+                </ul>
+            </div>
+        </div>
+      </div>
+
+        {% endfor %}
+    </div>
+
+    {% autoescape off %}{% bootstrap_messages %}{% endautoescape %}
+{% endblock %}

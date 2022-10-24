@@ -15,16 +15,19 @@
     <a class='nav-item nav-link' href="/accounts/google/login">Login with google</a>
     {% endif %}
 </nav>
-<div class="container">
-    <header>
-        <br>
-        <h1><emph>{% block title %}(no content){% endblock %}</emph></h1>
-    </header>
-
-    <!--{% autoescape off %}{% bootstrap_messages %}{% endautoescape %}-->
-
-    <div class="position-absolute top-50 start-50 translate-middle">
+<div class="container column gap-2">
+    <div class="row">
+        <header>
+            <h1>
+                <br/>
+                <emph>{% block title %}(no content){% endblock %}</emph>
+                <br />
+            </h1>
+        </header>
+    </div>
+    <div class="row p-2">
         {% block content %}{% endblock %}
     </div>
+    <!--{% autoescape off %}{% bootstrap_messages %}{% endautoescape %}-->
 </div>
 {% endblock %}
