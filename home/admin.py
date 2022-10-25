@@ -22,16 +22,16 @@ class CourseAdmin(admin.ModelAdmin):
     search_fields = ['catalog_number', 'description', 'department']
     list_per_page: 100
 
-class UserAdmin(admin.ModelAdmin):
-    model = User
-    fields = ["username"]
-    inlines = (ProfileInline, )
-    def get_inline_instances(self, request, obj=None):
+class ProfileAdmin(admin.ModelAdmin):
+    model = Profile
+    fields = ["user", "email", "major", "year", "follows"]
+    # inlines = (ProfileInline, )
+    """ def get_inline_instances(self, request, obj=None):
         if not obj:
             return list()
-        return super(UserAdmin, self).get_inline_instances(request, obj)
+        return super(UserAdmin, self).get_inline_instances(request, obj) """
 
 admin.site.unregister(User)
-admin.site.register(User, UserAdmin)
+admin.site.register(User, ProfileAdmin)
 admin.site.register(Course, CourseAdmin)
 admin.site.unregister(Group)

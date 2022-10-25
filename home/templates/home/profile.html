@@ -16,10 +16,10 @@
 <div class="content-section col-lg-12 col-md-12 col-sm-12 tutorial style" style="min-height:65;">
     <legend class="border-bottom mb-4"> Profile Information</legend>
     <h1>
-        {{ user.email }}
+        {{ user.profile }}
     </h1>
     {% for followers in user.follows.all %}
-    <li> {{ followers }}</li>
+    <li> {{ followers.username }}</li>
     {% endfor %}
 </div>
 {% endblock %}
