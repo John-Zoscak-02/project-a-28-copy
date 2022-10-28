@@ -42,6 +42,12 @@ class AboutUsView(generic.ListView):
     def about_us(request): 
         return render(request, 'home/about-us.html')
 
+class ProfileView(generic.DetailView):
+    model = Professor
+    template_name= 'home/about-us.html'
+    def about_us(request): 
+        return render(request, 'home/about-us.html')
+
 class CalendarView(generic.ListView):
     model = Professor
     template_name= 'home/calendar.html'
@@ -55,7 +61,7 @@ class CourseDetailView(generic.ListView):
     template_name = 'home/course_detail.html'
 
     @staticmethod
-    def about_us(request): 
+    def get_queryset(request): 
         return render(request, 'home/course_detail.html')
 
 class DeptDetailView(generic.ListView):
