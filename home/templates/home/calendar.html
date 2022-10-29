@@ -10,11 +10,6 @@
 {# Display django.contrib.messages as Bootstrap alerts #}
 {% bootstrap_messages %}
 
-{% block title %}Calendar Page{% endblock %}
 
-{% block content %}
-<content>
-    <p>Hello, this is the calendar page</p>
-    {% autoescape off %}{% bootstrap_messages %}{% endautoescape %}
-</content>
-{% endblock %}
+<p>CALENDAR</p>
+{% autoescape off %}{% bootstrap_messages %}{% endautoescape %}
