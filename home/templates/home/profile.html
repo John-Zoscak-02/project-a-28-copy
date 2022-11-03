@@ -1,0 +1,20 @@
+{% extends 'home/base.html' %}
+
+{# Load the tag library #}
+{% load bootstrap5 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+
+{% block title %}Profile Page{% endblock %}
+
+{% block content %}
+<content>
+    <p>Hello, this is the profile page</p>
+    {% autoescape off %}{% bootstrap_messages %}{% endautoescape %}
+</content>
+{% endblock %}

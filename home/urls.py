@@ -1,4 +1,4 @@
-"""louslist_a28 URL Configuration
+"""home URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.0/topics/http/urls/
@@ -13,13 +13,16 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
 from django.urls import path, include
+from . import views
 
-
+app_name = 'home'
 urlpatterns = [
-    path('accounts/', include('allauth.urls'), name='accounts'),
-    path('admin/', admin.site.urls),
-    path('', include('home.urls')),
-    
+    path('', views.landing, name='landing'),
+    path('friends', views.friends, name='friends'),
+    path('profile', views.profile, name='profile'), # This will need to be a url in the form of {{username}}/profile this is temporary
+    path('calendar/', views.CalendarView.as_view(), name='calendar'),
+    path('<int:pk>', views.CourseDetailView.as_view(), name='course_detail'),
+    path('about-us/', views.AboutUsView.as_view(), name='about-us'),
+    path('department/<str:dept>', views.DeptDetailView.as_view(), name='dept_detail')
 ]
