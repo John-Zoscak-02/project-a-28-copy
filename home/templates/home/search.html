@@ -1,0 +1,25 @@
+{% extends 'home/base.html' %}
+
+{# Load the tag library #}
+{% load bootstrap5 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{% block title %}Class Search{% endblock %}
+
+{% block content %}
+<content>
+
+    <div class="card example-1 scrollbar-ripe-malinka">
+      <form action="/search" method="post">
+        {% csrf_token %}
+        {{ form }}
+      <input type="submit" value="Submit">
+      </form>
+    </div>
+    {{search_data}}
+    {% autoescape off %}{% bootstrap_messages %}{% endautoescape %}
+</content>
+{% endblock %}
