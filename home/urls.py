@@ -21,7 +21,7 @@ urlpatterns = [
     path('', views.landing, name='landing'),
     path('friends', views.friends, name='friends'),
     path('about-us/', views.about_us, name='about-us'),
-    path('profile/', views.ProfileView.as_view(), name='profile'),
-    path('<int:pk>/', views.CourseDetailView.as_view(), name='course_detail'),
+    path('profiles/<int:pk>', views.ProfileView.as_view(), name='profile'),
+    path('course/<int:pk>/', views.CourseDetailView.as_view(), name='course_detail'),
     path('department/<str:dept>', views.DeptDetailView.as_view(), name='dept_detail')
 ]

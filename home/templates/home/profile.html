@@ -10,26 +10,220 @@
 {# Display django.contrib.messages as Bootstrap alerts #}
 {% bootstrap_messages %}
 
-{% block title %}Profile Page{% endblock %}
+{% if user.is_authenticated %}
+{% block title %}Account: {{profile.user.username}}{% endblock %}
+{% endif %}
 
 {% block content %}
-<content>
-    <h2>Account: {{profile.user.username}}</h2>
-    <h4>Friends:</h4>
-    {% if profile.friends %}
-    <ul class="nav flex-column">
-        {% for friend in profile.friends %}
-        <li class="nav-link" href="#">
-            <p>{{friend.user.username}}</p>
-        </li>
-        {% endfor %}
-    </ul>
+</div class='container column gap-2'>
+    {% if user.is_authenticated %}
+        <div class="row">
+            <h4>Friends:</h4>
+            <div class="card example-1 scrollbar-ripe-malinka">
+                <div class="card-body">
+                    {% if profile.friends.all|length != 0 %}
+                    {% for friend in profile.friends.all %}
+                    <a class="nav-link" href="/profiles/{{friend.user.id}}">{{friend.user.username}}</a>
+                    {% endfor %}
+                    </ul>
+                    {% else %}
+                    <ul class="nav flex-column">
+                        <li>Ha Ha you have no friends :P</li>
+                    </ul>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <h4>Calendar:</h4>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th scope="col"></th>
+                        <th scope="col" style="width: 14.29%">Sunday</th>
+                        <th scope="col" style="width: 14.29%">Monday</th>
+                        <th scope="col" style="width: 14.29%">Tuesday</th>
+                        <th scope="col" style="width: 14.29%">Wednesday</th>
+                        <th scope="col" style="width: 14.29%">Thursday</th>
+                        <th scope="col" style="width: 14.29%">Friday</th>
+                        <th scope="col" style="width: 14.29%">Saturday</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">6am</th>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                    </tr>
+                    <tr>
+                        <th scope="row align-baseline">7am</th>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                    </tr>
+                    <tr>
+                        <th scope="row align-baseline">8am</th>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">9am</th>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">10am</th>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">11am</th>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">12pm</th>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">1pm</th>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">2pm</th>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">3pm</th>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">4pm</th>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">5pm</th>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">6pm</th>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                    </tr><tr>
+                        <th scope="row">7pm</th>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">8pm</th>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">9pm</th>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">10pm</th>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                        <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+                    </tr>
+                </tbody>
+            </table>
     {% else %}
-        <p>Ha Ha you have no friends :P</p>
+    <p><strong><font color='red'>You must login to view member profiles</font></strong></p>
     {% endif %}
-    <h4>Calendar:</h4>
-    {% include 'calendar.html' %}
-
     {% autoescape off %}{% bootstrap_messages %}{% endautoescape %}
-</content>
+</div>
 {% endblock %}
