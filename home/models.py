@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
@@ -8,42 +8,12 @@ from django.dispatch import receiver
 # We will be able to get this information from the SIS scraper when we have access to that
 # To Do: the specifics of all of this will need to change, this is just an outline and example
 
-@receiver(post_save, sender=User)
-def create_profile(sender, instance, created, **kwargs):
-    if created:
-        user_profile = Profile(user=instance)
-        user_profile.save()
-        user_profile.follows.set([instance.profile.id])
-        user_profile.save()
+class User(AbstractUser):
+    friends = models.ManyToManyField("User", blank=True)
 
-class Profile(models.Model):
-    first = 1
-    second = 2
-    third = 3
-    fourth = 4
-    grad_student = 5
-    other = 6
-    ROLE_CHOICES = (
-        (first, 'First Year'),
-        (second, 'Second Year'),
-        (third, 'Thrid Year'),
-        (fourth, 'Fourth Year'),
-        (grad_student, 'Graduate Student'),
-        (other, 'Other'),
-    )
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    year = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, null=True, blank=True)
-    major = models.CharField(max_length=50, blank=True)
-    email = models.EmailField(blank=True)
-    follows = models.ManyToManyField(
-        "self",
-        related_name="followed_by",
-        symmetrical=False,
-        blank=True
-    )
-    def __str__(self):
-        return self.user.username
-
+class Friend_Request(models.Model):
+    from_user = models.ForeignKey(User, related_name='from_user', on_delete=models.CASCADE)
+    to_user = models.ForeignKey(User, related_name='to_user', on_delete=models.CASCADE)
 class Calendar(models.Model):
     date = models.DateField()
 

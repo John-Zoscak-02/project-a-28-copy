@@ -1,19 +1,22 @@
 from django.contrib import admin
 
-from .models import Department, Course, Section, Profile
-from django.contrib.auth.models import User, Group
-class ProfileInline(admin.StackedInline):
-    model = Profile
-    can_delete = False
-    verbose_name_plural = 'Profile'
-    fk_name = 'user'
+from .models import Department, Course, Section, User
+from django.contrib.auth.models import Group
+from django.contrib.auth.admin import UserAdmin
 
+ADDITIONAL_USER_FIELDS = (
+    (None, {'fields': ('username',)}),
+)
+
+class MyUserAdmin(UserAdmin):
+    model = User
+    add_fieldsets = UserAdmin.add_fieldsets + ADDITIONAL_USER_FIELDS
+    fieldsets = UserAdmin.fieldsets + ADDITIONAL_USER_FIELDS
 class SectionInline(admin.TabularInline):
     model = Section
     extra = 1
 
 class CourseAdmin(admin.ModelAdmin):
-    model = User
     fieldsets = [
         (None, {'fields' : ['description']}),
     ]
@@ -22,16 +25,6 @@ class CourseAdmin(admin.ModelAdmin):
     search_fields = ['catalog_number', 'description', 'department']
     list_per_page: 100
 
-class ProfileAdmin(admin.ModelAdmin):
-    model = Profile
-    fields = ["user", "email", "major", "year", "follows"]
-    # inlines = (ProfileInline, )
-    """ def get_inline_instances(self, request, obj=None):
-        if not obj:
-            return list()
-        return super(UserAdmin, self).get_inline_instances(request, obj) """
-
 admin.site.unregister(User)
-admin.site.register(User, ProfileAdmin)
 admin.site.register(Course, CourseAdmin)
-admin.site.unregister(Group)
+admin.site.register(User, MyUserAdmin)

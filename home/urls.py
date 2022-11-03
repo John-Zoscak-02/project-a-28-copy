@@ -20,9 +20,10 @@ app_name = 'home'
 urlpatterns = [
     path('', views.landing, name='landing'),
     path('friends', views.friends, name='friends'),
-    path('profile', views.ProfileView.as_view(), name='profile'), # This will need to be a url in the form of {{username}}/profile this is temporary
     path('calendar/', views.CalendarView.as_view(), name='calendar'),
     path('<int:pk>', views.CourseDetailView.as_view(), name='course_detail'),
     path('about-us/', views.AboutUsView.as_view(), name='about-us'),
-    path('department/<str:dept>', views.DeptDetailView.as_view(), name='dept_detail')
+    path('department/<str:dept>', views.DeptDetailView.as_view(), name='dept_detail'),
+    path('send_friend_request/<int:userID>/', views.send_friend_request, name='send_friend_request'),
+    path('accept_friend_request/<int:requestID>/', views.accept_friend_request, name='accept_friend_request')
 ]

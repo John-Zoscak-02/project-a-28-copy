@@ -1,6 +1,6 @@
-from cProfile import Profile
+from http.client import HTTPResponse
 from django.shortcuts import render
-from .models import Course, Department, Section, Professor, Profile
+from .models import Course, Department, Section, Professor, User, Friend_Request
 from django.views.generic.edit import CreateView
 from django.views import generic
 import urllib3
@@ -18,6 +18,24 @@ mnemonic_map= { "AAS":"African-American and African Studies","ACCT":"Accounting"
 #        Return nothing (right now)
 #        """
 #        return []
+def send_friend_request(request, userID):
+    from_user = request.user
+    to_user = User.object.get(id=userID)
+    friend_request, created = Friend_Request.objects.get_or_create(from_user=from_user, to_user=to_user)
+    if created:
+        return HTTPResponse('friend request sent')
+    else:
+        return HTTPResponse('friend request was already sent')
+
+def accept_friend_request(request, requestID):
+    friend_request = Friend_Request.objects.get(id=requestID)
+    if friend_request.to_user == request.user:
+        friend_request.to_user.friends.add(friend_request.from_user)
+        friend_request.from_user.friends.add(friend_request.to_user)
+        friend_request.delete()
+        return HTTPResponse('friend request accepted')
+    else:
+        return HTTPResponse('friend request not accepted')
 
 def landing(request):
     # Department list:
@@ -30,10 +48,6 @@ def landing(request):
 def friends(request):
     return render(request, 'home/friends.html')
 
-
-class ProfileView(generic.ListView):
-    model = Profile
-    template_name= 'home/profile.html'
 
 class AboutUsView(generic.ListView):
     model = Professor

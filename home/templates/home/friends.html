@@ -1,20 +1,17 @@
-{% extends 'home/base.html' %}
+<u1 class="all_users">
+    {% for user in allusers %}
+    {% if not user.is_superuser %}
+    {% if user not in request.user.friends.all %}
+    <h1>{{user}} <a href="/send_friend_request/{{user.id}}/">send_friend_request</a></h1>
+    {% endif %}
+    {% endif %}
+    {% endfor %}
+</u1>
 
-{# Load the tag library #}
-{% load bootstrap5 %}
-
-{# Load CSS and JavaScript #}
-{% bootstrap_css %}
-{% bootstrap_javascript %}
-
-{# Display django.contrib.messages as Bootstrap alerts #}
-{% bootstrap_messages %}
-
-{% block title %}Friends Page{% endblock %}
-
-{% block content %}
-<content>
-    <p>Hello, this is the friends search page</p>
-    {% autoescape off %}{% bootstrap_messages %}{% endautoescape %}
-</content>
-{% endblock %}
+    {% for friend_request in all_friend_requests %}
+<h1>{{friend_request.from_user}}
+    <a href="/accept_friend_request/{{friend_request.id}}/">
+        accept_friend_request
+    </a>
+</h1>
+    {% endfor %}
