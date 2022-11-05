@@ -25,6 +25,5 @@ class CourseAdmin(admin.ModelAdmin):
     search_fields = ['catalog_number', 'description', 'department']
     list_per_page: 100
 
-admin.site.unregister(User)
+
 admin.site.register(Course, CourseAdmin)
-admin.site.register(User, MyUserAdmin)
