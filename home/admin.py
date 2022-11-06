@@ -1,6 +1,11 @@
 from django.contrib import admin
 
-from .models import Department, Course, Section
+from .models import Department, Course, Section, Profile, Relationship
+from django.contrib.auth.models import Group
+
+
+
+
 
 class SectionInline(admin.TabularInline):
     model = Section
@@ -15,5 +20,6 @@ class CourseAdmin(admin.ModelAdmin):
     search_fields = ['catalog_number', 'description', 'department']
     list_per_page: 100
 
-
+admin.site.register(Profile)
+admin.site.register(Relationship)
 admin.site.register(Course, CourseAdmin)

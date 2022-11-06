@@ -11,14 +11,12 @@
 {% bootstrap_messages %}
 
 {% block title %}
-<h1>Profile of : {{profile.user}}</h1>
+Invite Friends
 {% endblock title %}
 
 {% block content %}
-    {% for friend in profile.get_friends %}
-        {{friend}}
-        <br>
-    {% endfor %}
-    Friends number : {{profile.get_friends_no}}
-
+<u1>
+    {% for item in qs %}
+    <li>{{item}}</li>
+</u1>
 {% endblock content%}
