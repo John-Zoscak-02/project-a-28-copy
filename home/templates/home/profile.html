@@ -15,7 +15,7 @@
 {% endif %}
 
 {% block content %}
-</div class='container column gap-2'>
+<div class='container column gap-2'>
     {% if user.is_authenticated %}
         <div class="row">
             <h4>Friends:</h4>
@@ -25,7 +25,6 @@
                     {% for friend in profile.friends.all %}
                     <a class="nav-link" href="/profiles/{{friend.user.id}}">{{friend.user.username}}</a>
                     {% endfor %}
-                    </ul>
                     {% else %}
                     <ul class="nav flex-column">
                         <li>Ha Ha you have no friends :P</li>

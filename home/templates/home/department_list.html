@@ -49,13 +49,16 @@
                       Professor: {{ section.instructor.name }}
                     </div>
                     <div class="col">
-                      {{ meeting.days}} {{ meeting.start_time|slice:"0:2" }}:{{ meeting.start_time|slice:"3:5" }} - {{ meeting.end_time|slice:"0:2" }}:{{ meeting.end_time|slice:"3:5" }}
+                      {{ meeting.days }} {{ meeting.start_time|slice:"0:2" }}:{{ meeting.start_time|slice:"3:5" }} - {{ meeting.end_time|slice:"0:2" }}:{{ meeting.end_time|slice:"3:5" }}
                     </div>
                     <div class="col">
                       {{ meeting.facility_description }}
                     </div>
                     <div class="col">
-                      <button type="button" class="btn btn-primary btn-xs rounded-pill">Add To Schedule</button>
+                      <form method="post">
+                        {% csrf_token %}
+                        <button type="button" class="btn btn-primary btn-xs rounded-pill" name="section_add" value="{{ section.course_number }}">Add To Schedule</button>
+                      </form>
                     </div>
                   </div>
                 </div>
