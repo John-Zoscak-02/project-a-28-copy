@@ -1,0 +1,38 @@
+{% extends 'home/base.html' %}
+
+{# Load the tag library #}
+{% load bootstrap5 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+
+{% block title %}
+All Profiles
+{% endblock title %}
+
+{% block content %}
+    {% if is_empty %}
+        <h1>No profiles to interact with</h1>
+    {% endif %}
+
+    {% for obj in object_list %}
+    <div class="ui segment">
+        <div class="ui grid">
+            <div class="row">
+                <div class = "three wide column">
+                    <img class="ui small circular image" src={{obj.avatar.url}}>
+                </div>
+                <div class="thirteen wide column">
+                    <h3>{{obj.user}}</h3>
+                    <p>{{obj.username}}</p>
+                    <button class="ui primary button">See schedule</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+{% endblock content %}

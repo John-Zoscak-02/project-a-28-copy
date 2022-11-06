@@ -1,8 +1,10 @@
 from http.client import HTTPResponse
 from django.shortcuts import render
-from .models import Course, Department, Section, Professor, User, Friend_Request
+from .models import Course, Department, Relationship, Section, Professor, Profile
 from django.views.generic.edit import CreateView
 from django.views import generic
+from django.views.generic import ListView
+from django.contrib.auth.models import User
 import urllib3
 import json
 import numpy as np
@@ -18,24 +20,57 @@ mnemonic_map= { "AAS":"African-American and African Studies","ACCT":"Accounting"
 #        Return nothing (right now)
 #        """
 #        return []
-def send_friend_request(request, userID):
-    from_user = request.user
-    to_user = User.object.get(id=userID)
-    friend_request, created = Friend_Request.objects.get_or_create(from_user=from_user, to_user=to_user)
-    if created:
-        return HTTPResponse('friend request sent')
-    else:
-        return HTTPResponse('friend request was already sent')
+def profiles_list_view(request):
+    user = request.user
+    qs = Profile.objects.get_all_profiles(user)
+    context = {'qs' : qs}
+    return render(request, 'home/profile_list.html', context)
 
-def accept_friend_request(request, requestID):
-    friend_request = Friend_Request.objects.get(id=requestID)
-    if friend_request.to_user == request.user:
-        friend_request.to_user.friends.add(friend_request.from_user)
-        friend_request.from_user.friends.add(friend_request.to_user)
-        friend_request.delete()
-        return HTTPResponse('friend request accepted')
-    else:
-        return HTTPResponse('friend request not accepted')
+class ProfleListView(ListView):
+    model = Profile
+    template_name = 'profiles/profile_list.html'
+    # context_object_name = 'qs'
+
+    def get_queryset(self):
+        qs = Profile.objects.get_all_profiles(self.request.user)
+        return qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = User.objects.get(username__iexact=self.request.user)
+        profile = Profile.objects.get(user=user)
+        rel_r = Relationship.objects.filter(sender=profile)
+        rel_s = Relationship.objects.filter(receiver=profile)
+        rel_receiver = []
+        rel_sender = []
+        for item in rel_r:
+            rel_receiver.append(item.receiver.user)
+        for item in rel_s:
+            rel_sender.append(item.sender.user)
+        
+        context["rel_receiver"] = rel_receiver
+        context["rel_sender"] = rel_sender
+        context['is_empty'] = False
+        if len(self.get_queryset()) == 0:
+            context['is_empty'] = True
+        return context
+
+def invite_profiles_list_view(request):
+    user = request.user
+    qs = Profile.objects.get_all_profiles_to_invite(user)
+    context = {'qs' : qs}
+    return render(request, 'home/to_invite_list.html', context)
+
+def my_profile(request):
+    profile = Profile.objects.get(user=request.user)
+    context = {'profile':profile}
+    return render(request, 'home/profile.html', context)
+
+def invites_received_view(request):
+    profile = Profile.objects.get(user=request.user)
+    qs = Relationship.objects.invitations_received(profile)
+    context = {'qs' : qs}
+    return render(request, 'home/friends.html', context)
 
 def landing(request):
     # Department list:

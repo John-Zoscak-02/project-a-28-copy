@@ -29,7 +29,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['localhost','127.0.0.1','louslist-a28.herokuapp.com']
 
 SOCIALACCOUNT_LOGIN_ON_GET = True
-AUTH_USER_MODEL = 'home.User'
+
 
 # Application definition
 

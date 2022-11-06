@@ -10,16 +10,15 @@
 {# Display django.contrib.messages as Bootstrap alerts #}
 {% bootstrap_messages %}
 
-{% block title %}Profile Page{% endblock %}
+{% block title %}
+<h1>Profile of : {{profile.user}}</h1>
+{% endblock title %}
 
 {% block content %}
-<div class="content-section col-lg-12 col-md-12 col-sm-12 tutorial style" style="min-height:65;">
-    <legend class="border-bottom mb-4"> Profile Information</legend>
-    <h1>
-        {{ user.profile }}
-    </h1>
-    {% for followers in user.follows.all %}
-    <li> {{ followers.username }}</li>
+    {% for friend in profile.get_friends %}
+        {{friend}}
+        <br>
     {% endfor %}
-</div>
-{% endblock %}
+    Friends number : {{profile.get_friends_no}}
+
+{% endblock content%}
