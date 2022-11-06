@@ -58,9 +58,15 @@
                     <div class="col">
                       {{ meeting.facility_description }}
                     </div>
+                    {% if user.is_authenticated %}
                     <div class="col">
                       <button type="button" class="btn btn-primary btn-xs rounded-pill">Add To Schedule</button>
                     </div>
+                    {% else %}
+                    <div class="col">
+                      To add class to schedule, login <a href="https://louslist-a28.herokuapp.com/accounts/google/login/">here</a>
+                    </div>
+                    {% endif %}                    
                   </div>
                 </div>
                 {% endwith %}

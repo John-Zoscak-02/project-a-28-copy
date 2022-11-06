@@ -10,9 +10,15 @@
 {# Display django.contrib.messages as Bootstrap alerts #}
 {% bootstrap_messages %}
 
-{% block title %}Friends Page{% endblock %}
+{% block title %}
+<h1>Friend invites of : {{profile.user}}</h1>
+{% endblock title %}
 
 {% block content %}
+<u1>
+    {% for item in qs %}
+    <li>{{item}}</li>
+</u1>
 <form>
     <p>Add a friend! Look up a friend by their first and last name or by email.</p>
     <label for="fname">First name:</label><br>
@@ -24,5 +30,4 @@
     <input type="submit" value="Submit">
 </form>
     {% autoescape off %}{% bootstrap_messages %}{% endautoescape %}
-{% endblock %}
-
+{% endblock content %}
