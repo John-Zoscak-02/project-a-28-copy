@@ -11,10 +11,11 @@
 {% bootstrap_messages %}
 
 {% block title %}
-<h1>Friend invites of : {{profile.user}}</h1>
+Friends List
 {% endblock title %}
 
 {% block content %}
+<h1>Friend invites of : {{profile.user}}</h1>
 <u1>
     {% for item in qs %}
     <li>{{item}}</li>
