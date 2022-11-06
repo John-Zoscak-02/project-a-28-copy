@@ -60,21 +60,36 @@ class Section(models.Model):
     facility_description = models.CharField(max_length=128)
 
     def intersect(self, time, day):
-        return day in self.days and float(self.start_time[:,5]) <= float(time[:,5]) <= float(self.end_time[:,5])
-
+        return day in self.days and float(self.start_time[:5]) <= float(time[:5]) <= float(self.end_time[:5])
 
     def __str__(self):
         return "number=%d course=%s" % (self.section_number, self.course)
 
 class Schedule(models.Model):
     profile = models.OneToOneField(Profile, on_delete=models.CASCADE, related_name='schedule')
-    classes = models.ManyToManyField(Section, related_name='schedules', null=True)
+    classes = models.ManyToManyField(Section, related_name='schedules')
 
-    def class_on(self, time, day):
-        for cls in self.classes:
-            if cls.intersect(time, day):
-                return cls
-        return None
+    @property
+    def classes_by_time(self):
+        by_time = {}
+        for cls in self.classes.all():
+            start_time = cls.start_time
+            end_time = cls.end_time
+            if start_time:
+                scale = ((float(end_time[:2]) - float(start_time[:2])) + 
+                        (float(end_time[3:5]) - float(start_time[3:5])))
+                translate = float(start_time[3:5]) / 60
+                t=''
+                if float(start_time[:2]) < 12:
+                    t = (str(start_time[:2])+"am", scale, translate)
+                else:
+                    t = (str(start_time[:2])+"pm", scale, translate)
 
+                if t in by_time:
+                    by_time[t].append((cls, (scale, translate)))
+                else:
+                    by_time[t] = []
+                    by_time[t].append((cls, (scale, translate)))
+        return by_time
 
 
