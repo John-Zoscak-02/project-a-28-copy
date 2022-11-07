@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 
-from .models import Department, Course, Section, Profile, Relationship
+from .models import Department, Course, Section, Profile, Relationship, Schedule
 from django.contrib.auth.models import Group
 
 class SectionInline(admin.TabularInline):
@@ -52,8 +52,9 @@ class CourseAdmin(admin.ModelAdmin):
 
 
 admin.site.unregister(User)
-admin.site.register(User, CustomUserAdmin)
+admin.site.register(User)
 admin.site.register(Profile)
+admin.site.register(Schedule)
 admin.site.register(Department)
 admin.site.register(Course, CourseAdmin)
 admin.site.register(Section)

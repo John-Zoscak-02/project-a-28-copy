@@ -59,14 +59,33 @@
                     </div>
                     {% if user.is_authenticated %}
                     <div class="col">
-                      <form method="post">
+                      <form method="post" id="add_section_form-{{ section.course_number }}">
                         {% csrf_token %}
-                        <button type="button" class="btn btn-primary btn-xs rounded-pill" name="section_add" value="{{ section.course_number }}">Add To Schedule</button>
+                        <button type="submit" class="btn btn-primary btn-xs rounded-pill" name="section_add" id="{{ section.course_number }}"
+                         value="{{ section.course_number }}">Add To Schedule</button>
                       </form>
+                      <script src="https://code.jquery.com/jquery-3.5.1.js" 
+          integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" 
+            crossorigin="anonymous"></script>
+                      <script type="text/javascript">
+                        $(document).on('submit','#add_section_form-{{ section.course_number }}',function(e){
+                            e.preventDefault();
+                            $.ajax({
+                                type:'POST',
+                                url:'{% url "home:dept_detail" object_list.dept %}',
+                                data:
+                                {
+                                    section_add:$("#{{ section.course_number }}").val(),
+                                    csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
+                                },
+                                success:function(){},
+                                })
+                            });
+                        </script>
                     </div>
                     {% else %}
                     <div class="col">
-                      To add class to schedule, login <a href="https://louslist-a28.herokuapp.com/accounts/google/login/">here</a>
+                      To add class to schedule, login <a href="/accounts/google/login">here</a>
                     </div>
                     {% endif %}                    
                   </div>
