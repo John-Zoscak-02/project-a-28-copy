@@ -17,8 +17,6 @@ class ProfileManager(models.Manager):
         profiles = Profile.objects.all().exclude(user=sender)
         profile = Profile.objects.get(user=sender)
         qs = Relationship.objects.filter(Q(sender=profile) | Q(receiver=profile))
-        
-
         accepted = set([])
         for rel in qs:
             if rel.status == 'accepted':
