@@ -73,11 +73,6 @@ class Relationship(models.Model):
     def __str__(self):
         return f"{self.sender}-{self.receiver}-{self.status}"
 
-class AboutUs(models.Model):
-    contact = models.TextField(max_length=1000)
-    def __str__(self):
-        return "Prof=%s Email=%s" % (self.prof_name, self.prof_email)
-
 class Department(models.Model):
     subject = models.CharField(max_length=4)
 
