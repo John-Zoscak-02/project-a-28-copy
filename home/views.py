@@ -3,7 +3,7 @@ from .models import Course, Department, Relationship, Section, Profile
 from django.views import generic
 from django.contrib.auth.models import User
 from django.db.models import Q
-from home.utils import group_by_course
+from home.utils import group_by_course, get_events
 
 #from google.oauth2 import service_account
 #import googleapiclient.discovery
