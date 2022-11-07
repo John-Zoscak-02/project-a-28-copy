@@ -1,3 +1,4 @@
+from pyexpat import model
 import profile
 from django.db import models
 from django.contrib.auth.models import User
@@ -7,6 +8,11 @@ from django.template.defaultfilters import slugify
 
 from django.db.models import Q
 
+
+from django.contrib.auth.models import User
+from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 # Create your models here.
 
@@ -45,6 +51,7 @@ class Profile(models.Model):
 
     def __str__(self):
         return str(self.user)
+        
 STATUS_CHOICES = (
     ('send', 'send'),
     ('accepted', 'accepted'),
@@ -65,19 +72,9 @@ class Relationship(models.Model):
     objects = RelationshipManager()
     def __str__(self):
         return f"{self.sender}-{self.receiver}-{self.status}"
-class Calendar(models.Model):
-    date = models.DateField()
-
-    def __str__(self):
-        return "Date: %s" % (self.date)
 
 class AboutUs(models.Model):
     contact = models.TextField(max_length=1000)
-
-class Professor(models.Model):
-    prof_name = models.CharField(max_length=200)
-    prof_email = models.CharField(max_length=24)
-
     def __str__(self):
         return "Prof=%s Email=%s" % (self.prof_name, self.prof_email)
 
@@ -104,14 +101,44 @@ class Section(models.Model):
     enrollment_available= models.IntegerField(default=0)
     topic = models.CharField(max_length=64)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    professor = models.ForeignKey(Professor, on_delete=models.CASCADE)
+    prof_name = models.CharField(max_length=200)
+    prof_email = models.CharField(max_length=24)
     days = models.CharField(max_length=128)
     start_time = models.CharField(max_length=128)
     end_time = models.CharField(max_length=128)
     facility_description = models.CharField(max_length=128)
 
+    def intersect(self, time, day):
+        return day in self.days and float(self.start_time[:5]) <= float(time[:5]) <= float(self.end_time[:5])
 
     def __str__(self):
         return "number=%d course=%s" % (self.section_number, self.course)
+
+class Schedule(models.Model):
+    profile = models.OneToOneField(Profile, on_delete=models.CASCADE, related_name='schedule', null=True)
+    classes = models.ManyToManyField(Section, related_name='schedules')
+
+    @property
+    def classes_by_time(self):
+        by_time = {}
+        for cls in self.classes.all():
+            start_time = cls.start_time
+            end_time = cls.end_time
+            if start_time:
+                scale = ((float(end_time[:2]) - float(start_time[:2])) + 
+                        (float(end_time[3:5]) - float(start_time[3:5])))
+                translate = float(start_time[3:5]) / 60
+                t = (float(start_time[:2]), scale, translate)
+                # if float(start_time[:2]) < 12:
+                #     t = (str(start_time[:2])+"am", scale, translate)
+                # else:
+                #     t = (str(start_time[:2])+"pm", scale, translate)
+
+                if t in by_time:
+                    by_time[t].append((cls, (scale, translate)))
+                else:
+                    by_time[t] = []
+                    by_time[t].append((cls, (scale, translate)))
+        return by_time
 
 

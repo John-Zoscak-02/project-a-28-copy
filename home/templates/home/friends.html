@@ -32,7 +32,7 @@
                         <p>{{obj.username}}</p>
                         <br>
                         <a href="">
-                            <button class="ui primary button w-big mb-5">See profile</button>
+                            <button class="ui primary button w-big mb-5" href="/profile/{{obj.id}}">See profile</button>
                         </a>
                         <form action="{% url 'home:accept-invite' %}" method="POST">
                             {% csrf_token %}

@@ -10,11 +10,15 @@
 {# Display django.contrib.messages as Bootstrap alerts #}
 {% bootstrap_messages %}
 
-{% block title %}Calendar Page{% endblock %}
+{% block title %}Calendar{% endblock %}
 
 {% block content %}
-<content>
-    <p>Hello, this is the calendar page</p>
+    <body>
+        <ul>
+            {% for result in results %}
+            <li>{{result.start.date}}{% if result.end.date %}-{% endif%}{{result.end.date}}: {{result.summary}}</li>
+            {% endfor %}
+        </ul>
+    </body>
     {% autoescape off %}{% bootstrap_messages %}{% endautoescape %}
-</content>
 {% endblock %}
