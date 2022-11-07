@@ -11,25 +11,48 @@
 {% bootstrap_messages %}
 
 {% block title %}
-Friends List
+<h1>Friend invites</h1>
 {% endblock title %}
 
 {% block content %}
-<h1>Friend invites of : {{profile.user}}</h1>
-<u1>
-    {% for item in qs %}
-    <li>{{item}}</li>
+
+    {% if is_empty %}
+        <h1>No invitations here...</h1>
+    {% endif %}
+
+    {% for obj in qs %}
+        <div class="ui segment">
+            <div class="ui grid">
+                <div class="row">
+                    <div class="three wide column">
+                        <img class="ui small circular image" src={{obj.avatar.url}}>
+                    </div>
+                    <div class="thirteen wide column">
+                        <h3>{{obj.user}}</h3>
+                        <p>{{obj.username}}</p>
+                        <br>
+                        <a href="">
+                            <button class="ui primary button w-big mb-5">See profile</button>
+                        </a>
+                        <form action="{% url 'home:accept-invite' %}" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="profile_pk" value={{obj.pk}}>
+                            <button type="submit" class="ui positive basic button w-big mb-5">
+                                <i class="check icon"></i>
+                                Accept invite
+                            </button>
+                        </form>
+                        <form action="{% url 'home:reject-invite' %}" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="profile_pk" value={{obj.pk}}>
+                            <button type="submit" class="ui negative basic button w-big mb-5">
+                                <i class="close icon"></i>
+                                Reject invite
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     {% endfor %}
-</u1>
-<form>
-    <p>Add a friend! Look up a friend by their first and last name or by email.</p>
-    <label for="fname">First name:</label><br>
-    <input type="text" id="fname" name="fname"><br>
-    <label for="lname">Last name:</label><br>
-    <input type="text" id="lname" name="lname"><br>
-    <label for="email">Email:</label><br>
-    <input type="text" id="email" name="email"><br><br>
-    <input type="submit" value="Submit">
-</form>
-    {% autoescape off %}{% bootstrap_messages %}{% endautoescape %}
 {% endblock content %}

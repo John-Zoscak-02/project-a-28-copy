@@ -1,10 +1,12 @@
 from http.client import HTTPResponse
-from django.shortcuts import render
-from .models import Course, Department, Section, Profile, Relationship
-from django.contrib.auth.models import User
-from .utils import group_by_course, get_events
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Course, Department, Relationship, Section, Professor, Profile
+from django.views.generic.edit import CreateView
 from django.views import generic
-
+from django.views.generic import ListView
+from django.contrib.auth.models import User
+from django.db.models import Q
+from .utils import group_by_course, get_events
 #from google.oauth2 import service_account
 #import googleapiclient.discovery
 
@@ -75,8 +77,58 @@ def my_profile(request):
 def invites_received_view(request):
     profile = Profile.objects.get(user=request.user)
     qs = Relationship.objects.invitations_received(profile)
-    context = {'qs' : qs}
+    results = list(map(lambda x: x.sender, qs))
+    is_empty = False
+    if len(results) == 0:
+        is_empty = True
+    context = {'qs' : results,
+    'is_empty': is_empty,
+    }
     return render(request, 'home/friends.html', context)
+
+def send_invitation(request):
+    if request.method=='POST':
+        pk = request.POST.get('profile_pk')
+        user = request.user
+        sender = Profile.objects.get(user=user)
+        receiver = Profile.objects.get(pk=pk)
+
+        rel = Relationship.objects.create(sender=sender, receiver=receiver, status='send')
+        return redirect(request.META.get('HTTP_REFERER'))
+    return redirect('home:my_profile_view')
+
+def remove_from_friends(request):
+    if request.method=='POST':
+        pk = request.POST.get('profile_pk')
+        user = request.user
+        sender = Profile.objects.get(user=user)
+        receiver = Profile.objects.get(pk=pk)
+
+        rel = Relationship.objects.get((Q(sender=sender) & Q(receiver=receiver)) | Q(sender=receiver) & Q(receiver=sender))
+        rel.delete()
+        return redirect(request.META.get('HTTP_REFERER'))
+    return redirect('home:my_profile_view')
+
+def accept_invitation(request):
+    if request.method=="POST":
+        pk = request.POST.get('profile_pk')
+        sender = Profile.objects.get(pk=pk)
+        receiver = Profile.objects.get(user=request.user)
+        rel = get_object_or_404(Relationship, sender=sender, receiver=receiver)
+        if rel.status == 'send':
+            rel.status == 'accepted'
+            rel.save()
+    return redirect('home:friends')
+
+def reject_invitation(request):
+    if request.method=="POST":
+        pk = request.POST.get('profile_pk')
+        receiver = Profile.objects.get(user=request.user)
+        sender = Profile.objects.get(pk=pk)
+        rel = get_object_or_404(Relationship, sender=sender, receiver=receiver)
+        rel.delete()
+    return redirect('home:friends')
+
 
 def landing(request):
     # Department list:
