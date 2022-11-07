@@ -1,7 +1,7 @@
 import csv
 from django.test import TestCase
 
-from .views import search_for_section
+from .utils import search_for_section
 
 class SearchTests(TestCase):
 	def test_open_csv(self):

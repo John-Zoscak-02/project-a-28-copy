@@ -3,7 +3,7 @@ from django.urls import reverse
 from django.db import IntegrityError
 
 from home.views import profiles_list_view
-from .models import Course, Department, Relationship, Section, Professor, Profile
+from .models import Course, Department, Relationship, Section, Profile
 from django.core.cache import cache
 # Create your tests here.
 import datetime
