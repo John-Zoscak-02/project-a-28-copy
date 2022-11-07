@@ -5,6 +5,7 @@ import json
 from datetime import datetime
 from datetime import timedelta
 import pytz
+import csv
 
 def get_events(value):
     events = []
@@ -203,7 +204,7 @@ def group_by_course(subject):
 
 def search_for_section(search_criteria):
     try:
-        csvfile = open('data/searchData.csv')
+        csvfile = open('static/searchData.csv')
     except (FileNotFoundError, FileExistsError):
         return None
     valid_search_criteria = ['department', 'catalog_number', 'instructor', 'days', 'description']
