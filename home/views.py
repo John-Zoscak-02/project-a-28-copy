@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Course, Department, Relationship, Section, Profile
+from .models import Course, Department, Relationship, Section, Profile, Schedule
+from django.views.generic.edit import CreateView
 from django.views import generic
 from django.contrib.auth.models import User
 from django.db.models import Q
@@ -44,7 +45,7 @@ class ProfileListView(generic.ListView):
             rel_receiver.append(item.receiver.user)
         for item in rel_s:
             rel_sender.append(item.sender.user)
-        
+
         context["rel_receiver"] = rel_receiver
         context["rel_sender"] = rel_sender
         context['is_empty'] = False
@@ -148,7 +149,7 @@ class CourseDetailView(generic.ListView):
     template_name = 'home/course_detail.html'
 
     @staticmethod
-    def get_queryset(request): 
+    def get_queryset(request):
         return render(request, 'home/course_detail.html')
 
 class DeptDetailView(generic.ListView):
@@ -159,3 +160,32 @@ class DeptDetailView(generic.ListView):
         # courses, professors, sections = deserialize_department(self.kwargs['dept'])
         courses_json = group_by_course(self.kwargs['dept'])
         return {'courses_json': courses_json, 'dept': self.kwargs['dept']}
+
+    def post(self, request, **kwargs):
+        current_user_profile = request.user.profile
+        schedule = Schedule.objects.get(profile=current_user_profile)
+        data = request.POST
+        section_number = int(data.get('section_add'))
+        section = Section.objects.get(section_number=section_number)
+        scheduled_sections = schedule.classes.all()
+
+        interval = [float(section.start_time[:2]) + float(section.start_time[3:5]) / 60,
+                    float(section.end_time[:2]) + float(section.end_time[3:5]) / 60]
+        days = {section.days[i:i+2] for i in range(0, len(section.days), 2)}
+
+        context = self.get_queryset()
+        
+        conflicts = False
+        for other_section in scheduled_sections:
+            other_interval = [float(other_section.start_time[:2]) + float(other_section.start_time[3:5]) / 60,
+                              float(other_section.end_time[:2]) + float(other_section.end_time[3:5]) / 60]
+            other_days = {other_section.days[i:i+2] for i in range(0, len(other_section.days), 2)}
+
+            if days.intersection(other_days):
+                if max(0, min(interval[1], other_interval[1])) - max(interval[0], other_interval[0]) > 0:
+                    conflicts = True
+        
+        if not conflicts:
+            schedule.classes.add(section)
+                
+        return render(request, self.template_name, context)
