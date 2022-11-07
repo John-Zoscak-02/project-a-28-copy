@@ -1,0 +1,29 @@
+{{profile.schedule.classes_by_time.items}}
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th scope="col"></th>
+            <th scope="col" style="width: 14.29%">Sunday</th>
+            <th scope="col" style="width: 14.29%">Monday</th>
+            <th scope="col" style="width: 14.29%">Tuesday</th>
+            <th scope="col" style="width: 14.29%">Wednesday</th>
+            <th scope="col" style="width: 14.29%">Thursday</th>
+            <th scope="col" style="width: 14.29%">Friday</th>
+            <th scope="col" style="width: 14.29%">Saturday</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for time in times %}
+        <tr>
+            <th scope="row">{{time}}</th>
+            <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+            <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+            <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+            <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+            <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+            <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+            <td class="p-0"><table class="table m-0"><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

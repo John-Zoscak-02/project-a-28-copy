@@ -19,12 +19,12 @@ from . import views
 app_name = 'home'
 urlpatterns = [
     path('', views.landing, name='landing'),
-    path('friends', views.invites_received_view, name='friends'),
-    path('all-profiles', views.ProfleListView.as_view(), name='all-profiles'),
-    path('to-invite', views.invite_profiles_list_view, name='invite-profiles-view'),
-    path('calendar/', views.CalendarView.as_view(), name='calendar'),
+    path('friends/', views.invites_received_view, name='friends'),
+    path('all-profiles/', views.ProfleListView.as_view(), name='all-profiles'),
+    path('to-invite/', views.invite_profiles_list_view, name='invite-profiles-view'),
     path('<int:pk>', views.CourseDetailView.as_view(), name='course_detail'),
-    path('about-us/', views.AboutUsView.as_view(), name='about-us'),
+    path('about-us/', views.about_us, name='about-us'),
     path('department/<str:dept>', views.DeptDetailView.as_view(), name='dept_detail'),
-    path('profile', views.my_profile, name='my_profile_view')
+    path('profile/', views.my_profile, name='my_profile_view')
+
 ]

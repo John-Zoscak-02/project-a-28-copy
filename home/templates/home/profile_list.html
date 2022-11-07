@@ -15,24 +15,29 @@ All Profiles
 {% endblock title %}
 
 {% block content %}
-    {% if is_empty %}
-        <h1>No profiles to interact with</h1>
-    {% endif %}
-
-    {% for obj in object_list %}
-    <div class="ui segment">
-        <div class="ui grid">
-            <div class="row">
-                <div class = "three wide column">
-                    <img class="ui small circular image" src={{obj.avatar.url}}>
-                </div>
-                <div class="thirteen wide column">
-                    <h3>{{obj.user}}</h3>
-                    <p>{{obj.username}}</p>
-                    <button class="ui primary button">See schedule</button>
+    {% if user.is_authenticated %}
+        {% if is_empty %}
+            <h1>No profiles to interact with</h1>
+        {% endif %}
+        {% for obj in object_list %}
+        <div class="ui segment">
+            <div class="ui grid">
+                <div class="row">
+                    <div class = "three wide column">
+                        <img class="ui small circular image" src={{obj.avatar.url}}>
+                    </div>
+                    <div class="thirteen wide column">
+                        <h3>{{obj.user}}</h3>
+                        <p>{{obj.username}}</p>
+                        <button class="ui primary button">See schedule</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    {% endfor %}
+        {% endfor %}
+    {% else %}
+        <strong>
+            <font color='red'>You must login to view member profiles</font>
+        </strong>
+    {% endif %}
 {% endblock content %}

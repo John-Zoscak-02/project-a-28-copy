@@ -98,6 +98,7 @@ celerybeat-schedule.*
 
 # Environments 
 .env 
+louslist_a28/.env
 .venv 
 env/ 
 venv/ 
@@ -135,6 +136,10 @@ GitHub.sublime-settings
 !.vscode/launch.json 
 !.vscode/extensions.json 
 .history
+
+# sensitive google service account info
+google-credentials.json
+
 .idea/vcs.xml
 .idea/inspectionProfiles/profiles_settings.xml
 .idea/inspectionProfiles/Project_Default.xml
