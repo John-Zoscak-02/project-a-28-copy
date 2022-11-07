@@ -10,26 +10,49 @@
 {# Display django.contrib.messages as Bootstrap alerts #}
 {% bootstrap_messages %}
 
-{% block title %}
-Friends List
-{% endblock title %}
+{% block title %}Friends Page{% endblock title %}
 
 {% block content %}
-<h1>Friend invites of : {{profile.user}}</h1>
-<u1>
-    {% for item in qs %}
-    <li>{{item}}</li>
-    {% endfor %}
-</u1>
-<form>
-    <p>Add a friend! Look up a friend by their first and last name or by email.</p>
-    <label for="fname">First name:</label><br>
-    <input type="text" id="fname" name="fname"><br>
-    <label for="lname">Last name:</label><br>
-    <input type="text" id="lname" name="lname"><br>
-    <label for="email">Email:</label><br>
-    <input type="text" id="email" name="email"><br><br>
-    <input type="submit" value="Submit">
-</form>
-    {% autoescape off %}{% bootstrap_messages %}{% endautoescape %}
+<div class="container column gap-2">
+    <div class="row p-2">
+        <p class="h3">Friends requests: {{profile.user}}</p>
+        <u1>
+            {% for relationship in qs %}
+                <li class="list-group">
+                    <div class="row align-start">
+                        <div class="col-4">
+                            <p>Friend request from: {{relationship.sender.user.first_name}} {{relationship.sender.user.last_name}}</p>
+                        </div>
+                        <div class="col-1">
+                            <form action="{% url 'home:accept' relationship.id %}" method="post">
+                                {% csrf_token %}
+                                <button type='submit' class="btn btn-primary" value="{{relationship}}">Accept</button>
+                            </form>
+                        </div>
+                        <div class="col-1">
+                            <form action="{% url 'home:reject' relationship.id %}" method="post">
+                                {% csrf_token %}
+                                <button type='submit' class="btn btn-secondary" value="{{relationship}}">Reject</button>
+                            </form>
+                        </div>
+                    </div>
+                </li>
+            {% endfor %}
+        </u1>
+    </div>
+    <div class="row p-2">
+        <form>
+            <p class="h3">Add a friend!</p>
+            <p class="h6">Look up a friend by their first and last name or by email.</p>
+            <label for="fname">First name:</label><br>
+            <input type="text" id="fname" name="fname"><br>
+            <label for="lname">Last name:</label><br>
+            <input type="text" id="lname" name="lname"><br>
+            <label for="email">Email:</label><br>
+            <input type="text" id="email" name="email"><br><br>
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+</div>
+{% autoescape off %}{% bootstrap_messages %}{% endautoescape %}
 {% endblock content %}

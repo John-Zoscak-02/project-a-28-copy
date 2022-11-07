@@ -13,7 +13,7 @@
 {% bootstrap_messages %}
 
 {% if user.is_authenticated %}
-{% block title %}Profile of : {{profile.user}}{% endblock %}
+{% block title %}Profile of: {{profile.user}}{% endblock %}
 {% endif %}
 
 {% block content %}
@@ -23,11 +23,12 @@
             <h3>Friends:</h3>
             <div class="card example-1 scrollbar-ripe-malinka">
                 <div class="card-body">
+                    <p class="h6">You have {{profile.get_friends_no}} friend(s)</p>                    
+                    <ul>
                     {% for friend in profile.get_friends %}
-                    {{friend}}
-                    <br>
+                        <li><a class='item-group' href="/profile/{{friend.profile.id}}">{{friend.first_name}} {{friend.last_name}}</a></li>
                     {% endfor %}
-                    Friends number : {{profile.get_friends_no}}
+                    </ul>
                 </div>
             </div>
         </div>

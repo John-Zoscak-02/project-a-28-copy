@@ -79,6 +79,9 @@ class AboutUs(models.Model):
     def __str__(self):
         return "Prof=%s Email=%s" % (self.prof_name, self.prof_email)
 
+class Calendar(models.Model):
+    mock = models.CharField(max_length=4, null=True)
+
 class Department(models.Model):
     subject = models.CharField(max_length=4)
 

@@ -23,8 +23,10 @@ urlpatterns = [
     path('all-profiles/', views.ProfleListView.as_view(), name='all-profiles'),
     path('to-invite/', views.invite_profiles_list_view, name='invite-profiles-view'),
     path('<int:pk>', views.CourseDetailView.as_view(), name='course_detail'),
+    path('<int:pk>/accept/', views.accept, name='accept'),
+    path('<int:pk>/reject/', views.reject, name='reject'),
     path('about-us/', views.about_us, name='about-us'),
     path('department/<str:dept>', views.DeptDetailView.as_view(), name='dept_detail'),
-    path('profile/', views.my_profile, name='my_profile_view')
+    path('profile/<int:pk>', views.my_profile, name='my_profile_view')
 
 ]
