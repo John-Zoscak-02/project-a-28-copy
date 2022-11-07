@@ -36,6 +36,7 @@ class Profile(models.Model):
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
     objects = ProfileManager()
+    
     def get_friends(self):
         return self.friends.all()
     
