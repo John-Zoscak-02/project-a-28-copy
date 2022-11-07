@@ -12,8 +12,9 @@
 {# Display django.contrib.messages as Bootstrap alerts #}
 {% bootstrap_messages %}
 
+
 {% if user.is_authenticated %}
-{% block title %}Account: {{profile.user.username}}{% endblock %}
+{% block title %}Profile of : {{profile.user}}{% endblock title %}
 {% endif %}
 
 {% block content %}
@@ -23,16 +24,11 @@
             <h3>Friends:</h3>
             <div class="card example-1 scrollbar-ripe-malinka">
                 <div class="card-body">
-                    {% if profile.friends.all|length != 0 %}
-                    {% for friend in profile.friends.all %}
-                    <a class="nav-link" href="/profile/{{friend.user.id}}">{{friend.user.username}}</a>
+                    {% for friend in profile.get_friends %}
+                        {{friend}}
+                        <br>
                     {% endfor %}
-                    </ul>
-                    {% else %}
-                    <ul class="nav flex-column">
-                        <li>Ha Ha you have no friends :P</li>
-                    </ul>
-                    {% endif %}
+                    Friends number : {{profile.get_friends_no}}
                 </div>
             </div>
         </div>

@@ -3,7 +3,8 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 
-from .models import Profile, Course, Section
+from .models import Department, Course, Section, Profile, Relationship
+from django.contrib.auth.models import Group
 
 class SectionInline(admin.TabularInline):
     model = Section
@@ -17,7 +18,6 @@ class CourseAdmin(admin.ModelAdmin):
     list_display = ('description', 'catalog_number', 'units', 'department')
     search_fields = ['catalog_number', 'description', 'department']
     list_per_page: 100
-
 
 #class FriendsInline(admin.StackedInline):
 #    model = Profile.friends
