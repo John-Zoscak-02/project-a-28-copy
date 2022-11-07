@@ -3,7 +3,7 @@ from django.test import TestCase
 from django.urls import reverse
 from django.db import IntegrityError
 from django.contrib.auth.models import User
-from home.views import profiles_list_view
+from home.views import invites_received_view, profiles_list_view
 from .models import Course, Department, Relationship, Section, Professor, Profile
 from django.core.cache import cache
 # Create your tests here.
@@ -22,6 +22,9 @@ from django.urls import reverse
 #     """
 #     time = timezone.now() + datetime.timedelta(days=days)
 #     return Question.objects.create(question_text=question_text, pub_date=time)
+
+
+# used https://github.com/revsys/django-friendship/blob/main/friendship/tests/tests.py for BaseCase set up
 class BaseTestCase(TestCase):
     def setUp(self):
         """
@@ -90,10 +93,11 @@ class ProfileManagerTests(BaseTestCase):
         results = Profile.objects.get_all_profiles_to_invite(self.user_bob)
         self.assertEqual(len(results), 3)
         self.assertTrue(Profile.objects.filter(id=self.user_amy.id).exists())
-        self.assertFalse(Profile.objects.filter(id=self.user_bob.id).exists())
+        self.assertTrue(Profile.objects.filter(id=self.user_bob.id).exists())
 
     def test_for_correct_fields(self):
-        email = self.user_amy.get_email_field_name
-        username = self.user_amy.get_username
-        self.assertEquals(email, "amy@amy.amy.com")
-        self.assertEquals(username, "amy")
+        username = self.user_amy
+        self.assertEquals(username.username, 'amy')
+        self.assertEquals(username.email,'amy@amy.amy.com')
+    def test_for_no_friends_yet(self):
+        self.assertEquals(Profile.get_friends_no(self.user_amy), 0)
