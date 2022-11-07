@@ -151,10 +151,9 @@ def search_page(request):
         # check whether it's valid:
         if form.is_valid():
             department = form.cleaned_data['department']
-            print(department)
             course_number = form.cleaned_data['course_number']
-            print(course_number)
-            search_data = search_for_section({'department': department, 'catalog_number': course_number})
+            days = form.cleaned_data['days']
+            search_data = search_for_section({'department': department, 'catalog_number': course_number, 'days': days})
 
             return render(request, 'home/search.html', {'form': form, 'search_data': search_data})
 
