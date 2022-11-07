@@ -31,5 +31,5 @@ urlpatterns = [
     path('remove-friend/', views.remove_from_friends, name='remove-friend'),
     path('friends/accept/', views.accept_invitation, name='accept-invite'),
     path('friends/reject/', views.reject_invitation, name='reject-invite'),
-    path('search', views.search, name='search')
+    path('search', views.search_page, name='search')
 ]
