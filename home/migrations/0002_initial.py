@@ -80,9 +80,4 @@ class Migration(migrations.Migration):
                 ('sender', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='sender', to='home.profile')),
             ],
         ),
-        migrations.AddField(
-            model_name='course',
-            name='department',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='home.department'),
-        ),
     ]
