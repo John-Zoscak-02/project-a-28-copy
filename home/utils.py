@@ -90,13 +90,6 @@ def deserialize_from_luthers_list():
                                 units=s['units'],
                                 department=dept)
                 course.save() # we can remove this when we are querying the api and rendering on the fly
-
-            #try:
-            #    professor = Professor.objects.get(prof_name=s['instructor']['name'])
-            #except Professor.DoesNotExist:
-            #    professor = Professor(prof_name=s['instructor']['name'],
-            #                    prof_email=s['instructor']['email'])
-            #    professor.save() # we can remove this when we are querying the api and rendering on the fly
             
             if len(s['meetings']) == 0:
                 #raise Exception("Having a problem with meeting %d in %s %s"  % (s['course_number'], dept.subject, course.catalog_number))

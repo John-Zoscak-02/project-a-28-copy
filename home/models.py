@@ -73,17 +73,6 @@ class Relationship(models.Model):
     objects = RelationshipManager()
     def __str__(self):
         return f"{self.sender}-{self.receiver}-{self.status}"
-class Calendar(models.Model):
-    date = models.DateField()
-
-    def __str__(self):  # __unicode__ for Python 2
-        return str(self.user)
-
-@receiver(post_save, sender=User)
-def watchlist_create(sender, instance=None, created=False, **kwargs):
-    if created:
-        Profile.objects.create(user=instance)
-
 
 class AboutUs(models.Model):
     contact = models.TextField(max_length=1000)
