@@ -30,7 +30,6 @@ All Profiles
                     <h3>{{obj.user}}</h3>
                     <p>{{obj.username}}</p>
                     <button class="ui primary button mb-5 w-big">See schedule</button>
-                    
                 </div>
                 {% if obj.user not in rel_receiver and obj.user not in rel_sender %}
                     <form action="{% url 'home:send-invite' %}" method="POST">
@@ -51,6 +50,10 @@ All Profiles
                 {% endif %}
             </div>
         </div>
-    </div>
-    {% endfor %}
+        {% endfor %}
+    {% else %}
+        <strong>
+            <font color='red'>You must login to view member profiles</font>
+        </strong>
+    {% endif %}
 {% endblock content %}

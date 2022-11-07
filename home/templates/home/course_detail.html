@@ -10,11 +10,19 @@
 {# Display django.contrib.messages as Bootstrap alerts #}
 {% bootstrap_messages %}
 
-{% block title %}Course Detail Page{% endblock %}
+{% block title %}{{course.department.subject}}: {{course.catalog_number}}{% endblock %}
 
 {% block content %}
 <content>
-    <p>Hello, this should display the details of the selected course</p>
+    <h2>{{course.description}}</h2>
+    <p>Average GPA: {{course.average_gpa}}</p>
+    <ul>
+        {% for review in course.review_set.all %}
+            {% if review.has_text %}
+                <li>{{review.rating}} -- {{review.text}}</li>
+            {% endif %}
+        {% endfor %}
+    </ul>
     {% autoescape off %}{% bootstrap_messages %}{% endautoescape %}
 </content>
 {% endblock %}
