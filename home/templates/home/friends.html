@@ -10,49 +10,49 @@
 {# Display django.contrib.messages as Bootstrap alerts #}
 {% bootstrap_messages %}
 
-{% block title %}Friends Page{% endblock title %}
+{% block title %}
+<h1>Friend invites</h1>
+{% endblock title %}
 
 {% block content %}
-<div class="container column gap-2">
-    <div class="row p-2">
-        <p class="h3">Friends requests: {{profile.user}}</p>
-        <u1>
-            {% for relationship in qs %}
-                <li class="list-group">
-                    <div class="row align-start">
-                        <div class="col-4">
-                            <p>Friend request from: {{relationship.sender.user.first_name}} {{relationship.sender.user.last_name}}</p>
-                        </div>
-                        <div class="col-1">
-                            <form action="{% url 'home:accept' relationship.id %}" method="post">
-                                {% csrf_token %}
-                                <button type='submit' class="btn btn-primary" value="{{relationship}}">Accept</button>
-                            </form>
-                        </div>
-                        <div class="col-1">
-                            <form action="{% url 'home:reject' relationship.id %}" method="post">
-                                {% csrf_token %}
-                                <button type='submit' class="btn btn-secondary" value="{{relationship}}">Reject</button>
-                            </form>
-                        </div>
+
+    {% if is_empty %}
+        <h1>No invitations here...</h1>
+    {% endif %}
+
+    {% for obj in qs %}
+        <div class="ui segment">
+            <div class="ui grid">
+                <div class="row">
+                    <div class="three wide column">
+                        <img class="ui small circular image" src={{obj.avatar.url}}>
                     </div>
-                </li>
-            {% endfor %}
-        </u1>
-    </div>
-    <div class="row p-2">
-        <form>
-            <p class="h3">Add a friend!</p>
-            <p class="h6">Look up a friend by their first and last name or by email.</p>
-            <label for="fname">First name:</label><br>
-            <input type="text" id="fname" name="fname"><br>
-            <label for="lname">Last name:</label><br>
-            <input type="text" id="lname" name="lname"><br>
-            <label for="email">Email:</label><br>
-            <input type="text" id="email" name="email"><br><br>
-            <input type="submit" value="Submit">
-        </form>
-    </div>
-</div>
-{% autoescape off %}{% bootstrap_messages %}{% endautoescape %}
+                    <div class="thirteen wide column">
+                        <h3>{{obj.user}}</h3>
+                        <p>{{obj.username}}</p>
+                        <br>
+                        <a href="">
+                            <button class="ui primary button w-big mb-5" href="/profile/obj.id">See profile</button>
+                        </a>
+                        <form action="{% url 'home:accept-invite' %}" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="profile_pk" value={{obj.pk}}>
+                            <button type="submit" class="ui positive basic button w-big mb-5">
+                                <i class="check icon"></i>
+                                Accept invite
+                            </button>
+                        </form>
+                        <form action="{% url 'home:reject-invite' %}" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="profile_pk" value={{obj.pk}}>
+                            <button type="submit" class="ui negative basic button w-big mb-5">
+                                <i class="close icon"></i>
+                                Reject invite
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
 {% endblock content %}

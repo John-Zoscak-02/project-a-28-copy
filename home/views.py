@@ -1,9 +1,8 @@
-from django.http import HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404
-from .models import Course, Department, Section, Profile, Relationship
-from django.contrib.auth.models import User
-from .utils import group_by_course, get_events
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Course, Department, Relationship, Section, Profile
 from django.views import generic
+from django.contrib.auth.models import User
+from django.db.models import Q
 
 #from google.oauth2 import service_account
 #import googleapiclient.discovery
@@ -52,25 +51,13 @@ class ProfleListView(generic.ListView):
             context['is_empty'] = True
         return context
 
-def accept(request, pk):
-    relationship = get_object_or_404(Relationship, pk=(pk))
-    relationship.status = 'accepted'
-    relationship.save()
-    return HttpResponseRedirect('/friends')
-
-def reject(request, pk):
-    relationship = get_object_or_404(Relationship, pk=(pk))
-    relationship.delete()
-    return HttpResponseRedirect('/friends')
-
-
 def invite_profiles_list_view(request):
     user = request.user
     qs = Profile.objects.get_all_profiles_to_invite(user)
     context = {'qs' : qs}
     return render(request, 'home/to_invite_list.html', context)
 
-def my_profile(request,pk):
+def my_profile(request, pk):
     profile = Profile.objects.get(id=pk)
     context = {'profile': profile, 'friends': profiles_list_view}
 
@@ -88,8 +75,58 @@ def my_profile(request,pk):
 def invites_received_view(request):
     profile = Profile.objects.get(user=request.user)
     qs = Relationship.objects.invitations_received(profile)
-    context = {'qs' : qs}
+    results = list(map(lambda x: x.sender, qs))
+    is_empty = False
+    if len(results) == 0:
+        is_empty = True
+    context = {'qs' : results,
+    'is_empty': is_empty,
+    }
     return render(request, 'home/friends.html', context)
+
+def send_invitation(request):
+    if request.method=='POST':
+        pk = request.POST.get('profile_pk')
+        user = request.user
+        sender = Profile.objects.get(user=user)
+        receiver = Profile.objects.get(pk=pk)
+
+        rel = Relationship.objects.create(sender=sender, receiver=receiver, status='send')
+        return redirect(request.META.get('HTTP_REFERER'))
+    return redirect('home:my_profile_view')
+
+def remove_from_friends(request):
+    if request.method=='POST':
+        pk = request.POST.get('profile_pk')
+        user = request.user
+        sender = Profile.objects.get(user=user)
+        receiver = Profile.objects.get(pk=pk)
+
+        rel = Relationship.objects.get((Q(sender=sender) & Q(receiver=receiver)) | Q(sender=receiver) & Q(receiver=sender))
+        rel.delete()
+        return redirect(request.META.get('HTTP_REFERER'))
+    return redirect('home:my_profile_view')
+
+def accept_invitation(request):
+    if request.method=="POST":
+        pk = request.POST.get('profile_pk')
+        sender = Profile.objects.get(pk=pk)
+        receiver = Profile.objects.get(user=request.user)
+        rel = get_object_or_404(Relationship, sender=sender, receiver=receiver)
+        if rel.status == 'send':
+            rel.status == 'accepted'
+            rel.save()
+    return redirect('home:friends')
+
+def reject_invitation(request):
+    if request.method=="POST":
+        pk = request.POST.get('profile_pk')
+        receiver = Profile.objects.get(user=request.user)
+        sender = Profile.objects.get(pk=pk)
+        rel = get_object_or_404(Relationship, sender=sender, receiver=receiver)
+        rel.delete()
+    return redirect('home:friends')
+
 
 def landing(request):
     # Department list:
