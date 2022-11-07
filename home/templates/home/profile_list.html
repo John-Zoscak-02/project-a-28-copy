@@ -15,21 +15,22 @@ All Profiles
 {% endblock title %}
 
 {% block content %}
-    {% if is_empty %}
-        <h1>No profiles to interact with</h1>
-    {% endif %}
-
-    {% for obj in object_list %}
-    <div class="ui segment">
-        <div class="ui grid">
-            <div class="row">
-                <div class = "three wide column">
-                    <img class="ui small circular image" src={{obj.avatar.url}}>
-                </div>
-                <div class="thirteen wide column">
-                    <h3>{{obj.user}}</h3>
-                    <p>{{obj.username}}</p>
-                    <button class="ui primary button mb-5 w-big">See schedule</button>
+    {% if user.is_authenticated %}
+        {% if is_empty %}
+            <h1>No profiles to interact with</h1>
+        {% endif %}
+        {% for obj in object_list %}
+        <div class="ui segment">
+            <div class="ui grid">
+                <div class="row">
+                    <div class = "three wide column">
+                        <img class="ui small circular image" src={{obj.avatar.url}}>
+                    </div>
+                    <div class="thirteen wide column">
+                        <h3>{{obj.user}}</h3>
+                        <p>{{obj.username}}</p>
+                        <a type='button' class="btn btn-primary" href="/profile/{{obj.id}}">See Profile</a>
+                    </div>
                 </div>
                 {% if obj.user not in rel_receiver and obj.user not in rel_sender %}
                     <form action="{% url 'home:send-invite' %}" method="POST">
