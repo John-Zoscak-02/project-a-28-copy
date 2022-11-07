@@ -3,6 +3,7 @@ from .models import Course, Department, Relationship, Section, Profile
 from django.views import generic
 from django.contrib.auth.models import User
 from django.db.models import Q
+from home.utils import group_by_course
 
 #from google.oauth2 import service_account
 #import googleapiclient.discovery
@@ -22,7 +23,7 @@ def profiles_list_view(request):
     context = {'qs' : qs}
     return render(request, 'home/profile_list.html', context)
 
-class ProfleListView(generic.ListView):
+class ProfileListView(generic.ListView):
     model = Profile
     template_name = 'profiles/profile_list.html'
     # context_object_name = 'qs'

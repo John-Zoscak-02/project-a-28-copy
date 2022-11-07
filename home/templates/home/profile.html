@@ -23,7 +23,7 @@
             <h3>Friends:</h3>
             <div class="card example-1 scrollbar-ripe-malinka">
                 <div class="card-body">
-                    <p class="h6">You have {{profile.get_friends_no}} friend(s)</p>                    
+                    <p class="h6">{{profile.get_friends_no}} friend(s)</p>                    
                     <ul>
                     {% for friend in profile.get_friends %}
                         <li><a class='item-group' href="/profile/{{friend.profile.id}}">{{friend.first_name}} {{friend.last_name}}</a></li>
