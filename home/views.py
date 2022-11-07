@@ -154,10 +154,8 @@ def search_page(request):
             print(department)
             course_number = form.cleaned_data['course_number']
             print(course_number)
-            # search_data = search_for_section({'department': department, 'catalog_number': course_number})
-            search_data = search_for_section({'department': 'AAS', 'catalog_number': '1010'})
-            print('search data: ')
-            print()
+            search_data = search_for_section({'department': department, 'catalog_number': course_number})
+
             return render(request, 'home/search.html', {'form': form, 'search_data': search_data})
 
     # if a GET (or any other method) we'll create a blank form
