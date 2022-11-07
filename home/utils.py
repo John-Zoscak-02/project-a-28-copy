@@ -201,3 +201,27 @@ def group_by_course(subject):
             courses[subject + section['catalog_number'] + ' - ' + section['description']].append(section)
     return courses
 
+def search_for_section(search_criteria):
+    try:
+        csvfile = open('data/searchData.csv')
+    except (FileNotFoundError, FileExistsError):
+        return None
+    valid_search_criteria = ['department', 'catalog_number', 'instructor', 'days', 'description']
+    if not all(crit in valid_search_criteria for crit in search_criteria):
+        return None
+    sections = []
+    reader = csv.DictReader(csvfile)
+    criteria_to_column = {'department': 'Mnemonic',
+                          'catalog_number': 'Number',
+                          'instructor': 'Instructor(s)',
+                          'days': 'Days',
+                          'description': 'Title',}
+    for row in reader:
+        valid = True
+        for crit in search_criteria:
+            if not search_criteria[crit].lower() in row[criteria_to_column[crit]].lower():
+                valid = False
+        if valid:
+            sections.append(row)
+
+    return sections
