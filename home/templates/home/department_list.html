@@ -59,6 +59,9 @@
                     </div>
                     {% if user.is_authenticated %}
                     <div class="col">
+                      {% if section in profile.schedule.classes.all %}
+                        Already in schedule
+                      {% else %}
                       <form method="post" id="add_section_form-{{ section.course_number }}">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-primary btn-xs rounded-pill" name="section_add" id="{{ section.course_number }}"
@@ -82,6 +85,7 @@
                                 })
                             });
                         </script>
+                        {% endif %}
                     </div>
                     {% else %}
                     <div class="col">

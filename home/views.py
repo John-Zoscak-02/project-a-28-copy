@@ -167,6 +167,25 @@ class DeptDetailView(generic.ListView):
         data = request.POST
         section_number = int(data.get('section_add'))
         section = Section.objects.get(section_number=section_number)
-        # schedule.classes.add(section)
-        print(schedule.classes_by_time)
-        return render(request, self.template_name, self.get_queryset())
+        scheduled_sections = schedule.classes.all()
+
+        interval = [float(section.start_time[:2]) + float(section.start_time[3:5]) / 60,
+                    float(section.end_time[:2]) + float(section.end_time[3:5]) / 60]
+        days = {section.days[i:i+2] for i in range(0, len(section.days), 2)}
+
+        context = self.get_queryset()
+        
+        conflicts = False
+        for other_section in scheduled_sections:
+            other_interval = [float(other_section.start_time[:2]) + float(other_section.start_time[3:5]) / 60,
+                              float(other_section.end_time[:2]) + float(other_section.end_time[3:5]) / 60]
+            other_days = {other_section.days[i:i+2] for i in range(0, len(other_section.days), 2)}
+
+            if days.intersection(other_days):
+                if max(0, min(interval[1], other_interval[1])) - max(interval[0], other_interval[0]) > 0:
+                    conflicts = True
+        
+        if not conflicts:
+            schedule.classes.add(section)
+                
+        return render(request, self.template_name, context)

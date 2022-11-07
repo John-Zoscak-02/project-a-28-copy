@@ -128,11 +128,11 @@ class Schedule(models.Model):
                 scale = ((float(end_time[:2]) - float(start_time[:2])) + 
                         (float(end_time[3:5]) - float(start_time[3:5])))
                 translate = float(start_time[3:5]) / 60
-                t=''
-                if float(start_time[:2]) < 12:
-                    t = (str(start_time[:2])+"am", scale, translate)
-                else:
-                    t = (str(start_time[:2])+"pm", scale, translate)
+                t = (float(start_time[:2]), scale, translate)
+                # if float(start_time[:2]) < 12:
+                #     t = (str(start_time[:2])+"am", scale, translate)
+                # else:
+                #     t = (str(start_time[:2])+"pm", scale, translate)
 
                 if t in by_time:
                     by_time[t].append((cls, (scale, translate)))
