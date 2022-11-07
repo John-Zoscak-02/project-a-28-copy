@@ -1,0 +1,23 @@
+{% extends 'home/base.html' %}
+
+{# Load the tag library #}
+{% load bootstrap5 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+
+{% block title %}
+Invite Friends
+{% endblock title %}
+
+{% block content %}
+<u1>
+    {% for item in qs %}
+    <li>{{item}}</li>
+    {% endfor %}
+</u1>
+{% endblock content%}

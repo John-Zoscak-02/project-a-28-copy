@@ -10,11 +10,49 @@
 {# Display django.contrib.messages as Bootstrap alerts #}
 {% bootstrap_messages %}
 
-{% block title %}Friends Page{% endblock %}
+{% block title %}
+<h1>Friend invites</h1>
+{% endblock title %}
 
 {% block content %}
-<content>
-    <p>Hello, this is the friends search page</p>
-    {% autoescape off %}{% bootstrap_messages %}{% endautoescape %}
-</content>
-{% endblock %}
+
+    {% if is_empty %}
+        <h1>No invitations here...</h1>
+    {% endif %}
+
+    {% for obj in qs %}
+        <div class="ui segment">
+            <div class="ui grid">
+                <div class="row">
+                    <div class="three wide column">
+                        <img class="ui small circular image" src={{obj.avatar.url}}>
+                    </div>
+                    <div class="thirteen wide column">
+                        <h3>{{obj.user}}</h3>
+                        <p>{{obj.username}}</p>
+                        <br>
+                        <a href="">
+                            <button class="ui primary button w-big mb-5" href="/profile/{{obj.id}}">See profile</button>
+                        </a>
+                        <form action="{% url 'home:accept-invite' %}" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="profile_pk" value={{obj.pk}}>
+                            <button type="submit" class="ui positive basic button w-big mb-5">
+                                <i class="check icon"></i>
+                                Accept invite
+                            </button>
+                        </form>
+                        <form action="{% url 'home:reject-invite' %}" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="profile_pk" value={{obj.pk}}>
+                            <button type="submit" class="ui negative basic button w-big mb-5">
+                                <i class="close icon"></i>
+                                Reject invite
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock content %}

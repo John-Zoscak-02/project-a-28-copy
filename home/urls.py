@@ -14,16 +14,22 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path, include
-from . import views
+from . import views 
 
 app_name = 'home'
 urlpatterns = [
     path('', views.landing, name='landing'),
-    path('friends', views.friends, name='friends'),
-    path('profile', views.profile, name='profile'), # This will need to be a url in the form of {{username}}/profile this is temporary
-    path('calendar/', views.CalendarView.as_view(), name='calendar'),
-    path('<int:pk>', views.CourseDetailView.as_view(), name='course_detail'),
-    path('about-us/', views.AboutUsView.as_view(), name='about-us'),
-    path('department/<str:dept>', views.DeptDetailView.as_view(), name='dept_detail'),
+
+    path('friends/', views.invites_received_view, name='friends'),
+    path('all-profiles/', views.ProfileListView.as_view(), name='all-profiles'),
+    path('to-invite/', views.invite_profiles_list_view, name='invite-profiles-view'),
+    path('<int:pk>/', views.CourseDetailView.as_view(), name='course_detail'),
+    path('about-us/', views.about_us, name='about-us'),
+    path('department/<str:dept>/', views.DeptDetailView.as_view(), name='dept_detail'),
+    path('profile/<int:pk>', views.my_profile, name='my_profile_view'),
+    path('send-invite/', views.send_invitation, name='send-invite'),
+    path('remove-friend/', views.remove_from_friends, name='remove-friend'),
+    path('friends/accept/', views.accept_invitation, name='accept-invite'),
+    path('friends/reject/', views.reject_invitation, name='reject-invite'),
     path('search', views.search, name='search')
 ]

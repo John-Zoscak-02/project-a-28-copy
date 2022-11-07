@@ -3,6 +3,8 @@
 {# Load the tag library #}
 {% load bootstrap5 %}
 
+{% load tags %}
+
 {# Load CSS and JavaScript #}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
@@ -10,11 +12,69 @@
 {# Display django.contrib.messages as Bootstrap alerts #}
 {% bootstrap_messages %}
 
-{% block title %}Profile Page{% endblock %}
+{% if user.is_authenticated %}
+{% block title %}Profile of: {{profile.user}}{% endblock %}
+{% endif %}
 
 {% block content %}
-<content>
-    <p>Hello, this is the profile page</p>
+<div class="container column gap-2">
+    {% if user.is_authenticated %}
+        <div class="row p-2">
+            <h3>Friends:</h3>
+            <div class="card example-1 scrollbar-ripe-malinka">
+                <div class="card-body">
+                    <p class="h6">{{profile.get_friends_no}} friend(s)</p>                    
+                    <ul>
+                    {% for friend in profile.get_friends %}
+                        <li><a class='item-group' href="/profile/{{friend.profile.id}}">{{friend.first_name}} {{friend.last_name}}</a></li>
+                    {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="row p-2">
+            <h3>Schedule: </h3>
+            <ul>
+                {% for class in profile.schedule.classes.all %}
+                <li class="list-group-item">
+                    <div class="container">
+                        <div class="row align-items-start">
+                            <div class="col">
+                                {{ class.course.department.subject }}: {{ class.course.catalog_number }}
+                            </div>
+                            <div class="col-3">
+                                {{ class.course.description }}
+                            </div>
+                            <div class="col">
+                                {{ class.course.units }} Units
+                            </div>
+                            <div class="col">
+                                {{ class.enrollment_available }}/{{ class.enrollment_total }}
+                            </div>
+                            <div class="col">
+                                {{ class.prof_name }}
+                            </div>
+                            <div class="col-2">
+                                {{class.days}} {{ class.start_time|slice:"0:2" }}:{{ class.start_time|slice:"3:5" }} - {{class.end_time|slice:"0:2" }}:{{ class.end_time|slice:"3:5" }}
+                            </div>
+                            <div class="col-2">
+                                {{ class.facility_description }}
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+            <!--{% for meeting in profile.schedule.classes.all|get_events %}
+                {{meeting.summary}}: {{meeting.start.date}} to {{meeting.end.date}}
+                <br/>
+            {% endfor %}-->
+            <!--<iframe
+                src="https://calendar.google.com/calendar/embed?height=750&wkst=1&bgcolor=%23ffffff&ctz=America%2FNew_York&mode=WEEK&showTitle=0&showNav=0&showDate=0&showPrint=0&showTabs=0&showCalendars=0&showTz=0&src=Y184ZGM5YTI4MDM4ZTY5Zjc3OTdlYmRhZGE1ZDdhMDc0MmE4ODQyNTg3OTUxN2IzODUwMmU2MmFmM2FlMDk3NmE5QGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20&color=%239E69AF"
+                style="border-width:0" width="1000" height="600" frameborder="0" scrolling="no"></iframe>-->
+    {% else %}
+    <p><strong><font color='red'>You must login to view member profiles</font></strong></p>
+    {% endif %}
     {% autoescape off %}{% bootstrap_messages %}{% endautoescape %}
-</content>
+</div>
 {% endblock %}
