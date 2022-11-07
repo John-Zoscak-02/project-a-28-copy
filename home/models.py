@@ -17,8 +17,6 @@ class ProfileManager(models.Manager):
         profiles = Profile.objects.all().exclude(user=sender)
         profile = Profile.objects.get(user=sender)
         qs = Relationship.objects.filter(Q(sender=profile) | Q(receiver=profile))
-        
-
         accepted = set([])
         for rel in qs:
             if rel.status == 'accepted':
@@ -38,6 +36,7 @@ class Profile(models.Model):
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
     objects = ProfileManager()
+    
     def get_friends(self):
         return self.friends.all()
     
