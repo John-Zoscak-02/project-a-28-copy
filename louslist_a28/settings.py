@@ -88,6 +88,9 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            'libraries':{
+                'tags': 'louslist_a28.template_tags.tags',
+            }
         },
     },
 ]

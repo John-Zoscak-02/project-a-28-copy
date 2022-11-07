@@ -1,20 +1,12 @@
-from django import template
-from datetime import datetime
-import pytz
 from .models import Course, Department, Section, Profile
 import urllib3
 import json
-import logging
-from django import template
 
-register = template.Library()
-logger = logging.getLogger(__name__)
-
-from enum import Enum
+from datetime import datetime
+from datetime import timedelta
+import pytz
 
 def get_events(value):
-    logging.debug("Here")
-
     events = []
 
     switcher = {
@@ -30,29 +22,37 @@ def get_events(value):
         days_str = class_event.days
         days = [days_str[i:i+2] for i in range(0, len(days_str), 2)]
 
-        today = datetime.now().astimezone(pytz.timezone('UTC-5')).date()
-        sunday_anchor = today - datetime.timedelta(days=today.strftime('%w'))
-        
-        starttime_delta = datetime.time_delta(hours=int(class_event.start_time[:2]), minutes=int(class_event.start_time[3:5]))
-        endtime_delta = datetime.time_delta(hours=int(class_event.end_time[:2]), minutes=int(class_event.end_time[3:5]))
-
-        for day in days:
-            start = f"{(sunday_anchor + datetime.time_delta(switcher.get(day ,0)) + starttime_delta)}" 
-            end = f"{(sunday_anchor + datetime.time_delta(switcher.get(day ,0)) + endtime_delta)}"
-        
-            events.append({
-                'summary': "%s: %s" % (class_event.course.department.subject, class_event.course.catalog_number),
-                'description': class_event.course.description,
-                'start': {
-                    'date': f"{start}",
-                    'timeZone': 'America/New_York',
-                },
-                'end': {
-                    'date': f"{end}",
-                    'timeZone': 'America/New_York',
-                },
-            })
+        today = datetime.now().astimezone(pytz.timezone('America/New_York')).date()
+        sunday = today - timedelta(days=(today.weekday()+1)%7)
+        sunday_anchor = datetime(sunday.year, sunday.month, sunday.day)
+        #print("anchor: ", sunday_anchor)
+        if class_event.start_time and class_event.end_time:
+            for day in days:
+                starttime_delta = timedelta(days=switcher.get(day, 0), hours=int(class_event.start_time[:2]), minutes=int(class_event.start_time[3:5]))
+                endtime_delta = timedelta(days=switcher.get(day, 0), hours=int(class_event.end_time[:2]), minutes=int(class_event.end_time[3:5]))
+                
+                start = sunday_anchor + starttime_delta
+                end = sunday_anchor + endtime_delta
+                summary = "%s: %s" % (class_event.course.department.subject, class_event.course.catalog_number)
+                description = class_event.course.description
+                location = class_event.facility_description
+                print(start.strftime("%Y-%m-%dT%H:%M:00.00Z"), end.strftime("%Y-%m-%dT%H:%M:00.00Z"))
+            
+                events.append({
+                    'summary': summary,
+                    'description': description,
+                    'location': location, 
+                    'start': {
+                        'dateTime': start.strftime("%Y-%m-%dT%H:%M:00.00Z"),
+                        'timeZone': 'America/New_York',
+                    },
+                    'end': {
+                        'dateTime': end.strftime("%Y-%m-%dT%H:%M:00.00Z"),
+                        'timeZone': 'America/New_York',
+                    },
+                })
     return events
+
 
 '''
 This function will construct/identify department instances for all the mnemonics in luthers list, then 

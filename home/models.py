@@ -66,7 +66,7 @@ class Section(models.Model):
         return "number=%d course=%s" % (self.section_number, self.course)
 
 class Schedule(models.Model):
-    profile = models.OneToOneField(Profile, on_delete=models.CASCADE, related_name='schedule')
+    profile = models.OneToOneField(Profile, on_delete=models.CASCADE, related_name='schedule', null=True)
     classes = models.ManyToManyField(Section, related_name='schedules')
 
     @property
