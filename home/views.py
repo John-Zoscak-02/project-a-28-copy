@@ -7,7 +7,7 @@ import numpy as np
 from .forms import SearchForm
 from django.contrib.auth.models import User
 from django.db.models import Q
-from home.utils import group_by_course, get_events
+from home.utils import group_by_course, get_events, search_for_section
 
 #from google.oauth2 import service_account
 #import googleapiclient.discovery
@@ -150,8 +150,14 @@ def search_page(request):
         form = SearchForm(request.POST)
         # check whether it's valid:
         if form.is_valid():
-            class_name = form.cleaned_data['class_name']
-            search_data = class_name
+            department = form.cleaned_data['department']
+            print(department)
+            course_number = form.cleaned_data['course_number']
+            print(course_number)
+            # search_data = search_for_section({'department': department, 'catalog_number': course_number})
+            search_data = search_for_section({'department': 'AAS', 'catalog_number': '1010'})
+            print('search data: ')
+            print()
             return render(request, 'home/search.html', {'form': form, 'search_data': search_data})
 
     # if a GET (or any other method) we'll create a blank form
