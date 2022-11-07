@@ -3,7 +3,8 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 
-from .models import Profile, Course, Section, Department
+from .models import Department, Course, Section, Profile, Relationship
+from django.contrib.auth.models import Group
 
 class SectionInline(admin.TabularInline):
     model = Section
@@ -18,37 +19,36 @@ class CourseAdmin(admin.ModelAdmin):
     search_fields = ['catalog_number', 'description', 'department']
     list_per_page: 100
 
+##class FriendsInline(admin.StackedInline):
+##    model = Profile.friends
 
-#class FriendsInline(admin.StackedInline):
-#    model = Profile.friends
+##class ScheduleInline(admin.StackedInline):
+##    model = Profile.classes
 
-#class ScheduleInline(admin.StackedInline):
-#    model = Profile.classes
+#class ProfileInline(admin.StackedInline):
+#    model=Profile
+#    #inlines = [FriendsInline, ScheduleInline]
+#    can_delete = False
+#    verbose_name_plural = 'Profile'
+#    fk_name = 'user'
 
-class ProfileInline(admin.StackedInline):
-    model=Profile
-    #inlines = [FriendsInline, ScheduleInline]
-    can_delete = False
-    verbose_name_plural = 'Profile'
-    fk_name = 'user'
+#class CustomUserAdmin(UserAdmin):
+#    inlines = (ProfileInline,)
+#    list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff', 'get_friends', 'get_schedule')
+#    list_select_related = ('profile', )
 
-class CustomUserAdmin(UserAdmin):
-    inlines = (ProfileInline,)
-    list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff', 'get_friends', 'get_schedule')
-    list_select_related = ('profile', )
+#    def get_friends(self, instance):
+#        return len(instance.profile.friends.all())
+#    get_friends.short_description = 'Friends'
 
-    def get_friends(self, instance):
-        return len(instance.profile.friends.all())
-    get_friends.short_description = 'Friends'
+#    def get_schedule(self, instance):
+#        return len(instance.profile.schedule.classes.all())
+#    get_schedule.short_description = 'Schedule'
 
-    def get_schedule(self, instance):
-        return len(instance.profile.schedule.classes.all())
-    get_schedule.short_description = 'Schedule'
-
-    def get_inline_instances(self, request, obj=None):
-        if not obj:
-            return list()
-        return super(CustomUserAdmin, self).get_inline_instances(request, obj)
+#    def get_inline_instances(self, request, obj=None):
+#        if not obj:
+#            return list()
+#        return super(CustomUserAdmin, self).get_inline_instances(request, obj)
 
 
 admin.site.unregister(User)

@@ -1,5 +1,13 @@
 from pyexpat import model
+import profile
 from django.db import models
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.template.defaultfilters import slugify
+
+from django.db.models import Q
+
 
 from django.contrib.auth.models import User
 from django.db import models
@@ -10,19 +18,60 @@ from django.dispatch import receiver
 
 # We will be able to get this information from the SIS scraper when we have access to that
 # To Do: the specifics of all of this will need to change, this is just an outline and example
+class ProfileManager(models.Manager):
+    def get_all_profiles_to_invite(self,sender):
+        profiles = Profile.objects.all().exclude(user=sender)
+        profile = Profile.objects.get(user=sender)
+        qs = Relationship.objects.filter(Q(sender=profile) | Q(receiver=profile))
+        accepted = set([])
+        for rel in qs:
+            if rel.status == 'accepted':
+                accepted.add(rel.receiver)
+                accepted.add(rel.sender)
 
+        available = [profile for profile in profiles if profile not in accepted]
+        return available
+    def get_all_profiles(self, me):
+        profiles = Profile.objects.all().exclude(user=me)
+        return profiles
+        
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-    friends_with = models.ForeignKey("self", on_delete=models.CASCADE, related_name='friends', null=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    major = models.TextField()
+    friends = models.ManyToManyField(User, related_name='friends', blank=True)
+    updated = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True)
+    objects = ProfileManager()
+    
+    def get_friends(self):
+        return self.friends.all()
+    
+    def get_friends_no(self):
+        return self.friends.all().count()
 
-    def __str__(self):  # __unicode__ for Python 2
+    def __str__(self):
         return str(self.user)
+        
+STATUS_CHOICES = (
+    ('send', 'send'),
+    ('accepted', 'accepted'),
+)
 
-@receiver(post_save, sender=User)
-def watchlist_create(sender, instance=None, created=False, **kwargs):
-    if created:
-        Profile.objects.create(user=instance)
+class RelationshipManager(models.Manager):
+    def invitations_received(self, receiver):
+        qs = Relationship.objects.filter(receiver=receiver, status='send')
+        return qs
 
+class Relationship(models.Model):
+    sender = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='sender')
+    receiver = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='receiver')
+    status = models.CharField(max_length=8, choices=STATUS_CHOICES)
+    updated = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True)
+
+    objects = RelationshipManager()
+    def __str__(self):
+        return f"{self.sender}-{self.receiver}-{self.status}"
 
 class AboutUs(models.Model):
     contact = models.TextField(max_length=1000)
@@ -66,7 +115,7 @@ class Section(models.Model):
         return "number=%d course=%s" % (self.section_number, self.course)
 
 class Schedule(models.Model):
-    profile = models.OneToOneField(Profile, on_delete=models.CASCADE, related_name='schedule')
+    profile = models.OneToOneField(Profile, on_delete=models.CASCADE, related_name='schedule', null=True)
     classes = models.ManyToManyField(Section, related_name='schedules')
 
     @property

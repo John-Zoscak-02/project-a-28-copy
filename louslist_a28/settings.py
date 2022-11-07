@@ -28,6 +28,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['localhost','127.0.0.1','louslist-a28.herokuapp.com']
 
+SOCIALACCOUNT_LOGIN_ON_GET = True
+
 
 # Application definition
 
@@ -88,6 +90,9 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            'libraries':{
+                'tags': 'louslist_a28.template_tags.tags',
+            }
         },
     },
 ]
