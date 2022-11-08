@@ -37,7 +37,7 @@ class ProfileManager(models.Manager):
         
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    major = models.TextField()
+    major = models.CharField(max_length=200, blank=True)
     friends = models.ManyToManyField(User, related_name='friends', blank=True)
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
