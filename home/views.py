@@ -30,7 +30,7 @@ def profiles_list_view(request):
 
 class ProfileListView(generic.ListView):
     model = Profile
-    template_name = 'profiles/profile_list.html'
+    template_name = 'home/profile_list.html'
     # context_object_name = 'qs'
 
     def get_queryset(self):
