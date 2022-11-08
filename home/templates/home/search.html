@@ -1,0 +1,73 @@
+{% extends 'home/base.html' %}
+
+{# Load the tag library #}
+{% load bootstrap5 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{% block title %}Class Search{% endblock %}
+
+{% block content %}
+<content>
+
+    <div class="card form-group">
+      <form action="/search" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+      <input type="submit" value="Submit" class="form-control">
+      </form>
+    </div>
+<!--    {{search_data}}-->
+    <div>
+        {% for section in search_data %}
+        <div>
+            <li class="list-group-item">
+                {%with section.meetings|first as meeting %}
+                <div class="container">
+                  <div class="row align-items-start">
+                    <div>
+                      {{ section.Mnemonic }} {{ section.Number }} {{ section.Title }}
+                    </div>
+                    <div class="col">
+                      {{ section.Section }}
+                    </div>
+                    <div class="col">
+                      {{ section.Type }}
+                    </div>
+                    <div class="col">
+                      {{ section.component }} {{ section.Units }} Units
+                    </div>
+<!--                    <div class="col">-->
+<!--                      {{ section.enrollment_available }}/{{ section.enrollment_total }}-->
+<!--                    </div>-->
+<!--                    <div class="col">-->
+<!--                      Professor: {{ section.instructor.name }}-->
+<!--                    </div>-->
+<!--                    <div class="col">-->
+<!--                      {{ meeting.days}} {{ meeting.start_time|slice:"0:2" }}:{{ meeting.start_time|slice:"3:5" }} - {{ meeting.end_time|slice:"0:2" }}:{{ meeting.end_time|slice:"3:5" }}-->
+<!--                    </div>-->
+<!--                    <div class="col">-->
+<!--                      {{ meeting.facility_description }}-->
+<!--                    </div>-->
+                    {% if user.is_authenticated %}
+                    <div class="col">
+                      <button type="button" class="btn btn-primary btn-xs rounded-pill">Add To Schedule</button>
+                    </div>
+                    {% else %}
+                    <div class="col">
+                      To add class to schedule, login <a href="https://louslist-a28.herokuapp.com/accounts/google/login/">here</a>
+                    </div>
+                    {% endif %}
+                  </div>
+                </div>
+                {% endwith %}
+                </li>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% autoescape off %}{% bootstrap_messages %}{% endautoescape %}
+</content>
+{% endblock %}

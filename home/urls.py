@@ -19,6 +19,7 @@ from . import views
 app_name = 'home'
 urlpatterns = [
     path('', views.landing, name='landing'),
+
     path('friends/', views.invites_received_view, name='friends'),
     path('all-profiles/', views.ProfileListView.as_view(), name='all-profiles'),
     path('to-invite/', views.invite_profiles_list_view, name='invite-profiles-view'),
@@ -30,4 +31,5 @@ urlpatterns = [
     path('remove-friend/', views.remove_from_friends, name='remove-friend'),
     path('friends/accept/', views.accept_invitation, name='accept-invite'),
     path('friends/reject/', views.reject_invitation, name='reject-invite'),
+    path('search', views.search_page, name='search')
 ]

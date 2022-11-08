@@ -2,9 +2,13 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Course, Department, Relationship, Section, Profile, Schedule
 from django.views.generic.edit import CreateView
 from django.views import generic
+import urllib3
+import json
+import numpy as np
+from .forms import SearchForm
 from django.contrib.auth.models import User
 from django.db.models import Q
-from home.utils import group_by_course, get_events
+from home.utils import group_by_course, get_events, search_for_section
 
 #from google.oauth2 import service_account
 #import googleapiclient.discovery
@@ -130,6 +134,7 @@ def reject_invitation(request):
     return redirect('home:friends')
 
 
+
 def landing(request):
     # Department list:
 
@@ -137,6 +142,28 @@ def landing(request):
     deptList = [{"subject": dept["subject"], "name":mnemonic_map[dept["subject"]]} for dept in deptList]
 
     return render(request, 'home/landing.html', {'deptList': deptList})
+
+
+def search_page(request):
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = SearchForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            department = form.cleaned_data['department']
+            course_number = form.cleaned_data['course_number']
+            days = form.cleaned_data['days']
+            search_data = search_for_section({'department': department, 'catalog_number': course_number, 'days': days})
+
+            return render(request, 'home/search.html', {'form': form, 'search_data': search_data})
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = SearchForm()
+
+    return render(request, 'home/search.html', {'form': form, 'search_data': None})
+
 
 def friends(request):
     return render(request, 'home/friends.html')
