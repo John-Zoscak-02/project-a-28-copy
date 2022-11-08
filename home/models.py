@@ -18,6 +18,10 @@ from django.dispatch import receiver
 
 # We will be able to get this information from the SIS scraper when we have access to that
 # To Do: the specifics of all of this will need to change, this is just an outline and example
+
+# Friends feature created by adjusting https://github.com/hellopyplane/Social-Network/blob/master/profiles/models.py to fit our needs
+
+
 class ProfileManager(models.Manager):
     def get_all_profiles_to_invite(self,sender):
         profiles = Profile.objects.all().exclude(user=sender)
