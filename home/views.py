@@ -122,8 +122,6 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
             rel_sender.append(item.sender.user)
         context["rel_receiver"] = rel_receiver
         context["rel_sender"] = rel_sender
-        context['posts'] = self.get_object().get_all_authors_posts()
-        context['len_posts'] = True if len(self.get_object().get_all_authors_posts()) > 0 else False
         return context
 
 class ProfileListView(LoginRequiredMixin, ListView):
