@@ -11,14 +11,16 @@
 
 {% block content %}
 <content>
-
-    <div class="card form-group">
-      <form action="/search" method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-      <input type="submit" value="Submit" class="form-control">
-      </form>
+    <div class="pb-5">
+        <div class="card form-group">
+          <form action="/search" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+          <input type="submit" value="Submit" class="form-control">
+          </form>
+        </div>
     </div>
+
 <!--    {{search_data}}-->
     <div>
         {% for section in search_data %}
@@ -27,9 +29,9 @@
             <li class="list-group-item">
                 {%with section.meetings|first as meeting %}
                 <div class="container">
-                <div>
+                <h5>
                   {{ section.Mnemonic }} {{ section.Number }} {{ section.Title }}
-                </div>
+                </h5>
                   <div class="row align-items-start">
                     <div class="col">
                       {{ section.ClassNumber }}
