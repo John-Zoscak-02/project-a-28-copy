@@ -214,7 +214,7 @@ def search_for_section(search_criteria):
     reader = csv.DictReader(csvfile)
     criteria_to_column = {'department': 'Mnemonic',
                           'catalog_number': 'Number',
-                          'instructor': 'Instructor(s)',
+                          'instructor': 'Instructor',
                           'days': 'Days',
                           'description': 'Title',}
     for row in reader:
