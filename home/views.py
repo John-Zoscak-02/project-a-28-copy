@@ -214,7 +214,8 @@ def search_page(request):
             department = form.cleaned_data['department']
             course_number = form.cleaned_data['course_number']
             days = form.cleaned_data['days']
-            search_data = search_for_section({'department': department, 'catalog_number': course_number, 'days': days})
+            instructor = form.cleaned_data['instructor']
+            search_data = search_for_section({'department': department, 'catalog_number': course_number, 'days': days, 'instructor': instructor})
 
             return render(request, 'home/search.html', {'form': form, 'search_data': search_data})
 

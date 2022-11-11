@@ -94,6 +94,8 @@ class Department(models.Model):
     def __str__(self):
         return self.subject
 
+
+
 class Course(models.Model):
     catalog_number = models.CharField(max_length=4)
     description = models.CharField(max_length=64)
