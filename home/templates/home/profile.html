@@ -75,6 +75,23 @@
     {% else %}
     <p><strong><font color='red'>You must login to view member profiles</font></strong></p>
     {% endif %}
+
     {% autoescape off %}{% bootstrap_messages %}{% endautoescape %}
 </div>
+<!-- 
+<div class="section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+               
+                <form method="POST" action="{% url 'post' slug-post.slug %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        {{ form }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div> -->
 {% endblock %}
