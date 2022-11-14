@@ -22,7 +22,6 @@ class Migration(migrations.Migration):
                 ('catalog_number', models.CharField(max_length=4)),
                 ('description', models.CharField(max_length=64)),
                 ('units', models.CharField(max_length=1)),
-                ('department', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='home.department')),
             ],
         ),
         migrations.CreateModel(
