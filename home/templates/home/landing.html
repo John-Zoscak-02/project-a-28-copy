@@ -14,86 +14,51 @@
 
 {% block content %}
 <content>
-
-    <div class="card example-1 scrollbar-ripe-malinka">
-      <div class="card-body">
-        <div class="row justify-content-center align-items-center">
-          {% for dept in deptList %}
-              <div class="col-4 {% cycle 'order-1' 'order-2' 'order-3' as column %}">
-                <a href="department/{{ dept.subject }}">{{dept.name}} ({{dept.subject}})</a>
-              </div>
-            {% if forloop.counter|divisibleby:3 %}
-            </div>
+    <div class="accordion" id="accordionExample">
+      {% for school, subjects in schools.items %}
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="heading{{ forloop.counter }}">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+            data-bs-target="#collapse{{ forloop.counter }}" aria-expanded="false"
+            aria-controls="collapse{{ forloop.counter }}">
+            <div style="width: 800px;">{{ school }}</div>
+            <!--              this width value is temporary, I hasn't able to figure out how to keep the badge on the right while in the button-->
+            <div class="badge bg-primary rounded-pill pl-4" style="float:right">{{ subjects|length }} Subject(s)</div>
+    
+          </button>
+        </h2>
+        <div id="collapse{{ forloop.counter }}" class="accordion-collapse collapsed collapse"
+          aria-labelledby="heading{{ forloop.counter }}">
+          <div class="accordion-body">
             <div class="row justify-content-center align-items-center">
-            {% endif %}
-          {% endfor %}
+              {% for subject in subjects %}
+                <div class="col-4 {% cycle 'order-1' 'order-2' 'order-3' as column %}">
+                  <a href="department/{{ subject.mnemonic }}"><small>{{subject.name}} ({{subject.mnemonic}})</small></a>
+                </div>
+                {% if forloop.last %}
+                    {% if column == 'order-1'%}
+                      <div class="col-4 order-2"></div>
+                      <div class="col-4 order-3"></div>
+                    {% endif %}
+                    {% if column == 'order-2'%}
+                      <div class="col-4 order-3"></div>
+                    {% endif %}
+                    {% resetcycle %}
+                {% endif %}
+                {% if forloop.counter|divisibleby:3 %}
+                  </div>
+                  <div class="row justify-content-center align-items-center">
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
         </div>
       </div>
+    
+      {% endfor %}
     </div>
+
+
     {% autoescape off %}{% bootstrap_messages %}{% endautoescape %}
 </content>
-
-<button class="accordion">Arts & Sciences Departments</button>
-<div class="panel">
-  <p>...</p>
-</div>
-
-<button class="accordion">Engineering & Applied Sciences Departments</button>
-<div class="panel">
-  <p>...</p>
-</div>
-
-<button class="accordion">School of Education & Human Development Departments</button>
-<div class="panel">
-  <p>...</p>
-</div>
-
-<style>
-/* Style the buttons that are used to open and close the accordion panel */
-.accordion {
-  background-color: #eee;
-  color: #444;
-  cursor: pointer;
-  padding: 18px;
-  width: 100%;
-  text-align: left;
-  border: none;
-  outline: none;
-  transition: 0.4s;
-}
-
-/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
-.active, .accordion:hover {
-  background-color: #ccc;
-}
-
-/* Style the accordion panel. Note: hidden by default */
-.panel {
-  padding: 0 18px;
-  background-color: white;
-  display: none;
-  overflow: hidden;
-}
-</style>
-
-<script>
-var acc = document.getElementsByClassName("accordion");
-var i;
-
-for (i = 0; i < acc.length; i++) {
-  acc[i].addEventListener("click", function() {
-    /* Toggle between adding and removing the "active" class,
-    to highlight the button that controls the panel */
-    this.classList.toggle("active");
-
-    /* Toggle between hiding and showing the active panel */
-    var panel = this.nextElementSibling;
-    if (panel.style.display === "block") {
-      panel.style.display = "none";
-    } else {
-      panel.style.display = "block";
-    }
-  });
-}
-</script>
 {% endblock %}
