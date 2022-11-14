@@ -52,11 +52,11 @@
                           <small>{{ meeting.days }} {{ meeting.start_time|slice:"0:2" }}:{{ meeting.start_time|slice:"3:5" }} -{{meeting.end_time|slice:"0:2" }}:{{ meeting.end_time|slice:"3:5" }}</small>
                         </div>
                     {% endif %}
-                    <div class="col-2">
+                    <div class="col-3">
                       <small>{{ meeting.facility_description }}</small>
                     </div>
                     {% if user.is_authenticated %}
-                    <div class="col-2">
+                    <div class="col">
                       {% if section in profile.schedule.classes.all %}
                         <small>Already in schedule</small>
                       {% else %}
