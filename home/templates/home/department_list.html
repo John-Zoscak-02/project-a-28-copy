@@ -62,9 +62,8 @@
                       {% else %}
                       <form method="post" id="add_section_form-{{ section.course_number }}">
                         {% csrf_token %}
-                        <button type="submit" class="btn btn-primary btn-xs rounded-pill" name="section_add" id="{{ section.course_number }}" value="{{ section.course_number }}">
-                          <small>Add To Schedule</small>
-                        </button>
+                        <button type="submit" class="btn btn-primary btn-xs rounded-pill" name="section_add" id="{{ section.course_number }}"
+                         value="{{ section }}">Add To Schedule</button>
                       </form>
                       <script src="https://code.jquery.com/jquery-3.5.1.js" 
                               integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" 
