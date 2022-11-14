@@ -113,6 +113,18 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
         context["rel_sender"] = rel_sender
         return context
 
+    def post(self, request, **kwargs):
+        current_user_profile = request.user.profile
+        schedule = Schedule.objects.get(profile=current_user_profile)
+        data = request.POST
+        section_number = int(data.get('section_remove'))
+        section = Section.objects.get(section_number=section_number)
+        schedule.objects.remove(section)
+        schedule.save()
+                
+        context = self.get_context_data(kwargs=kwargs)
+        return render(request, self.template_name, context)
+
 class ProfileListView(LoginRequiredMixin, ListView):
     model = Profile
     template_name = 'home/profile_list.html'

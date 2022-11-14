@@ -60,6 +60,39 @@
                             <div class="col-2">
                                 {{ class.facility_description }}
                             </div>
+                            {% if user.is_authenticated %}
+                            <div class="col">
+                                <form method="post" id="remove_section_form-{{ section.course_number }}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-primary btn-xs rounded-pill" name="section_add"
+                                        id="{{ section.course_number }}" value="{{ section.course_number }}">
+                                        <small>Remove From Schedule</small>
+                                    </button>
+                                </form>
+                                <script src="https://code.jquery.com/jquery-3.5.1.js"
+                                    integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+                                <script type="text/javascript">
+                                    $(document).on('submit', '#remove_section_form-{{ section.course_number }}', function (e) {
+                                        e.preventDefault();
+                                        $.ajax({
+                                            type: 'POST',
+                                            url: '{% url "home:profile" %}',
+                                            data:
+                                            {
+                                                section_remove: $("#{{ section.course_number }}").val(),
+                                                csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
+                                            },
+                                            success: function () { },
+                                        })
+                                    });
+                                </script>
+                                {% endif %}
+                            </div>
+                            {% else %}
+                            <div class="col">
+                                <small>To add class to schedule, <a href="/accounts/google/login">Login</a></small>
+                            </div>
+                            {% endif %}
                         </div>
                     </div>
                 </li>
