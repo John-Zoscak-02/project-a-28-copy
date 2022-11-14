@@ -212,18 +212,12 @@ def group_by_schools():
     except (FileNotFoundError, FileExistsError):
         return None
 
-    #print(schools.columns.values)
     for school in schools.columns.values:
         schools_dict[school] = list()
         for mnemonic in schools[school]:
             name = mnemonic_map.get(mnemonic, None)
             if (name):
                 schools_dict[school].append({'mnemonic':mnemonic, 'name':mnemonic_map[mnemonic]})
-    #for school, subjects in schools_dict:
-    #    print(school)
-    #    for subject in subjects:
-    #        print("    ", subject.mnemonic, subject.name)
-    print(schools_dict)
     return schools_dict
     
 
