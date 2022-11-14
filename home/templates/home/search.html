@@ -1,0 +1,77 @@
+{% extends 'home/base.html' %}
+
+{# Load the tag library #}
+{% load bootstrap5 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{% block title %}Class Search{% endblock %}
+
+{% block content %}
+<content>
+    <div class="pb-5">
+        <div class="card form-group">
+          <form action="/search" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+          <input type="submit" value="Submit" class="form-control">
+          </form>
+        </div>
+    </div>
+
+<!--    {{search_data}}-->
+    <div>
+        {% for section in search_data %}
+        <div>
+<!--            <ul>-->
+            <li class="list-group-item">
+                {%with section.meetings|first as meeting %}
+                <div class="container">
+                <h5>
+                  {{ section.Mnemonic }} {{ section.Number }} {{ section.Title }}
+                </h5>
+                  <div class="row align-items-start">
+                    <div class="col">
+                      {{ section.ClassNumber }}
+                    </div>
+                    <div class="col">
+                      {{ section.Section }}
+                    </div>
+                    <div class="col">
+                        {{ section.Type }} {{ section.Units }} Units
+                    </div>
+                    <div class="col">
+                      {{ section.Enrollment }} / {{ section.EnrollmentLimit }}
+                    </div>
+                    <div class="col">
+                        Professor: {{ section.Instructor }}
+                    </div>
+                    <div class="col">
+                      {{ section.Days }}
+                    </div>
+                    <div class="col">
+                      {{ section.Room }}
+                    </div>
+                    {% if user.is_authenticated %}
+                    <div class="col">
+                      <button type="button" class="btn btn-primary btn-xs rounded-pill">Add To Schedule</button>
+                    </div>
+                    {% else %}
+                    <div class="col">
+                      To add class to schedule, login <a href="https://louslist-a28.herokuapp.com/accounts/google/login/">here</a>
+                    </div>
+                    {% endif %}
+                  </div>
+                </div>
+                {% endwith %}
+                </li>
+<!--            </ul>-->
+        </div>
+        {% endfor %}
+    </div>
+
+    {% autoescape off %}{% bootstrap_messages %}{% endautoescape %}
+</content>
+{% endblock %}
