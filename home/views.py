@@ -93,20 +93,20 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
     model = Profile
     template_name = 'home/profile.html'
 
-    #def get_context_data(self, **kwargs):
-    #    context = super().get_context_data(**kwargs)
-    #    profile = Profile.objects.get(user=self.request.user)
-    #    rel_r = Relationship.objects.filter(sender=profile)
-    #    rel_s = Relationship.objects.filter(receiver=profile)
-    #    rel_receiver = []
-    #    rel_sender = []
-    #    for item in rel_r:
-    #        rel_receiver.append(item.receiver.user)
-    #    for item in rel_s:
-    #        rel_sender.append(item.sender.user)
-    #    context["rel_receiver"] = rel_receiver
-    #    context["rel_sender"] = rel_sender
-    #    return context
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        profile = Profile.objects.get(user=self.request.user)
+        rel_r = Relationship.objects.filter(sender=profile)
+        rel_s = Relationship.objects.filter(receiver=profile)
+        rel_receiver = []
+        rel_sender = []
+        for item in rel_r:
+            rel_receiver.append(item.receiver.user)
+        for item in rel_s:
+            rel_sender.append(item.sender.user)
+        context["rel_receiver"] = rel_receiver
+        context["rel_sender"] = rel_sender
+        return context
 
     def post(self, request, **kwargs):
         current_user_profile = request.user.profile
@@ -119,9 +119,9 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
         schedule.classes.remove(section)
         schedule.save()
                 
-        #context = self.get_context_data(kwargs=kwargs)
-        #return render(request, self.template_name, context)
-        return redirect('home:profile_view')
+        context = self.get_context_data(kwargs=kwargs)
+        return render(request, self.template_name, context)
+        #return redirect('home:profile_view')
 
 class ProfileListView(LoginRequiredMixin, ListView):
     model = Profile
