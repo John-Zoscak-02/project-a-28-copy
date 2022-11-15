@@ -220,7 +220,63 @@ def group_by_schools():
                 schools_dict[school].append({'mnemonic':mnemonic, 'name':mnemonic_map[mnemonic]})
     return schools_dict
     
+def get_section(section_data):
+    subject = section_data['subject']
+    try:
+        department = Department.objects.get(subject=subject)
+    except Department.DoesNotExist:
+        department = Department.objects.create(subject=subject)
+        department.save()
 
+    catalog_number = section_data['catalog_number']
+    description = section_data['description']
+    units = section_data['units']
+    try:
+        course = Course.objects.get(department=department, catalog_number=catalog_number)
+    except Course.DoesNotExist:
+        course = Course.objects.create(catalog_number=catalog_number, description=description, units=units, department=department)
+        course.save()
+
+    section_number = section_data['course_number']
+    wait_list = section_data['wait_list']
+    wait_cap = section_data['wait_cap']
+    enrollment_total = section_data['enrollment_total']
+    enrollment_available = section_data['enrollment_available']
+    topic = section_data['topic']
+    prof_name = section_data['instructor']['name']
+    prof_email = section_data['instructor']['email']
+    if len(section_data['meetings']) == 0:
+        meeting = {"days": "-",
+                    "start_time": "",
+                    "end_time": "",
+                    "facility_description": "-"}
+    else:
+        meeting = section_data['meetings'][0]
+    days = meeting['days']
+    start_time = meeting['start_time']
+    end_time = meeting['end_time']
+    facility_description = meeting['facility_description']
+    try:
+        section = Section.objects.get(course=course, section_number=section_number)
+    except Section.DoesNotExist:
+        section = Section.objects.create(
+            section_number=section_number,
+            wait_list=wait_list,
+            wait_cap=wait_cap,
+            enrollment_total=enrollment_total,
+            enrollment_available=enrollment_available,
+            topic=topic,
+            course=course,
+            prof_name=prof_name,
+            prof_email=prof_email,
+            days=days,
+            start_time=start_time,
+            end_time=end_time,
+            facility_description=facility_description,
+        )
+        section.save()
+
+    return section
 
 def search_for_section(search_criteria):
     try:

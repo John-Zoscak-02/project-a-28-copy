@@ -9,13 +9,13 @@ import numpy as np
 from .forms import SearchForm
 from django.contrib.auth.models import User
 from django.db.models import Q
-from home.utils import group_by_course, get_events, search_for_section, group_by_schools
+from home.utils import group_by_course, get_events, search_for_section, group_by_schools, get_section
 from .forms import ProfileModelForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 @login_required
-def my_profile_view(request):
+def profile_view(request):
     profile = Profile.objects.get(user=request.user)
     form = ProfileModelForm(request.POST or None, request.FILES or None, instance=profile)
     confirm = False
@@ -93,11 +93,6 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
     model = Profile
     template_name = 'home/profile.html'
 
-    # def get_object(self):
-    #     slug = self.kwargs.get('slug')
-    #     profile = Profile.objects.get(slug=slug)
-    #     return profile
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         profile = Profile.objects.get(user=self.request.user)
@@ -112,6 +107,21 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
         context["rel_receiver"] = rel_receiver
         context["rel_sender"] = rel_sender
         return context
+
+    def post(self, request, **kwargs):
+        current_user_profile = request.user.profile
+        schedule = Schedule.objects.get(profile=current_user_profile)
+        data = request.POST
+        print(data)
+        section_data = data['class_remove']
+        print(section_data)
+        section = Section.objects.get(section_number=section_data[7:12])
+        schedule.classes.remove(section)
+        schedule.save()
+                
+        context = self.get_context_data(kwargs=kwargs)
+        return render(request, self.template_name, context)
+        #return redirect('home:profile_view')
 
 class ProfileListView(LoginRequiredMixin, ListView):
     model = Profile
@@ -152,7 +162,7 @@ def send_invitation(request):
         rel = Relationship.objects.create(sender=sender, receiver=receiver, status='send')
 
         return redirect(request.META.get('HTTP_REFERER'))
-    return redirect('home:my_profile_view')
+    return redirect('home:profile_view')
     
 @login_required
 def remove_from_friends(request):
@@ -167,7 +177,7 @@ def remove_from_friends(request):
         )
         rel.delete()
         return redirect(request.META.get('HTTP_REFERER'))
-    return redirect('home:my_profile_view')
+    return redirect('home:profile_view')
 
 def landing(request):
     schools = group_by_schools()
@@ -211,65 +221,6 @@ class CourseDetailView(generic.ListView):
     def get_queryset(request):
         return render(request, 'home/course_detail.html')
 
-def get_section(section_data):
-    subject = section_data['subject']
-    try:
-        department = Department.objects.get(subject=subject)
-    except Department.DoesNotExist:
-        department = Department.objects.create(subject=subject)
-        department.save()
-
-    catalog_number = section_data['catalog_number']
-    description = section_data['description']
-    units = section_data['units']
-    try:
-        course = Course.objects.get(department=department, catalog_number=catalog_number)
-    except Course.DoesNotExist:
-        course = Course.objects.create(catalog_number=catalog_number, description=description, units=units, department=department)
-        course.save()
-
-    section_number = section_data['course_number']
-    wait_list = section_data['wait_list']
-    wait_cap = section_data['wait_cap']
-    enrollment_total = section_data['enrollment_total']
-    enrollment_available = section_data['enrollment_available']
-    topic = section_data['topic']
-    prof_name = section_data['instructor']['name']
-    prof_email = section_data['instructor']['email']
-    if len(section_data['meetings']) == 0:
-        meeting = {"days": "-",
-                    "start_time": "",
-                    "end_time": "",
-                    "facility_description": "-"}
-    else:
-        meeting = section_data['meetings'][0]
-    days = meeting['days']
-    start_time = meeting['start_time']
-    end_time = meeting['end_time']
-    facility_description = meeting['facility_description']
-    try:
-        section = Section.objects.get(course=course, section_number=section_number)
-    except Section.DoesNotExist:
-        section = Section.objects.create(
-            section_number=section_number,
-            wait_list=wait_list,
-            wait_cap=wait_cap,
-            enrollment_total=enrollment_total,
-            enrollment_available=enrollment_available,
-            topic=topic,
-            course=course,
-            prof_name=prof_name,
-            prof_email=prof_email,
-            days=days,
-            start_time=start_time,
-            end_time=end_time,
-            facility_description=facility_description,
-        )
-        section.save()
-
-    return section
-
-
 class DeptDetailView(generic.ListView):
     model = Course
     template_name = 'home/department_list.html'
@@ -295,8 +246,6 @@ class DeptDetailView(generic.ListView):
         interval = [float(section.start_time[:2]) + float(section.start_time[3:5]) / 60,
                     float(section.end_time[:2]) + float(section.end_time[3:5]) / 60]
         days = {section.days[i:i+2] for i in range(0, len(section.days), 2)}
-
-        context = self.get_queryset()
         
         conflicts = False
         for other_section in scheduled_sections:
@@ -311,4 +260,4 @@ class DeptDetailView(generic.ListView):
         if not conflicts:
             schedule.classes.add(section)
                 
-        return render(request, self.template_name, context)
+        return redirect('home:dept_detail', self.kwargs['dept'])
