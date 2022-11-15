@@ -3,8 +3,6 @@
 {# Load the tag library #}
 {% load bootstrap5 %}
 
-{% load tags %}
-
 {# Load CSS and JavaScript #}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
@@ -18,48 +16,71 @@
 
 {% block content %}
 <div class='container column gap-2'>
-    {% if user.is_authenticated %}
-        <div class="row p-2">
-            <h3>Friends:</h3>
-            <div class="card example-1 scrollbar-ripe-malinka">
-                <div class="card-body">
-                    <p class="h6">{{profile.get_friends_no}} friend(s)</p>                    
-                    <ul>
-                    {% for friend in profile.get_friends %}
-                        <li><a class='item-group' href="/profile/{{friend.profile.id}}">{{friend.first_name}} {{friend.last_name}}</a></li>
-                    {% endfor %}
-                    </ul>
-                </div>
+    <div class="row p-2">
+        <h3>Friends:</h3>
+        <div class="card example-1 scrollbar-ripe-malinka">
+            <div class="card-body">
+                <p class="h6">{{profile.get_friends_no}} friend(s)</p>                    
+                <ul>
+                {% for friend in profile.get_friends %}
+                    <li><a class='item-group' href="/profile/{{friend.profile.id}}">{{friend.first_name}} {{friend.last_name}} ({{friend.username}})</a></li>
+                {% endfor %}
+                </ul>
             </div>
         </div>
-        <div class="row p-2">
-            <h3>Schedule: </h3>
-            <ul>
-                {% for class in profile.schedule.classes.all %}
-                <li class="list-group-item">
-                    <div class="container">
-                        <div class="row align-items-start">
-                            <div class="col">
-                                {{ class.course.department.subject }}: {{ class.course.catalog_number }}
-                            </div>
-                            <div class="col-3">
-                                {{ class.course.description }}
-                            </div>
-                            <div class="col">
-                                {{ class.course.units }} Units
-                            </div>
-                            <div class="col">
-                                {{ class.enrollment_available }}/{{ class.enrollment_total }}
-                            </div>
-                            <div class="col">
-                                {{ class.prof_name }}
-                            </div>
-                            <div class="col-2">
-                                {{class.days}} {{ class.start_time|slice:"0:2" }}:{{ class.start_time|slice:"3:5" }} - {{class.end_time|slice:"0:2" }}:{{ class.end_time|slice:"3:5" }}
-                            </div>
-                            <div class="col-2">
-                                {{ class.facility_description }}
-                            </div>
+    </div>
+    <div class="row p-2">
+        <h3>Schedule: </h3>
+        <ul>
+            {% for class in profile.schedule.classes.all %}
+            <li class="list-group-item">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-1">
+                            <small>{{ class.course.department.subject }}: {{ class.course.catalog_number }}</small>
+                        </div>
+                        <div class="col-2">
+                            <small>{{ class.course.description }}</small>
+                        </div>
+                        <div class="col-2">
+                            <small>{{ class.course.units }} Units | </small>
+                            <small>{{ class.enrollment_available }}/{{ class.enrollment_total }} Seats</small>
+                        </div>
+                        <div class="col-2">
+                            <small>{{ class.prof_name }}</small>
+                        </div>
+                        <div class="col-2">
+                            <small>{{class.days}} {{ class.start_time|slice:"0:2" }}:{{ class.start_time|slice:"3:5" }} - {{class.end_time|slice:"0:2"}}:{{ class.end_time|slice:"3:5" }}</small>
+                        </div>
+                        <div class="col-2">
+                            <small>{{ class.facility_description }}</small>
+                        </div>
+                        <div class="col-1">
+                            <form method="post" id="remove_class_form-{{ class.section_number }}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger btn-xs rounded-pill" name="class_remove"
+                                    id="{{ class.section_number }}" value="{{ class }}">
+                                    <small>Remove</small>
+                                </button>
+                            </form>
+                            <script src="https://code.jquery.com/jquery-3.5.1.js" 
+                                    integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+                                    crossorigin="anonymous"></script>
+                            <script type="text/javascript">
+                                $(document).on('submit', '#remove_class_form-{{ class.section_number }}', function (e) {
+                                    e.preventDefault();
+                                    $.ajax({
+                                        type: 'POST',
+                                        url: '{% url "home:profile_view" profile.id %}',
+                                        data:
+                                        {
+                                            class_remove: $("#{{ class.section_number }}").val(),
+                                            csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
+                                        },
+                                        success: function () { },
+                                    })
+                                });
+                            </script>
                         </div>
                     </div>
                 </li>

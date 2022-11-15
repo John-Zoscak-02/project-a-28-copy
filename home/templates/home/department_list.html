@@ -32,24 +32,20 @@
                 <li class="list-group-item">
                 {%with section.meetings|first as meeting %}
                 <div class="container">
-                  <div class="row align-items-start">
-                    <div>
-                      {{ section.topic }}
-                    </div>
+                  {% if section.topic %}
+                    <h6>{{ section.topic }}</h6>
+                  {% endif%}
+                  <div class="row align-items-center">
                     <div class="col">
-                      {{ section.course_number }}
+                      <small>{{ section.course_number }}</small>
+                      <small>{{ section.course_section }}</small>
                     </div>
-                    <div class="col">
-                      {{ section.course_section }}
+                    <div class="col-3">
+                      <small>{{ section.component }} {{ section.units }} Units | </small>
+                      <small>{{ section.enrollment_available }}/{{ section.enrollment_total }} Seats</small>
                     </div>
-                    <div class="col">
-                      {{ section.component }} {{ section.units }} Units
-                    </div>
-                    <div class="col">
-                      {{ section.enrollment_available }}/{{ section.enrollment_total }}
-                    </div>
-                    <div class="col">
-                      Professor: {{ section.instructor.name }}
+                    <div class="col-2">
+                      <small>{{ section.instructor.name }}</small>
                     </div>
                     <div class="col">
                       {{ meeting.days }} {{ meeting.start_time|slice:"0:2" }}:{{ meeting.start_time|slice:"3:5" }} - {{ meeting.end_time|slice:"0:2" }}:{{ meeting.end_time|slice:"3:5" }}
@@ -60,16 +56,17 @@
                     {% if user.is_authenticated %}
                     <div class="col">
                       {% if section in profile.schedule.classes.all %}
-                        Already in schedule
+                        <small>Already in schedule</small>
                       {% else %}
                       <form method="post" id="add_section_form-{{ section.course_number }}">
                         {% csrf_token %}
-                        <button type="submit" class="btn btn-primary btn-xs rounded-pill" name="section_add" id="{{ section.course_number }}"
-                         value="{{ section.course_number }}">Add To Schedule</button>
+                        <button type="submit" class="btn btn-primary btn-xs rounded-pill" name="section_add" id="{{ section.course_number }}" value="{{ section }}">
+                          <small>Add To Schedule</small>
+                        </button>
                       </form>
                       <script src="https://code.jquery.com/jquery-3.5.1.js" 
-          integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" 
-            crossorigin="anonymous"></script>
+                              integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" 
+                              crossorigin="anonymous"></script>
                       <script type="text/javascript">
                         $(document).on('submit','#add_section_form-{{ section.course_number }}',function(e){
                             e.preventDefault();
@@ -89,7 +86,7 @@
                     </div>
                     {% else %}
                     <div class="col">
-                      To add class to schedule, login <a href="/accounts/google/login">here</a>
+                      <small>To add class to schedule, <a href="/accounts/google/login">Login</a></small>
                     </div>
                     {% endif %}                    
                   </div>
