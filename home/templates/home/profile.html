@@ -23,7 +23,7 @@
                 <p class="h6">{{profile.get_friends_no}} friend(s)</p>                    
                 <ul>
                 {% for friend in profile.get_friends %}
-                    <li><a class='item-group' href="/profile/{{friend.profile.id}}">{{friend.first_name}} {{friend.last_name}}</a></li>
+                    <li><a class='item-group' href="/profile/{{friend.profile.id}}">{{friend.first_name}} {{friend.last_name}} ({{friend.username}})</a></li>
                 {% endfor %}
                 </ul>
             </div>
