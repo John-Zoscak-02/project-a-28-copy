@@ -80,13 +80,13 @@ class Relationship(models.Model):
 class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     date = models.DateField(auto_now_add = True)
-    profile = models.ForeignKey('Profile', on_delete=models.CASCADE)
+    profile = models.ForeignKey('Profile', on_delete=models.CASCADE, related_name='comments')
     content = models.TextField()
     class Meta:
         ordering = ['date']
 
     def __str__(self):
-        return 'Comment {} by {} on {}'.format(self.content, self.user.username, self.date)
+        return 'Comment by {} on {}'.format(self.user.username, self.date)
 
 class Department(models.Model):
     subject = models.CharField(max_length=4)

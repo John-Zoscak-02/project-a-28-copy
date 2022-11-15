@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 
-from .models import Department, Course, Section, Profile, Relationship, Schedule
+from .models import Department, Course, Section, Profile, Relationship, Schedule, Comment
 from django.contrib.auth.models import Group
 
 class SectionInline(admin.TabularInline):
@@ -49,9 +49,12 @@ class CourseAdmin(admin.ModelAdmin):
 #        if not obj:
 #            return list()
 #        return super(CustomUserAdmin, self).get_inline_instances(request, obj)
-
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ('content', 'user')
+    search_fields = ('user')
 
 admin.site.unregister(User)
+admin.site.register(Comment)
 admin.site.register(User)
 admin.site.register(Profile)
 admin.site.register(Schedule)
