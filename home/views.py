@@ -1,6 +1,7 @@
+from datetime import datetime
 from multiprocessing import context
 from urllib import request
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 from .models import Course, Department, Relationship, Section, Schedule, Profile, Comment
 from django.views.generic.edit import CreateView
 from django.views.generic import ListView, DetailView
@@ -15,7 +16,6 @@ from home.utils import group_by_course, get_events, search_for_section, group_by
 from .forms import ProfileModelForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-
 
 @login_required
 def profile_view(request):
@@ -35,6 +35,31 @@ def profile_view(request):
     }
 
     return render(request, 'home/profile.html', context)
+
+
+@login_required
+def add_comment(request, pk):
+    profile = Profile.objects.get(id=pk)
+    if request.method == 'POST':
+        form = CommentForm(request.POST,instance=profile)
+        if form.is_valid():
+            body = form.cleaned_data['content']
+            c = Comment(profile = profile, user = request.user, content = body, date = datetime.now())
+            c.save()
+            return redirect(request.path_info)
+        else:
+            return HttpResponse('Invalid input')
+    else:
+        form = CommentForm()
+    all_comments = Comment.objects.filter(profile=profile).count()
+    context = {
+        'form' : form,
+        'profile': profile,
+        'all_comments_number': all_comments
+    }
+    return render(request, 'home/comments.html', context)
+
+
 
 @login_required
 def invites_received_view(request):
@@ -113,7 +138,7 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
 
     def post(self, request, **kwargs):
         current_user_profile = request.user.profile
-        schedule = Schedule.objects.get(profile=current_user_profile)
+        schedule = get_object_or_404(Schedule, profile=current_user_profile)
         data = request.POST
         print(data)
         section_data = data['class_remove']
@@ -234,7 +259,7 @@ class DeptDetailView(generic.ListView):
     def post(self, request, **kwargs):
         current_user_profile = request.user.profile
         try:
-            schedule = Schedule.objects.get(profile=current_user_profile)
+            schedule = get_object_or_404(Schedule, profile=current_user_profile)
         except Schedule.DoesNotExist:
             schedule = Schedule.objects.create(profile=current_user_profile)
             schedule.save()

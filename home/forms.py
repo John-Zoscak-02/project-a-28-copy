@@ -28,10 +28,11 @@ class CommentForm(forms.ModelForm):
     content = forms.CharField(widget = forms.Textarea(
     attrs ={
         'class':'form-control',
-        'placeholder':'Comment on schdeule here',
+        'placeholder':'Comment on schedule here',
         'rows':4,
         'cols':50
     }))
+
     class Meta:
         model = Comment
         fields = ('content', )
