@@ -47,13 +47,11 @@
                     <div class="col-2">
                       <small>{{ section.instructor.name }}</small>
                     </div>
-                    {% if section.component != "IND" %}
-                        <div class="col-2">
-                          <small>{{ meeting.days }} {{ meeting.start_time|slice:"0:2" }}:{{ meeting.start_time|slice:"3:5" }} -{{meeting.end_time|slice:"0:2" }}:{{ meeting.end_time|slice:"3:5" }}</small>
-                        </div>
-                    {% endif %}
-                    <div class="col-3">
-                      <small>{{ meeting.facility_description }}</small>
+                    <div class="col">
+                      {{ meeting.days }} {{ meeting.start_time|slice:"0:2" }}:{{ meeting.start_time|slice:"3:5" }} - {{ meeting.end_time|slice:"0:2" }}:{{ meeting.end_time|slice:"3:5" }}
+                    </div>
+                    <div class="col">
+                      {{ meeting.facility_description }} <a href="https://www.google.com/maps/search/?api=1&query={{meeting.facility_description}} charlottesville-virginia>"> click here for Google Maps View</a>
                     </div>
                     {% if user.is_authenticated %}
                     <div class="col">

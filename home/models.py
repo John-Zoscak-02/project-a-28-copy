@@ -1,5 +1,5 @@
+from email.policy import default
 from pyexpat import model
-import profile
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
@@ -76,11 +76,23 @@ class Relationship(models.Model):
     def __str__(self):
         return f"{self.sender}-{self.receiver}-{self.status}"
 
+class Comment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    date = models.DateField(auto_now_add = True)
+    profile = models.ForeignKey('Profile', on_delete=models.CASCADE, related_name='comments')
+    content = models.TextField()
+    class Meta:
+        ordering = ['date']
+    def __str__(self):
+        return 'Comment by {} on {}'.format(self.user.username, self.date)
+
 class Department(models.Model):
     subject = models.CharField(max_length=4)
 
     def __str__(self):
         return self.subject
+
+
 
 class Course(models.Model):
     catalog_number = models.CharField(max_length=4)
