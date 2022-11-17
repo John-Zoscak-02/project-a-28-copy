@@ -2,10 +2,21 @@
 
 {% block title %} Comment Section {% endblock %}
 {% block content %}
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <strong>Attention!</strong> Comments that are deemed inappropriate according to <a class='item-group' href="/about-us/">our terms of service</a> will be deleted
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
 <h1 style="font-size: 40px; margin-left: 30px;" class="p-2">
     Add Comment({{all_comments_number}})
  </h1>
  <div class="col-md-4">
+    {% if messages %}
+    <ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
     {% for comment in profile.comments.all %}
     <h5><strong>{{ comment.user.username }}:</strong></h5>
     <p>{{ comment.content }}</p>

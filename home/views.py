@@ -16,6 +16,7 @@ from home.utils import group_by_course, get_events, search_for_section, group_by
 from .forms import ProfileModelForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages
 
 @login_required
 def profile_view(request):
@@ -48,7 +49,8 @@ def add_comment(request, pk):
             c.save()
             return redirect(request.path_info)
         else:
-            return HttpResponse('Invalid input')
+            messages.info(request, 'Invalid Input!')
+            return redirect(request.path_info)
     else:
         form = CommentForm()
     all_comments = Comment.objects.filter(profile=profile).count()
