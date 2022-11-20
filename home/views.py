@@ -53,10 +53,11 @@ def add_comment(request, pk):
             return redirect(request.path_info)
     else:
         form = CommentForm()
-    #all_comments = Comment.objects.filter(profile=profile).count()
+    all_comments = Comment.objects.filter(profile=profile).count()
     context = {
         'form' : form,
         'profile': profile,
+        'all_comments_number': all_comments
     }
     return render(request, 'home/comments.html', context)
 
