@@ -81,6 +81,7 @@ class Comment(models.Model):
     date = models.DateField(auto_now_add = True)
     profile = models.ForeignKey('Profile', on_delete=models.CASCADE, related_name='profile')
     content = models.TextField()
+    
     class Meta:
         ordering = ['date']
     def __str__(self):
