@@ -64,25 +64,7 @@
                           <small>Add To Schedule</small>
                         </button>
                       </form>
-                      <script src="https://code.jquery.com/jquery-3.5.1.js" 
-                              integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" 
-                              crossorigin="anonymous"></script>
-                      <script type="text/javascript">
-                        $(document).on('submit','#add_section_form-{{ section.course_number }}',function(e){
-                            e.preventDefault();
-                            $.ajax({
-                                type:'POST',
-                                url:'{% url "home:dept_detail" object_list.dept %}',
-                                data:
-                                {
-                                    section_add:$("#{{ section.course_number }}").val(),
-                                    csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
-                                },
-                                success:function(){},
-                                })
-                            });
-                        </script>
-                        {% endif %}
+                      {% endif %}
                     </div>
                     {% else %}
                     <div class="col">

@@ -11,13 +11,12 @@
 
 {% block content %}
 <content>
+  <form method="post">
+    {% csrf_token %}
     <div class="pb-5">
         <div class="card form-group">
-          <form action="/search" method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
+          {{ form.as_p }}
           <input type="submit" value="Submit" class="form-control">
-          </form>
         </div>
     </div>
 
@@ -52,7 +51,8 @@
                     </div>
                     {% if user.is_authenticated %}
                     <div class="col-2">
-                      <small><button type="button" class="btn btn-primary btn-xs rounded-pill">Add To Schedule</button></small>
+                      <small><button type="submit" class="btn btn-primary btn-xs rounded-pill" name="section_add"
+                        id="{{ section.ClassNumber }}" value="{{ section }}">Add To Schedule</button></small>
                     </div>
                     {% else %}
                     <div class="col-2">
@@ -67,7 +67,8 @@
         </div>
         {% endfor %}
     </div>
+  </form>
 
-    {% autoescape off %}{% bootstrap_messages %}{% endautoescape %}
+  {% autoescape off %}{% bootstrap_messages %}{% endautoescape %}
 </content>
 {% endblock %}
