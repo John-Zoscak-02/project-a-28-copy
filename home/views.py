@@ -340,7 +340,8 @@ class DeptDetailView(generic.ListView):
     def post(self, request, **kwargs):
         current_user_profile = request.user.profile
         try:
-            schedule = get_object_or_404(Schedule, profile=current_user_profile)
+            schedule = Schedule.objects.get(profile=current_user_profile)
+            print(schedule)
         except Schedule.DoesNotExist:
             schedule = Schedule.objects.create(profile=current_user_profile)
             schedule.save()
@@ -356,7 +357,7 @@ class DeptDetailView(generic.ListView):
         context = self.get_queryset()
         
         conflicts = False
-        for other_section in scheduled_sections:
+        for other_section in schedule.classes.all():
             other_interval = [float(other_section.start_time[:2]) + float(other_section.start_time[3:5]) / 60,
                               float(other_section.end_time[:2]) + float(other_section.end_time[3:5]) / 60]
             other_days = {other_section.days[i:i+2] for i in range(0, len(other_section.days), 2)}
