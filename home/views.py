@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from multiprocessing import context
 from urllib import request
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
@@ -38,6 +38,8 @@ def profile_view(request):
     return render(request, 'home/profile.html', context)
 
 
+
+
 @login_required
 def add_comment(request, pk):
     profile = Profile.objects.get(id=pk)
@@ -53,10 +55,11 @@ def add_comment(request, pk):
             return redirect(request.path_info)
     else:
         form = CommentForm()
-    #all_comments = Comment.objects.filter(profile=profile).count()
+    all_comments = Comment.objects.filter(profile=profile).count()
     context = {
         'form' : form,
         'profile': profile,
+        'number_of_comments': all_comments
     }
     return render(request, 'home/comments.html', context)
 
@@ -208,9 +211,19 @@ def remove_from_friends(request):
 
 def landing(request):
     schools = group_by_schools()
-
-    return render(request, 'home/landing.html', {'schools': schools})
-
+    is_not_empty = False
+    number_of_comments = 0
+    if request.user.is_authenticated:
+        profile = Profile.objects.get(user=request.user)
+        startdate = datetime.today()
+        enddate = startdate + timedelta(days=1)
+        number_of_comments = Comment.objects.filter(profile=profile).filter(date__range=[startdate, enddate]).count()
+        qs = Relationship.objects.invitations_received(profile)
+        results = list(map(lambda x: x.sender, qs))
+        is_not_empty = True
+        if len(results) == 0:
+            is_not_empty = False
+    return render(request, 'home/landing.html', {'schools': schools, 'is_not_empty': is_not_empty, 'number_of_comments': number_of_comments})
 
 def search_page(request):
     # if this is a POST request we need to process the form data
@@ -224,7 +237,6 @@ def search_page(request):
             days = form.cleaned_data['days']
             instructor = form.cleaned_data['instructor']
             search_data = search_for_section({'department': department, 'catalog_number': course_number, 'days': days, 'instructor': instructor})
-
             return render(request, 'home/search.html', {'form': form, 'search_data': search_data})
 
     # if a GET (or any other method) we'll create a blank form
