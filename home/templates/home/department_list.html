@@ -51,7 +51,7 @@
                       {{ meeting.days }} {{ meeting.start_time|slice:"0:2" }}:{{ meeting.start_time|slice:"3:5" }} - {{ meeting.end_time|slice:"0:2" }}:{{ meeting.end_time|slice:"3:5" }}
                     </div>
                     <div class="col">
-                      {{ meeting.facility_description }} <a href="https://www.google.com/maps/search/?api=1&query={{meeting.facility_description}} charlottesville-virginia>"> click here for Google Maps View</a>
+                      {{ meeting.facility_description }} <a href="https://www.google.com/maps/search/?api=1&query={{meeting.facility_description}}"> click here for Google Maps View</a>
                     </div>
                     {% if user.is_authenticated %}
                     <div class="col">

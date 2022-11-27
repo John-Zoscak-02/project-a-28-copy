@@ -19,6 +19,29 @@
     Please read our purpose and terms of service <a class='item-group' href="/about-us/">here</a>
   </div>
 </div>
+
+{% if user.is_authenticated %}
+  {% if is_not_empty %}
+  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <div>
+      A friend request has been sent to your account. Click <a class='item-group' href="/friends/">here</a> to accept or decline
+    </div>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  {% endif %}
+{% endif %}
+
+{% if user.is_authenticated %}
+  {% if number_of_comments %}
+  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <div>
+      You have {{number_of_comments}} comment(s) made to you in the past 24 hours. Click <a class='item-group' href="/add-comment/{{user.id}}">here</a> to see and respond to them
+    </div>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  {% endif %}
+{% endif %}
+
 <content>
     <div class="accordion" id="accordionExample">
       {% for school, subjects in schools.items %}
