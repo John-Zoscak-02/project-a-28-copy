@@ -1,4 +1,4 @@
-from .models import Course, Department, Section, Profile
+from .models import Course, Department, Section, Profile, Schedule
 import urllib3
 import json
 
@@ -302,3 +302,31 @@ def search_for_section(search_criteria):
             sections.append(row)
 
     return sections
+
+def add_section_to_schedule(section, profile):
+    try:
+        schedule = Schedule.objects.get(profile=profile)
+        print(schedule)
+    except Schedule.DoesNotExist:
+        schedule = Schedule.objects.create(profile=profile)
+        schedule.save()
+
+    interval = [float(section.start_time[:2]) + float(section.start_time[3:5]) / 60,
+                    float(section.end_time[:2]) + float(section.end_time[3:5]) / 60]
+    days = {section.days[i:i+2] for i in range(0, len(section.days), 2)}
+    
+    conflicts = False
+    for other_section in schedule.classes.all():
+        other_interval = [float(other_section.start_time[:2]) + float(other_section.start_time[3:5]) / 60,
+                            float(other_section.end_time[:2]) + float(other_section.end_time[3:5]) / 60]
+        other_days = {other_section.days[i:i+2] for i in range(0, len(other_section.days), 2)}
+
+        if days.intersection(other_days):
+            if max(0, min(interval[1], other_interval[1])) - max(interval[0], other_interval[0]) > 0:
+                conflicts = True
+    
+    if not conflicts:
+        schedule.classes.add(section)
+        return True
+    
+    return False
