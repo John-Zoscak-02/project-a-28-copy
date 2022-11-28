@@ -12,7 +12,7 @@ import numpy as np
 from .forms import CommentForm, SearchForm
 from django.contrib.auth.models import User
 from django.db.models import Q
-from home.utils import group_by_course, get_events, search_for_section, group_by_schools, get_section
+from home.utils import group_by_course, get_events, search_for_section, group_by_schools, get_section, get_department_json, add_section_to_schedule
 from .forms import ProfileModelForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -36,9 +36,6 @@ def profile_view(request):
     }
 
     return render(request, 'home/profile.html', context)
-
-
-
 
 @login_required
 def add_comment(request, pk):
@@ -239,24 +236,19 @@ def search_page(request):
             search_data = search_for_section({'department': department, 'catalog_number': course_number, 'days': days, 'instructor': instructor})
             if 'section_add' in request.POST:
                 current_user_profile = request.user.profile
-                try:
-                    schedule = Schedule.objects.get(profile=current_user_profile)
-                except Schedule.DoesNotExist:
-                    schedule = Schedule.objects.create(profile=current_user_profile)
-                    schedule.save()
                 
                 csv_section_data = json.loads(request.POST['section_add'].replace('\'', '"'))
-                print(csv_section_data)
+                # print(csv_section_data)
 
                 dept_json = get_department_json(csv_section_data['Mnemonic'])
 
-                for section in dept_json:
-                    if section['course_number'] == csv_section_data['ClassNumber']:
-                        print(section)
-
-                # section = get_section(section_data)
-
-                # retval = add_to_schedule(section, schedule)
+                section = None
+                for section_json in dept_json:
+                    if section_json['course_number'] == int(csv_section_data['ClassNumber']):
+                        section = get_section(section_json)
+                
+                if section is not None:
+                    retval = add_section_to_schedule(section, current_user_profile)
 
             return render(request, 'home/search.html', {'form': form, 'search_data': search_data})
 
@@ -281,64 +273,6 @@ class CourseDetailView(generic.ListView):
     def get_queryset(request):
         return render(request, 'home/course_detail.html')
 
-def get_section(section_data):
-    subject = section_data['subject']
-    try:
-        department = Department.objects.get(subject=subject)
-    except Department.DoesNotExist:
-        department = Department.objects.create(subject=subject)
-        department.save()
-
-    catalog_number = section_data['catalog_number']
-    description = section_data['description']
-    units = section_data['units']
-    try:
-        course = Course.objects.get(department=department, catalog_number=catalog_number)
-    except Course.DoesNotExist:
-        course = Course.objects.create(catalog_number=catalog_number, description=description, units=units, department=department)
-        course.save()
-
-    section_number = section_data['course_number']
-    wait_list = section_data['wait_list']
-    wait_cap = section_data['wait_cap']
-    enrollment_total = section_data['enrollment_total']
-    enrollment_available = section_data['enrollment_available']
-    topic = section_data['topic']
-    prof_name = section_data['instructor']['name']
-    prof_email = section_data['instructor']['email']
-    if len(section_data['meetings']) == 0:
-        meeting = {"days": "-",
-                    "start_time": "",
-                    "end_time": "",
-                    "facility_description": "-"}
-    else:
-        meeting = section_data['meetings'][0]
-    days = meeting['days']
-    start_time = meeting['start_time']
-    end_time = meeting['end_time']
-    facility_description = meeting['facility_description']
-    try:
-        section = Section.objects.get(course=course, section_number=section_number)
-    except Section.DoesNotExist:
-        section = Section.objects.create(
-            section_number=section_number,
-            wait_list=wait_list,
-            wait_cap=wait_cap,
-            enrollment_total=enrollment_total,
-            enrollment_available=enrollment_available,
-            topic=topic,
-            course=course,
-            prof_name=prof_name,
-            prof_email=prof_email,
-            days=days,
-            start_time=start_time,
-            end_time=end_time,
-            facility_description=facility_description,
-        )
-        section.save()
-
-    return section
-
 
 class DeptDetailView(generic.ListView):
     model = Course
@@ -351,34 +285,12 @@ class DeptDetailView(generic.ListView):
 
     def post(self, request, **kwargs):
         current_user_profile = request.user.profile
-        try:
-            schedule = Schedule.objects.get(profile=current_user_profile)
-            print(schedule)
-        except Schedule.DoesNotExist:
-            schedule = Schedule.objects.create(profile=current_user_profile)
-            schedule.save()
+        
         data = request.POST
         section_data = json.loads(data['section_add'].replace('\'', '"'))
 
         section = get_section(section_data)
 
-        interval = [float(section.start_time[:2]) + float(section.start_time[3:5]) / 60,
-                    float(section.end_time[:2]) + float(section.end_time[3:5]) / 60]
-        days = {section.days[i:i+2] for i in range(0, len(section.days), 2)}
-
-        context = self.get_queryset()
-        
-        conflicts = False
-        for other_section in schedule.classes.all():
-            other_interval = [float(other_section.start_time[:2]) + float(other_section.start_time[3:5]) / 60,
-                              float(other_section.end_time[:2]) + float(other_section.end_time[3:5]) / 60]
-            other_days = {other_section.days[i:i+2] for i in range(0, len(other_section.days), 2)}
-
-            if days.intersection(other_days):
-                if max(0, min(interval[1], other_interval[1])) - max(interval[0], other_interval[0]) > 0:
-                    conflicts = True
-        
-        if not conflicts:
-            schedule.classes.add(section)
+        retval = add_section_to_schedule(section, current_user_profile)
                 
         return redirect('home:dept_detail', self.kwargs['dept'])
