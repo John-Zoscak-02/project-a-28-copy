@@ -17,10 +17,10 @@ DAY_CHOICES = [
     ('Fr', 'Friday')
 ]
 class SearchForm(forms.Form):
-    department = forms.CharField(label='Department Abbreviation', widget=forms.TextInput(attrs={'class': 'form-control'}))
-    course_number = forms.CharField(label='Course Number', widget=forms.TextInput(attrs={'class': 'form-control'}))
-    days = forms.CharField(label='Days', widget=forms.TextInput(attrs={'class': 'form-control'}))
-    instructor = forms.CharField(label='Instructor (not required)',required=False, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    department = forms.CharField(label='Department Abbreviation', required=False, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    course_number = forms.CharField(label='Course Number', required=False, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    days = forms.CharField(label='Days', required=False, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    instructor = forms.CharField(label='Instructor',required=False, widget=forms.TextInput(attrs={'class': 'form-control'}))
     days = forms.CharField(label='Days', initial='', required=False, widget=forms.Select(choices=DAY_CHOICES, attrs={'class': 'form-control'}))
 
 
