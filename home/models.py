@@ -129,28 +129,34 @@ class Schedule(models.Model):
     profile = models.OneToOneField(Profile, on_delete=models.CASCADE, related_name='schedule', null=True)
     classes = models.ManyToManyField(Section, related_name='schedules')
 
-    @property
-    def classes_by_time(self):
-        by_time = {}
-        for cls in self.classes.all():
-            start_time = cls.start_time
-            end_time = cls.end_time
-            if start_time:
-                scale = ((float(end_time[:2]) - float(start_time[:2])) + 
-                        (float(end_time[3:5]) - float(start_time[3:5])))
-                translate = float(start_time[3:5]) / 60
-                t = (float(start_time[:2]), scale, translate)
-                # if float(start_time[:2]) < 12:
-                #     t = (str(start_time[:2])+"am", scale, translate)
-                # else:
-                #     t = (str(start_time[:2])+"pm", scale, translate)
+    #@property
+    #def classes_by_time(self):
+    #    by_time = {}
+    #    for cls in self.classes.all():
+    #        start_time = cls.start_time
+    #        end_time = cls.end_time
+    #        if start_time:
+    #            scale = ((float(end_time[:2]) - float(start_time[:2])) + 
+    #                    (float(end_time[3:5]) - float(start_time[3:5])))
+    #            translate = float(start_time[3:5]) / 60
+    #            t = (float(start_time[:2]), scale, translate)
+    #            # if float(start_time[:2]) < 12:
+    #            #     t = (str(start_time[:2])+"am", scale, translate)
+    #            # else:
+    #            #     t = (str(start_time[:2])+"pm", scale, translate)
 
-                if t in by_time:
-                    by_time[t].append((cls, (scale, translate)))
-                else:
-                    by_time[t] = []
-                    by_time[t].append((cls, (scale, translate)))
-        return by_time
+    #            if t in by_time:
+    #                by_time[t].append((cls, (scale, translate)))
+    #            else:
+    #                by_time[t] = []
+    #                by_time[t].append((cls, (scale, translate)))
+    #    return by_time
+
+    def get_translate(self, cls):
+        return str(50 * (float(cls.start_time[:2]) - 8) + (((float(cls.start_time[3:5])) / 60) * 50))
+    
+    def get_scale(self, cls):
+        return str(50 * (float(cls.end_time[:2]) - float(cls.start_time[:2])) + (((float(cls.end_time[3:5]) - float(cls.start_time[3:5])) / 60) * 50))
 
     @property
     def classes_by_day(self):
@@ -160,7 +166,7 @@ class Schedule(models.Model):
             for day in days:
                 if not (day in by_day):
                     by_day[day] = []
-                by_day[day].append(cls)
+                by_day[day].append((cls, self.get_translate(cls), self.get_scale(cls)))
 
         return by_day
 

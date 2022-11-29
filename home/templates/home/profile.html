@@ -94,65 +94,93 @@
     <div class="row p-2">
         <table class="table table-bordered">
             <tbody>
-                <tr>
-                    <th scope="col" style="width: 14.29%">T</th>
+                <tr style="width: 0%">
+                    <th scope="col" style="width: 14.29%;">T</th>
                     {% for time in times %}
                     <td scope="col">{{time}}</td>
                     {% endfor %}
                 </tr>
-                <tr>
+                <tr class='position-relative' style="width: 14.29%">
                     <th scope="col" style="width: 14.29%">Sunday</th>
                     <td class='p-0' height="750px">
-                        {% for class in profile.schedule.classes_by_day.Su %}
-                        <p>{{class.course.description}}</p>
+                        {% for class, translate, scale in profile.schedule.classes_by_day.Su %}
+                        {% with "width: 98.5%; height: "|add:scale|add:"px; transform: translateY("|add:translate|add:"px"|add:");" as styl %}
+                        <div class="p-1 border border-primary rounded position-absolute" style="{{ styl }}">
+                            <p>{{class.course.description}}</p>
+                        </div>
+                        {% endwith %}
                         {% endfor %}
                     </td>
                 </tr>
-                <tr>
+                <tr class='position-relative' style="width: 14.29%">
                     <th scope="col" style="width: 14.29%">Monday</th>
                     <td class='p-0' height="750px">
-                        {% for class in profile.schedule.classes_by_day.Mo %}
-                        <p>{{class.course.description}}</p>
+                        {% for class, translate, scale in profile.schedule.classes_by_day.Mo %}
+                        {% with "width: 98.5%; height: "|add:scale|add:"px; transform: translateY("|add:translate|add:"px"|add:");" as styl %}
+                        <div class="p-1 border border-primary rounded position-absolute" style="{{ styl }}">
+                            <p>{{class.course.description}}</p>
+                        </div>
+                        {% endwith %}
                         {% endfor %}
                     </td>
                 </tr>
-                <tr>
+                <tr class='position-relative' style="width: 14.29%">
                     <th scope="col" style="width: 14.29%">Tuesday</th>
                     <td class='p-0' height="750px">
-                        {% for class in profile.schedule.classes_by_day.Tu %}
-                        <p>{{class.course.description}}</p>
+                        {% for class, translate, scale in profile.schedule.classes_by_day.Tu %}
+                        {% with "width: 98.5%; height: "|add:scale|add:"px; transform: translateY("|add:translate|add:"px"|add:");" as styl %}
+                        <div class="p-1 border border-primary rounded position-absolute" style="{{ styl }}">
+                            <p>{{class.course.description}}</p>
+                        </div>
+                        {% endwith %}
                         {% endfor %}
                     </td>
                 </tr>
-                <tr>
+                <tr class='position-relative' style="width: 14.29%">
                     <th scope="col" style="width: 14.29%">Wednesday</th>
                     <td class='p-0' height="750px">
-                        {% for class in profile.schedule.classes_by_day.We %}
-                        <p>{{class.course.description}}</p>
+                        {% for class, translate, scale in profile.schedule.classes_by_day.We %}
+                        {% with "width: 98.5%; height: "|add:scale|add:"px; transform: translateY("|add:translate|add:"px"|add:");" as styl %}
+                        <div class="p-1 border border-primary rounded position-absolute" style="{{ styl }}">
+                            <p>{{class.course.description}}</p>
+                        </div>
+                        {% endwith %}
                         {% endfor %}
                     </td>
                 </tr>
-                <tr>
+                <tr class='position-relative' style="width: 14.29%">
                     <th scope="col" style="width: 14.29%">Thursday</th>
                     <td class='p-0' height="750px">
-                        {% for class in profile.schedule.classes_by_day.Th %}
-                        <p>{{class.course.description}}</p>
+                        {% for class, translate, scale in profile.schedule.classes_by_day.Th %}
+                        {% with "width: 98.5%; height: "|add:scale|add:"px; transform: translateY("|add:translate|add:"px"|add:");" as styl %}
+                        <div class="p-1 border border-primary rounded position-absolute" style="{{ styl }}">
+                            <p>{{class.course.description}}</p>
+                        </div>
+                        {% endwith %}
                         {% endfor %}
                     </td>
                 </tr>
-                <tr>
+                <tr class='position-relative' style="width: 14.29%">
                     <th scope="col" style="width: 14.29%">Friday</th>
                     <td class='p-0' height="750px">
-                        {% for class in profile.schedule.classes_by_day.Fr %}
-                        <p>{{class.course.description}}</p>
+                        {% for class, translate, scale in profile.schedule.classes_by_day.Fr %}
+                        {% with "width: 98.5%; height: "|add:scale|add:"px; transform: translateY("|add:translate|add:"px"|add:");" as styl %}
+                        <div class="p-1 border border-primary rounded position-absolute" style="{{ styl }}">
+                            <p>{{class.course.description}}</p>
+                        </div>
+                        {% endwith %}
                         {% endfor %}
                     </td>
                 </tr>
-                <tr>
+                <tr class='position-relative' style="width: 14.29%">
                     <th scope="col" style="width: 14.29%">Saturday</th>
                     <td class='p-0' height="750px">
-                        {% for class in profile.schedule.classes_by_day.Sa %}
-                        <p>{{class.course.description}}</p>
+                        {% for class, translate, scale in profile.schedule.classes_by_day.Sa %}
+                        {% with "width: 98.5%; height: "|add:scale|add:"px); transform: translateY("|add:translate|add:"px"|add:");" as styl %}
+                        <div class="p-1 border border-primary rounded position-absolute" style="{{ styl }}">
+                            <p>{{class.course.description}}</p>
+                        </div>
+                        {% endwith %}
                         {% endfor %}
                     </td>
                 </tr>
