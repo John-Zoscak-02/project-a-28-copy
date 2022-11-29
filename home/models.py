@@ -152,4 +152,15 @@ class Schedule(models.Model):
                     by_time[t].append((cls, (scale, translate)))
         return by_time
 
+    @property
+    def classes_by_day(self):
+        by_day = {}
+        for cls in self.classes.all():
+            days = {cls.days[i:i+2] for i in range(0, len(cls.days), 2)}
+            for day in days:
+                if not (day in by_day):
+                    by_day[day] = []
+                by_day[day].append(cls)
+
+        return by_day
 
