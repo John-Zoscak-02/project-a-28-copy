@@ -55,13 +55,16 @@
                     </div>
                     {% if user.is_authenticated %}
                     <div class="col">
-                      {% if section in profile.schedule.classes.all %}
-                        <small>Already in schedule</small>
+                      {% if section in user.profile.schedule.classes.all %}
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-primary btn-xs rounded-pill">
+                        <small>Already in Schedule!</small>
+                      </button>
                       {% else %}
                       <form method="post" id="add_section_form-{{ section.course_number }}">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-primary btn-xs rounded-pill" name="section_add" id="{{ section.course_number }}" value="{{ section }}">
-                          <small>Add To Schedule</small>
+                          <small>Add To Schedule </small>
                         </button>
                       </form>
                       {% endif %}

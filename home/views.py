@@ -124,6 +124,7 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        print(kwargs)
         profile = Profile.objects.get(user=self.request.user)
         rel_r = Relationship.objects.filter(sender=profile)
         rel_s = Relationship.objects.filter(receiver=profile)
@@ -293,4 +294,5 @@ class DeptDetailView(generic.ListView):
 
         retval = add_section_to_schedule(section, current_user_profile)
                 
-        return redirect('home:dept_detail', self.kwargs['dept'])
+        #return redirect('home:dept_detail', self.kwargs['dept'])
+        return render(request, 'home/department_list.html', {'retval': retval})
