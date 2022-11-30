@@ -48,7 +48,8 @@ All Profiles
                 <form action="{% url 'home:remove-friend' %}" method="POST">
                     {% csrf_token %}
                     <input type="hidden" name="profile_pk" value={{obj.pk}}>
-                    <button type="submit" class="btn btn-secondary">Remove from friends</button>
+                    <button type="submit" class="ui negative basic button mb-5 w-big"><i class="minus square icon"></i>Remove from
+                        friends</button>
                 </form>
                 {% endif %}
             </div>
