@@ -23,7 +23,7 @@ All Profiles
         <div class="ui segment">
             <div class="ui grid">
                 <div class="row">
-                    <div class = "three wide column">
+                    <div class="three wide column">
                         <img class="ui small circular image" src={{obj.avatar.url}}>
                     </div>
                     <div class="thirteen wide column">
@@ -32,12 +32,14 @@ All Profiles
                         <a type='button' class="btn btn-primary" href="/profile/{{obj.id}}">See Profile</a>
                     </div>
                 </div>
+            <div class="col-2">
                 {% if obj.user not in rel_receiver and obj.user not in rel_sender %}
-                    <form action="{% url 'home:send-invite' %}" method="POST">
-                        {% csrf_token %}
-                        <input type="hidden" name="profile_pk" value={{obj.pk}}>
-                        <button type="submit" class="ui positive basic button mb-5 w-big"><i class="plus square icon"></i>Add to friends</button>
-                    </form>
+                <form action="{% url 'home:send-invite' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="profile_pk" value={{obj.pk}}>
+                    <button type="submit" class="ui positive basic button mb-5 w-big"><i class="plus square icon"></i>Add to
+                        friends</button>
+                </form>
                 {% endif %}
                 {% if obj.user in rel_receiver and request.user not in obj.friends.all %}
                     <button class="ui disabled button mb-5 w-big"><i class="user icon"></i>Waiting for approval</button>
@@ -46,7 +48,8 @@ All Profiles
                 <form action="{% url 'home:remove-friend' %}" method="POST">
                     {% csrf_token %}
                     <input type="hidden" name="profile_pk" value={{obj.pk}}>
-                    <button type="submit" class="ui negative basic button mb-5 w-big"><i class="minus square icon"></i>Remove from friends</button>
+                    <button type="submit" class="ui negative basic button mb-5 w-big"><i class="minus square icon"></i>Remove from
+                        friends</button>
                 </form>
                 {% endif %}
             </div>

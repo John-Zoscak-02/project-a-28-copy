@@ -85,11 +85,150 @@
                             </script>
                         </div>
                     </div>
-                </li>
-                {% endfor %}
-            </ul>
-</div>
- {% autoescape off %}{% bootstrap_messages %}{% endautoescape %}
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="row p-2">
+        <table class="table table-bordered">
+            <tbody>
+                <tr style="width: 0%">
+                    <th scope="col" style="width: 14.29%;">Time</th>
+                    {% for time in times %}
+                    <td scope="col">{{time}}</td>
+                    {% endfor %}
+                </tr>
+                <tr class='position-relative' style="width: 14.29%;">
+                    <th scope="col" style="width: 14.29%">Sunday</th>
+                    <td class='p-0' height="50px" style="font-size: 12px;">
+                        {% for class, translate, scale in profile.schedule.classes_by_day.Su %}
+                        {% with "white-space: pre-wrap; width: 98.5%; height: "|add:scale|add:"px; transform: translateY("|add:translate|add:"px"|add:");" as styl %}
+                        <div class="overflow-hidden bg-light p-1 border border-3 border-success rounded position-absolute" style="{{ styl }}"><b>{{class.course.department.subject}}: {{class.course.catalog_number}}</b> - {{class.course.description}}
+{{ class.start_time|slice:"0:2" }}:{{ class.start_time|slice:"3:5" }} - {{class.end_time|slice:"0:2"}}:{{ class.end_time|slice:"3:5" }}
+                        </div>
+                        {% endwith %}
+                        {% endfor %}
+                    </td>
+                    {% for time in times %}
+                    {% if forloop.last %}
+                    {% else %}
+                        <td height="50px"></td>
+                    {% endif %}
+                    {% endfor %}
+                </tr>
+                <tr class='position-relative' style="width: 14.29%">
+                    <th scope="col" style="width: 14.29%">Monday</th>
+                    <td class='p-0' height="50px" style="font-size: 12px;">
+                        {% for class, translate, scale in profile.schedule.classes_by_day.Mo %}
+                        {% with "white-space: pre-wrap; width: 98.5%; height: "|add:scale|add:"px; transform: translateY("|add:translate|add:"px"|add:");" as styl %}
+                        <div class="overflow-hidden bg-light p-1 border border-3 border-success rounded position-absolute" style="{{ styl }}"><b>{{class.course.department.subject}}: {{class.course.catalog_number}}</b> - {{class.course.description}}
+{{ class.start_time|slice:"0:2" }}:{{ class.start_time|slice:"3:5" }} - {{class.end_time|slice:"0:2"}}:{{class.end_time|slice:"3:5" }}
+                        </div>
+                        {% endwith %}
+                        {% endfor %}
+                    </td>
+                    {% for time in times %}
+                    {% if forloop.last %}
+                    {% else %}
+                        <td height="50px"></td>
+                    {% endif %}
+                    {% endfor %}
+                </tr>
+                <tr class='position-relative' style="width: 14.29%;">
+                    <th scope="col" style="width: 14.29%">Tuesday</th>
+                    <td class='p-0' height="50px" style="font-size: 12px;">
+                        {% for class, translate, scale in profile.schedule.classes_by_day.Tu %}
+                        {% with "white-space: pre-wrap; width: 98.5%; height: "|add:scale|add:"px; transform: translateY("|add:translate|add:"px"|add:");" as styl %}
+                        <div class="overflow-hidden bg-light p-1 border border-3 border-success rounded position-absolute" style="{{ styl }}"><b>{{class.course.department.subject}}: {{class.course.catalog_number}}</b> - {{class.course.description}}
+{{ class.start_time|slice:"0:2" }}:{{ class.start_time|slice:"3:5" }} - {{class.end_time|slice:"0:2"}}:{{class.end_time|slice:"3:5" }}
+                        </div>
+                        {% endwith %}
+                        {% endfor %}
+                    </td>
+                    {% for time in times %}
+                    {% if forloop.last %}
+                    {% else %}
+                        <td height="50px"></td>
+                    {% endif %}
+                    {% endfor %}
+                </tr>
+                <tr class='position-relative' style="width: 14.29%;">
+                    <th scope="col" style="width: 14.29%">Wednesday</th>
+                    <td class='p-0' height="50px" style="font-size: 12px;">
+                        {% for class, translate, scale in profile.schedule.classes_by_day.We %}
+                        {% with "white-space: pre-wrap; width: 98.5%; height: "|add:scale|add:"px; transform: translateY("|add:translate|add:"px"|add:");" as styl %}
+                        <div class="overflow-hidden bg-light p-1 border border-3 border-success rounded position-absolute" style="{{ styl }}"><b>{{class.course.department.subject}}: {{class.course.catalog_number}}</b> - {{class.course.description}}
+{{ class.start_time|slice:"0:2" }}:{{ class.start_time|slice:"3:5" }} - {{class.end_time|slice:"0:2"}}:{{class.end_time|slice:"3:5" }}
+                        </div>
+                        {% endwith %}
+                        {% endfor %}
+                    </td>
+                    {% for time in times %}
+                    {% if forloop.last %}
+                    {% else %}
+                        <td height="50px"></td>
+                    {% endif %}
+                    {% endfor %}
+                </tr>
+                <tr class='position-relative' style="width: 14.29%;">
+                    <th scope="col" style="width: 14.29%">Thursday</th>
+                    <td class='p-0' height="50px" style="font-size: 12px;">
+                        {% for class, translate, scale in profile.schedule.classes_by_day.Th %}
+                        {% with "white-space: pre-wrap; width: 98.5%; height: "|add:scale|add:"px; transform: translateY("|add:translate|add:"px"|add:");" as styl %}
+                        <div class="overflow-hidden bg-light p-1 border border-3 border-success rounded position-absolute" style="{{ styl }}"><b>{{class.course.department.subject}}: {{class.course.catalog_number}}</b> - {{class.course.description}}
+{{ class.start_time|slice:"0:2" }}:{{ class.start_time|slice:"3:5" }} - {{class.end_time|slice:"0:2"}}:{{class.end_time|slice:"3:5" }}
+                        </div>
+                        {% endwith %}
+                        {% endfor %}
+                    </td>
+                    {% for time in times %}
+                    {% if forloop.last %}
+                    {% else %}
+                        <td height="50px"></td>
+                    {% endif %}
+                    {% endfor %}
+                </tr>
+                <tr class='position-relative' style="width: 14.29%;">
+                    <th scope="col" style="width: 14.29%">Friday</th>
+                    <td class='p-0' height="50px" style="font-size: 12px;">
+                        {% for class, translate, scale in profile.schedule.classes_by_day.Fr %}
+                        {% with "white-space: pre-wrap; width: 98.5%; height: "|add:scale|add:"px; transform: translateY("|add:translate|add:"px"|add:");" as styl %}
+                        <div class="overflow-hidden bg-light p-1 border border-3 border-success rounded position-absolute" style="{{ styl }}"><b>{{class.course.department.subject}}: {{class.course.catalog_number}}</b> - {{class.course.description}}
+{{ class.start_time|slice:"0:2" }}:{{ class.start_time|slice:"3:5" }} - {{class.end_time|slice:"0:2"}}:{{class.end_time|slice:"3:5" }}
+                        </div>
+                        {% endwith %}
+                        {% endfor %}
+                    </td>
+                    {% for time in times %}
+                    {% if forloop.last %}
+                    {% else %}
+                        <td height="50px"></td>
+                    {% endif %}
+                    {% endfor %}
+                </tr>
+                <tr class='position-relative' style="width: 14.29%;">
+                    <th scope="col" style="width: 14.29%">Saturday</th>
+                    <td class='p-0' height="50px" style="font-size: 12px;">
+                        {% for class, translate, scale in profile.schedule.classes_by_day.Sa %}
+                        {% with "white-space: pre-wrap; width: 98.5%; height: "|add:scale|add:"px); transform: translateY("|add:translate|add:"px"|add:");" as styl %}
+                        <div class="overflow-hidden bg-light p-1 border border-3 border-success rounded position-absolute" style="{{ styl }}"><b>{{class.course.department.subject}}: {{class.course.catalog_number}}</b> - {{class.course.description}}
+{{ class.start_time|slice:"0:2" }}:{{ class.start_time|slice:"3:5" }} - {{class.end_time|slice:"0:2"}}:{{class.end_time|slice:"3:5" }}
+                        </div>
+                        {% endwith %}
+                        {% endfor %}
+                    </td>
+                    {% for time in times %}
+                    {% if forloop.last %}
+                    {% else %}
+                        <td height="50px"></td>
+                    {% endif %}
+                    {% endfor %}
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    {% autoescape off %}{% bootstrap_messages %}{% endautoescape %}
 {% else %}
 <p><strong><font color='red'>You must login to view member profiles</font></strong></p>
 {% endif %}
