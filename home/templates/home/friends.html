@@ -36,39 +36,6 @@ Friend invites
     <div class="row p-2">
         <h3>Friends Requests: </h3>
         {% for obj in qs %}
-        <!--<div class="ui segment">
-                    <div class="ui grid">
-                        <div class="row">
-                            <div class="three wide column">
-                                <img class="ui small circular image" src={{obj.avatar.url}}>
-                            </div>
-                            <div class="thirteen wide column">
-                                <h3>{{obj.user}}</h3>
-                                <p>{{obj.username}}</p>
-                                <br>
-                                <a href="">
-                                    <button class="ui primary button w-big mb-5" href="/profile/{{obj.id}}">See profile</button>
-                                </a>
-                                <form action="{% url 'home:accept-invite' %}" method="POST">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="profile_pk" value={{obj.pk}}>
-                                    <button type="submit" class="ui positive basic button w-big mb-5">
-                                        <i class="check icon"></i>
-                                        Accept invite
-                                    </button>
-                                </form>
-                                <form action="{% url 'home:reject-invite' %}" method="POST">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="profile_pk" value={{obj.pk}}>
-                                    <button type="submit" class="ui negative basic button w-big mb-5">
-                                        <i class="close icon"></i>
-                                        Reject invite
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>-->
         <div class="row p-2 align-items-center">
             <div class="col-6">
                 {{obj.user.first_name}} {{obj.user.last_name}} - ({{obj.user}})
