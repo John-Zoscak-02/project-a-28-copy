@@ -74,6 +74,7 @@ def invites_received_view(request):
     context = {
         'qs': results,
         'is_empty': is_empty,
+        'profile': profile,
     }
 
     return render(request, 'home/friends.html', context)

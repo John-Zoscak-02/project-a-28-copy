@@ -19,6 +19,19 @@ Friend invites
     {% if is_empty %}
         <h1>No invitations here...</h1>
     {% endif %}
+    <div class="row p-2">
+        <h3>Friends:</h3>
+        <div class="card example-1 scrollbar-ripe-malinka">
+            <div class="card-body">
+                <p class="h6">{{profile.get_friends_no}} friend(s)</p>
+                <ul>
+                {% for friend in profile.get_friends %}
+                    <li><a class='item-group' href="/profile/{{friend.profile.id}}">{{friend.first_name}} {{friend.last_name}} ({{friend.username}})</a>, to comment on their schedule click <a class='item-group' href="/add-comment/{{friend.profile.id}}">here</a></li>
+                {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
 
     {% for obj in qs %}
         <div class="ui segment">
