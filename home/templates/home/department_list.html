@@ -11,8 +11,8 @@
 {% bootstrap_messages %}
 
 {% block title %}{{ object_list.dept }} List Page{% endblock %}
-
 {% block content %}
+
     <div class="accordion" id="accordionExample">
         {% for course, sections in object_list.courses_json.items %}
       <div class="accordion-item">
@@ -51,27 +51,25 @@
                       {{ meeting.days }} {{ meeting.start_time|slice:"0:2" }}:{{ meeting.start_time|slice:"3:5" }} - {{ meeting.end_time|slice:"0:2" }}:{{ meeting.end_time|slice:"3:5" }}
                     </div>
                     <div class="col">
-                      {{ meeting.facility_description }} <a href="https://www.google.com/maps/search/?api=1&query={{meeting.facility_description}}"> click here for Google Maps View</a>
+                      {{ meeting.facility_description }} <a href="https://www.google.com/maps/search/?api=1&query={{meeting.facility_description}}" target="_blank" rel="noopener noreferrer"> click here for Google Maps View</a>
                     </div>
                     {% if user.is_authenticated %}
                     <div class="col">
-                      {% if section in user.profile.schedule.classes.all %}
-                      {% csrf_token %}
-                      <button type="submit" class="btn btn-primary btn-xs rounded-pill">
-                        <small>Already in Schedule!</small>
-                      </button>
-                      {% else %}
                       <form method="post" id="add_section_form-{{ section.course_number }}">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-primary btn-xs rounded-pill" name="section_add" id="{{ section.course_number }}" value="{{ section }}">
-                          <small>Add To Schedule </small>
+                          <small>Add class to schedule</small>
+                          {% for class in user.profile.schedule.classes.all %}
+                            {% if class.section_number ==  section.course_number %}
+                              <small>, this class already in schedule</small>
+                            {% endif %}
+                          {% endfor %}
                         </button>
                       </form>
-                      {% endif %}
                     </div>
                     {% else %}
                     <div class="col">
-                      <small>To add class to schedule, <a href="/accounts/google/login">Login</a></small>
+                      <small>To add class to schedule, <a href="https://louslist-a28.herokuapp.com/accounts/google/login/">Login</a></small>
                     </div>
                     {% endif %}                    
                   </div>

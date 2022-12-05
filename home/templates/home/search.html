@@ -10,6 +10,7 @@
 {% block title %}Class Search{% endblock %}
 
 {% block content %}
+
 <content>
   <form method="post">
     {% csrf_token %}
@@ -25,6 +26,16 @@
         {% for section in search_data %}
         <div>
 <!--            <ul>-->
+  <p>
+    {{section.ClassNumber}}
+    {% for class in user.profile.schedule.classes.all %}
+    {{ class.section_number }}
+    {% if section.ClassNumber == class.section_number %}
+    already in schedule
+    {% endif %}
+    {% endfor %}
+    
+  </p>
             <li class="list-group-item">
                 {%with section.meetings|first as meeting %}
                 <div class="container">
@@ -47,12 +58,19 @@
                       <small>{{ section.Days }}</small>
                     </div>
                     <div class="col-2">
-                      <small>{{ section.Room }}</small>
+                      <small>{{ section.Room }} <a href="https://www.google.com/maps/search/?api=1&query={{section.Room}}" target="_blank" rel="noopener noreferrer"> click here for Google Maps View</a></small>
                     </div>
                     {% if user.is_authenticated %}
                     <div class="col-2">
-                      <small><button type="submit" class="btn btn-primary btn-xs rounded-pill" name="section_add"
-                        id="{{ section.ClassNumber }}" value="{{ section }}">Add To Schedule</button></small>
+                      <button type="submit" class="btn btn-primary btn-xs rounded-pill" name="section_add"
+                        id="{{ section.ClassNumber }}" value="{{ section }}">
+                        <small>Add class to schedule</small>
+                          {% for class in user.profile.schedule.classes.all %}
+                            {% if class.section_number ==  section.ClassNumber %}
+                              <small>, this class already in schedule</small>
+                            {% endif %}
+                          {% endfor %}
+                      </button>
                     </div>
                     {% else %}
                     <div class="col-2">

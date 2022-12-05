@@ -286,13 +286,10 @@ class DeptDetailView(generic.ListView):
 
     def post(self, request, **kwargs):
         current_user_profile = request.user.profile
-        
         data = request.POST
         section_data = json.loads(data['section_add'].replace('\'', '"'))
-
         section = get_section(section_data)
-
         retval = add_section_to_schedule(section, current_user_profile)
-                
-        #return redirect('home:dept_detail', self.kwargs['dept'])
-        return render(request, 'home/department_list.html', {'retval': retval})
+        return redirect('home:dept_detail', self.kwargs['dept'])
+        #return redirect('home:dept_detail', self.kwargs['dept'], {'retval': retval})
+        #return render(request, 'home/department_list.html', {'retval': retval})

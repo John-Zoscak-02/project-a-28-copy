@@ -97,6 +97,8 @@ TEMPLATES = [
     },
 ]
 
+
+
 WSGI_APPLICATION = 'louslist_a28.wsgi.application'
 
 

@@ -17,12 +17,6 @@
 {% block content %}
 
 {% if user.is_authenticated %}
-<p>
-    {% if user in profile.get_friends %}
-    yes
-    {% endif %}
-
-</p>
     
 <div class='container column gap-2'>
     <div class="row p-2">
