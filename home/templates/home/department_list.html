@@ -3,6 +3,8 @@
 {# Load the tag library #}
 {% load bootstrap5 %}
 
+{% load course_list_tags %}
+
 {# Load CSS and JavaScript #}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
@@ -11,8 +13,8 @@
 {% bootstrap_messages %}
 
 {% block title %}{{ object_list.dept }} List Page{% endblock %}
-
 {% block content %}
+
     <div class="accordion" id="accordionExample">
         {% for course, sections in object_list.courses_json.items %}
       <div class="accordion-item">
@@ -55,20 +57,20 @@
                     </div>
                     {% if user.is_authenticated %}
                     <div class="col">
-                      {% if section in profile.schedule.classes.all %}
-                        <small>Already in schedule</small>
+                      {% if section.course_number|in_schedule:user.profile.schedule.classes.all == 0 %}
+                        <form method="post" id="add_section_form-{{ section.course_number }}">
+                          {% csrf_token %}
+                          <button type="submit" class="btn btn-primary btn-xs rounded-pill" name="section_add" id="{{ section.course_number }}" value="{{ section }}">
+                            <small>Add class to schedule</small>
+                          </button>
+                        </form>
                       {% else %}
-                      <form method="post" id="add_section_form-{{ section.course_number }}">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-primary btn-xs rounded-pill" name="section_add" id="{{ section.course_number }}" value="{{ section }}">
-                          <small>Add To Schedule</small>
-                        </button>
-                      </form>
+                        Course already in schedule.
                       {% endif %}
                     </div>
                     {% else %}
                     <div class="col">
-                      <small>To add class to schedule, <a href="/accounts/google/login">Login</a></small>
+                      <small>To add class to schedule, <a href="https://louslist-a28.herokuapp.com/accounts/google/login/">Login</a></small>
                     </div>
                     {% endif %}                    
                   </div>

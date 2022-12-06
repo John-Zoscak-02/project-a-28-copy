@@ -15,7 +15,9 @@
 {% endif %}
 
 {% block content %}
+
 {% if user.is_authenticated %}
+    
 <div class='container column gap-2'>
     <div class="row p-2">
         <h3>Friends:</h3>
@@ -30,7 +32,7 @@
             </div>
         </div>
     </div>
-    
+    {% if user in profile.get_friends or profile.user.id == user.id %}
     <div class="row p-2">
         <h3>Schedule: </h3>
         <ul>
@@ -57,14 +59,15 @@
                         <div class="col-2">
                             <small>{{ class.facility_description }}</small>
                         </div>
+                        {% if profile.user.id == user.id %}
                         <div class="col-1">
-                            <form method="post" id="remove_class_form-{{ class.section_number }}">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-danger btn-xs rounded-pill" name="class_remove"
-                                    id="{{ class.section_number }}" value="{{ class }}">
-                                    <small>Remove</small>
-                                </button>
-                            </form>
+                                <form method="post" id="remove_class_form-{{ class.section_number }}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger btn-xs rounded-pill" name="class_remove"
+                                        id="{{ class.section_number }}" value="{{ class }}" onclick="location.href = '/profile/{{user.id}}';">
+                                        <small>Remove</small>
+                                    </button>
+                                </form>
                             <script src="https://code.jquery.com/jquery-3.5.1.js" 
                                     integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
                                     crossorigin="anonymous"></script>
@@ -232,6 +235,8 @@
 {% else %}
 <p><strong><font color='red'>You must login to view member profiles</font></strong></p>
 {% endif %}
+
+
  </div>
 
 
