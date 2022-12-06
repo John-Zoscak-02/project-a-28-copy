@@ -61,7 +61,7 @@
                         <form method="post" id="add_section_form-{{ section.course_number }}">
                           {% csrf_token %}
                           <button type="submit" class="btn btn-primary btn-xs rounded-pill" name="section_add" id="{{ section.course_number }}" value="{{ section }}">
-                            <small>{{ section.course_number|in_schedule:user.profile.schedule.classes.all }}Add class to schedule</small>
+                            <small>Add class to schedule</small>
                           </button>
                         </form>
                       {% else %}

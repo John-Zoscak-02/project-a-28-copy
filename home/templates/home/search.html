@@ -28,16 +28,6 @@
         {% for section in search_data %}
         <div>
 <!--            <ul>-->
-  <p>
-    {{section.ClassNumber}}
-    {% for class in user.profile.schedule.classes.all %}
-    {{ class.section_number }}
-    {% if section.ClassNumber == class.section_number %}
-    already in schedule
-    {% endif %}
-    {% endfor %}
-    
-  </p>
             <li class="list-group-item">
                 {%with section.meetings|first as meeting %}
                 <div class="container">
