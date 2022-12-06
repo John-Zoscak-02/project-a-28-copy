@@ -125,6 +125,7 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        #print(kwargs)
         profile = Profile.objects.get(user=self.request.user)
         rel_r = Relationship.objects.filter(sender=profile)
         rel_s = Relationship.objects.filter(receiver=profile)
@@ -136,7 +137,7 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
             rel_sender.append(item.sender.user)
         context["rel_receiver"] = rel_receiver
         context["rel_sender"] = rel_sender
-        context["times"] = ['8am', '9am', '10am', '11am', '12am', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', '8pm', '9pm', '10pm', ]
+        context["times"] = ['7am', '8am', '9am', '10am', '11am', '12am', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', '8pm', '9pm', '10pm', ]
         return context
 
     def post(self, request, **kwargs):
@@ -288,12 +289,10 @@ class DeptDetailView(generic.ListView):
 
     def post(self, request, **kwargs):
         current_user_profile = request.user.profile
-        
         data = request.POST
         section_data = json.loads(data['section_add'].replace('\'', '"'))
-
         section = get_section(section_data)
-
         retval = add_section_to_schedule(section, current_user_profile)
-                
         return redirect('home:dept_detail', self.kwargs['dept'])
+        #return redirect('home:dept_detail', self.kwargs['dept'], {'retval': retval})
+        #return render(request, 'home/department_list.html', {'retval': retval})

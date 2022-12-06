@@ -80,7 +80,7 @@ class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     date = models.DateField(auto_now_add = True)
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='comments')
-    content = models.TextField()
+    content = models.CharField(max_length=200)
     
     class Meta:
         ordering = ['date']
@@ -130,7 +130,7 @@ class Schedule(models.Model):
     classes = models.ManyToManyField(Section, related_name='schedules')
 
     def get_translate(self, cls):
-        return str(50 * (float(cls.start_time[:2]) - 8) + (((float(cls.start_time[3:5])) / 60) * 50))
+        return str(50 * (float(cls.start_time[:2]) - 7) + (((float(cls.start_time[3:5])) / 60) * 50))
     
     def get_scale(self, cls):
         return str(50 * (float(cls.end_time[:2]) - float(cls.start_time[:2])) + (((float(cls.end_time[3:5]) - float(cls.start_time[3:5])) / 60) * 50))
