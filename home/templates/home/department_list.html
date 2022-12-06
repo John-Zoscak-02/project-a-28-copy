@@ -65,7 +65,12 @@
                           </button>
                         </form>
                       {% else %}
-                        Course already in schedule.
+                      <form method="post" id="add_section_form-{{ section.course_number }}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary btn-xs rounded-pill" name="section_add" id="{{ section.course_number }}" onclick="this.textContent = 'Added to Schedule'" value="{{ section }}">
+                          Add To Schedule
+                        </button>
+                      </form>
                       {% endif %}
                     </div>
                     {% else %}

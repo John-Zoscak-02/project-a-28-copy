@@ -82,9 +82,12 @@
                                             class_remove: $("#{{ class.section_number }}").val(),
                                             csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
                                         },
-                                        success: function () { },
+                                        success: function () {
+                                         window.location.reload();
+                                         },
                                     })
                                 });
+
                             </script>
                         </div>
                         {% endif %}

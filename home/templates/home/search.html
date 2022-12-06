@@ -16,7 +16,7 @@
 <content>
   <form method="post">
     {% csrf_token %}
-    <div class="pb-5">
+    <div class="pb-5 px-5">
         <div class="card form-group">
           {{ form.as_p }}
           <input type="submit" value="Submit" class="form-control">
@@ -55,12 +55,10 @@
                     {% if user.is_authenticated %}
                     <div class="col-2">
                       {% if section.ClassNumber|in_schedule:user.profile.schedule.classes.all == 0 %}
-                        <button type="submit" class="btn btn-primary btn-xs rounded-pill" name="section_add"
-                          id="{{ section.ClassNumber }}" value="{{ section }}">
-                          <small>Add class to schedule</small>
-                        </button>
+                      <small><button type="submit" class="btn btn-primary btn-xs rounded-pill" name="section_add"
+                        id="{{ section.ClassNumber }}" value="{{ section }}" onclick="this.textContent = 'Added to Schedule'">Add To Schedule</button></small>
                       {% else %}
-                        Class already in schedule.
+                      Class already in schedule.
                       {% endif %}
                     </div>
                     {% else %}
