@@ -74,6 +74,7 @@ def invites_received_view(request):
     context = {
         'qs': results,
         'is_empty': is_empty,
+        'profile': profile,
     }
 
     return render(request, 'home/friends.html', context)
@@ -136,6 +137,7 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
             rel_sender.append(item.sender.user)
         context["rel_receiver"] = rel_receiver
         context["rel_sender"] = rel_sender
+        context["times"] = ['7am', '8am', '9am', '10am', '11am', '12am', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', '8pm', '9pm', '10pm', ]
         return context
 
     def post(self, request, **kwargs):
