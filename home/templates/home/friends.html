@@ -44,8 +44,8 @@ Friend invites
                         <h3>{{obj.user}}</h3>
                         <p>{{obj.username}}</p>
                         <br>
-                        <a href="">
-                            <button class="ui primary button w-big mb-5" href="/profile/{{obj.id}}">See profile</button>
+                        <a href="/profile/{{obj.user.id}}">
+                            <button class="ui primary button w-big mb-5" href="/profile/{{obj.user.id}}">See profile</button>
                         </a>
                         <form action="{% url 'home:accept-invite' %}" method="POST">
                             {% csrf_token %}
