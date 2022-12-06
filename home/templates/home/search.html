@@ -3,6 +3,8 @@
 {# Load the tag library #}
 {% load bootstrap5 %}
 
+{% load course_list_tags %}
+
 {# Load CSS and JavaScript #}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
@@ -62,15 +64,14 @@
                     </div>
                     {% if user.is_authenticated %}
                     <div class="col-2">
-                      <button type="submit" class="btn btn-primary btn-xs rounded-pill" name="section_add"
-                        id="{{ section.ClassNumber }}" value="{{ section }}">
-                        <small>Add class to schedule</small>
-                          {% for class in user.profile.schedule.classes.all %}
-                            {% if class.section_number ==  section.ClassNumber %}
-                              <small>, this class already in schedule</small>
-                            {% endif %}
-                          {% endfor %}
-                      </button>
+                      {% if section.ClassNumber|in_schedule:user.profile.schedule.classes.all == 0 %}
+                        <button type="submit" class="btn btn-primary btn-xs rounded-pill" name="section_add"
+                          id="{{ section.ClassNumber }}" value="{{ section }}">
+                          <small>Add class to schedule</small>
+                        </button>
+                      {% else %}
+                        Class already in schedule.
+                      {% endif %}
                     </div>
                     {% else %}
                     <div class="col-2">
