@@ -3,6 +3,8 @@
 {# Load the tag library #}
 {% load bootstrap5 %}
 
+{% load course_list_tags %}
+
 {# Load CSS and JavaScript #}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
@@ -10,10 +12,11 @@
 {% block title %}Class Search{% endblock %}
 
 {% block content %}
+
 <content>
   <form method="post">
     {% csrf_token %}
-    <div class="pb-5">
+    <div class="pb-5 px-5">
         <div class="card form-group">
           {{ form.as_p }}
           <input type="submit" value="Submit" class="form-control">
@@ -47,12 +50,16 @@
                       <small>{{ section.Days }}</small>
                     </div>
                     <div class="col-2">
-                      <small>{{ section.Room }}</small>
+                      <small>{{ section.Room }} <a href="https://www.google.com/maps/search/?api=1&query={{section.Room}}" target="_blank" rel="noopener noreferrer"> click here for Google Maps View</a></small>
                     </div>
                     {% if user.is_authenticated %}
                     <div class="col-2">
+                      {% if section.ClassNumber|in_schedule:user.profile.schedule.classes.all == 0 %}
                       <small><button type="submit" class="btn btn-primary btn-xs rounded-pill" name="section_add"
-                        id="{{ section.ClassNumber }}" value="{{ section }}">Add To Schedule</button></small>
+                        id="{{ section.ClassNumber }}" value="{{ section }}" onclick="this.textContent = 'Added to Schedule'">Add To Schedule</button></small>
+                      {% else %}
+                      Class already in schedule.
+                      {% endif %}
                     </div>
                     {% else %}
                     <div class="col-2">

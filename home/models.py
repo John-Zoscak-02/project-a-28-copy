@@ -80,7 +80,7 @@ class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     date = models.DateField(auto_now_add = True)
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='comments')
-    content = models.TextField()
+    content = models.CharField(max_length=200)
     
     class Meta:
         ordering = ['date']

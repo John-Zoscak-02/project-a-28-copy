@@ -125,6 +125,7 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        #print(kwargs)
         profile = Profile.objects.get(user=self.request.user)
         rel_r = Relationship.objects.filter(sender=profile)
         rel_s = Relationship.objects.filter(receiver=profile)
@@ -226,6 +227,7 @@ def landing(request):
 
 def search_page(request):
     # if this is a POST request we need to process the form data
+
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
         form = SearchForm(request.POST)
@@ -287,12 +289,10 @@ class DeptDetailView(generic.ListView):
 
     def post(self, request, **kwargs):
         current_user_profile = request.user.profile
-        
         data = request.POST
         section_data = json.loads(data['section_add'].replace('\'', '"'))
-
         section = get_section(section_data)
-
         retval = add_section_to_schedule(section, current_user_profile)
-                
         return redirect('home:dept_detail', self.kwargs['dept'])
+        #return redirect('home:dept_detail', self.kwargs['dept'], {'retval': retval})
+        #return render(request, 'home/department_list.html', {'retval': retval})
