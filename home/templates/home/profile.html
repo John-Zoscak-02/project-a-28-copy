@@ -61,13 +61,13 @@
                         </div>
                         {% if profile.user.id == user.id %}
                         <div class="col-1">
-                                <form method="post" id="remove_class_form-{{ class.section_number }}">
-                                    {% csrf_token %}
-                                    <button type="submit" class="btn btn-danger btn-xs rounded-pill" name="class_remove"
-                                        id="{{ class.section_number }}" value="{{ class }}" onclick="location.href = '/profile/{{user.id}}';">
-                                        <small>Remove</small>
-                                    </button>
-                                </form>
+                            <form method="post" id="remove_class_form-{{ class.section_number }}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger btn-xs rounded-pill" name="class_remove"
+                                    id="{{ class.section_number }}" value="{{ class }}" onclick="location.href = '/profile/{{user.id}}';">
+                                    <small>Remove</small>
+                                </button>
+                            </form>
                             <script src="https://code.jquery.com/jquery-3.5.1.js" 
                                     integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
                                     crossorigin="anonymous"></script>
@@ -87,6 +87,7 @@
                                 });
                             </script>
                         </div>
+                        {% endif %}
                     </div>
                 </div>
             </li>
@@ -231,14 +232,13 @@
             </tbody>
         </table>
     </div>
-    {% autoescape off %}{% bootstrap_messages %}{% endautoescape %}
+    {% else %}
+    Add this user as a friend <a href="\all-profiles">here</a> to see this user's schedule
+    {% endif %}
+</div>
+{% autoescape off %}{% bootstrap_messages %}{% endautoescape %}
 {% else %}
 <p><strong><font color='red'>You must login to view member profiles</font></strong></p>
 {% endif %}
-
-
- </div>
-
-
 
 {% endblock %}
