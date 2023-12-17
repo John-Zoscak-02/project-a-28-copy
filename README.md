@@ -5,3 +5,5 @@
     - pip install django-allauth
     - pip install dj-database-url
     - pip install django-bootstrap-v5
+
+- Note: This website was originally configured to query data from an existing API which scrapes UVA's SIS. It was called luthers list and was hosted at: http://luthers-list.herokuapp.com/api/. If this website is down then the application may not work =(

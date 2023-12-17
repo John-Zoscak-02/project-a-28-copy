@@ -61,14 +61,14 @@
                         <form method="post" id="add_section_form-{{ section.course_number }}">
                           {% csrf_token %}
                           <button type="submit" class="btn btn-primary btn-xs rounded-pill" name="section_add" id="{{ section.course_number }}" value="{{ section }}">
-                            <small>Add class to schedule</small>
+                            <small></small>
                           </button>
                         </form>
                       {% else %}
                       <form method="post" id="add_section_form-{{ section.course_number }}">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-primary btn-xs rounded-pill" name="section_add" id="{{ section.course_number }}" onclick="this.textContent = 'Added to Schedule'" value="{{ section }}">
-                          Add To Schedule
+                          <small>Add class to schedule</small>
                         </button>
                       </form>
                       {% endif %}
